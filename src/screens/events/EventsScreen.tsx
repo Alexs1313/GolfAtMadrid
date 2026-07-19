@@ -1,22 +1,32 @@
-import React, {useMemo, useState} from 'react';
-import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useMemo, useState } from 'react';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-import {FadeInItem} from '../../components/FadeInItem';
-import {ScreenHeader} from '../../components/ScreenHeader';
-import {AppIcon} from '../../components/icons/AppIcon';
-import {Fonts} from '../../constants/theme';
-import {EVENTS} from '../../data/events';
-import {useAppNavigation} from '../../navigation/NavigationContext';
-import {useRequestsState} from '../../navigation/RequestsContext';
-import {Colors} from '../../theme/colors';
-import type {EventItem} from '../../types';
-import {getEventDayLabel} from '../../utils/date';
+import { FadeInItem } from '../../components/FadeInItem';
+import { ScreenHeader } from '../../components/ScreenHeader';
+import { AppIcon } from '../../components/icons/AppIcon';
+import { Fonts } from '../../constants/theme';
+import { EVENTS } from '../../data/events';
+import { useAppNavigation } from '../../navigation/NavigationContext';
+import { useRequestsState } from '../../navigation/RequestsContext';
+import { Colors } from '../../theme/colors';
+import type { EventItem } from '../../types';
+import { getEventDayLabel } from '../../utils/date';
 
 export function EventsScreen() {
-  const {openEventDetail, showRequestSent, openRequestCenter} = useAppNavigation();
-  const {submitRequest, submittedRequests} = useRequestsState();
-  const activeRequestCount = submittedRequests.filter(r => r.status === 'active').length;
+  const { openEventDetail, showRequestSent, openRequestCenter } =
+    useAppNavigation();
+  const { submitRequest, submittedRequests } = useRequestsState();
+  const activeRequestCount = submittedRequests.filter(
+    r => r.status === 'active',
+  ).length;
 
   const daysWithEvents = useMemo(
     () => new Set(EVENTS.map(event => event.daysFromToday)),
@@ -25,11 +35,13 @@ export function EventsScreen() {
 
   const days = useMemo(() => {
     const maxDay = Math.max(...EVENTS.map(event => event.daysFromToday));
-    return Array.from({length: maxDay + 1}, (_, i) => i);
+    return Array.from({ length: maxDay + 1 }, (_, i) => i);
   }, []);
 
   const [selectedDay, setSelectedDay] = useState(days[0]);
-  const eventsForDay = EVENTS.filter(event => event.daysFromToday === selectedDay);
+  const eventsForDay = EVENTS.filter(
+    event => event.daysFromToday === selectedDay,
+  );
   const selectedDayLabel = getEventDayLabel(selectedDay);
 
   const discoverEvent = () => {
@@ -39,18 +51,19 @@ export function EventsScreen() {
 
   return (
     <View style={styles.EventsScreenContainer}>
-      <ScreenHeader
-        title="Events"
-        subtitle="Upcoming at Casino Real de Madrid"
-        notificationCount={activeRequestCount}
-        onPressBell={openRequestCenter}
-      />
-
       <ScrollView showsVerticalScrollIndicator={false}>
+        <ScreenHeader
+          title="Events"
+          subtitle="Upcoming at Casino Real De Madrid"
+          notificationCount={activeRequestCount}
+          onPressBell={openRequestCenter}
+        />
+
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.EventsScreenDaysRow}>
+          contentContainerStyle={styles.EventsScreenDaysRow}
+        >
           {days.map(day => {
             const isActive = day === selectedDay;
             const hasEvents = daysWithEvents.has(day);
@@ -60,9 +73,14 @@ export function EventsScreen() {
                 {isActive ? (
                   <LinearGradient
                     colors={[Colors.goldLight, Colors.gold]}
-                    style={styles.EventsScreenDayChip}>
-                    <Text style={styles.EventsScreenDayWeekdayActive}>{weekday}</Text>
-                    <Text style={styles.EventsScreenDayNumberActive}>{number}</Text>
+                    style={styles.EventsScreenDayChip}
+                  >
+                    <Text style={styles.EventsScreenDayWeekdayActive}>
+                      {weekday}
+                    </Text>
+                    <Text style={styles.EventsScreenDayNumberActive}>
+                      {number}
+                    </Text>
                     <View
                       style={[
                         styles.EventsScreenDayDotActive,
@@ -94,7 +112,9 @@ export function EventsScreen() {
 
         {eventsForDay.length === 0 ? (
           <View style={styles.EventsScreenEmpty}>
-            <Text style={styles.EventsScreenEmptyTitle}>No events this day</Text>
+            <Text style={styles.EventsScreenEmptyTitle}>
+              No events this day
+            </Text>
             <Text style={styles.EventsScreenEmptySubtitle}>
               Check another date or let us surprise you below.
             </Text>
@@ -114,12 +134,17 @@ export function EventsScreen() {
           ))
         )}
 
-        <TouchableOpacity style={styles.EventsScreenDiscoverCard} onPress={discoverEvent}>
+        <TouchableOpacity
+          style={styles.EventsScreenDiscoverCard}
+          onPress={discoverEvent}
+        >
           <View style={styles.EventsScreenDiscoverIcon}>
             <AppIcon name="sparkle" size={18} />
           </View>
           <View style={styles.EventsScreenDiscoverText}>
-            <Text style={styles.EventsScreenDiscoverTitle}>Discover an Event</Text>
+            <Text style={styles.EventsScreenDiscoverTitle}>
+              Discover an Event
+            </Text>
             <Text style={styles.EventsScreenDiscoverSubtitle}>
               Let us surprise you with something on today's calendar
             </Text>
@@ -142,7 +167,11 @@ function EventCard({
   return (
     <View style={styles.EventCardContainer}>
       <View style={styles.EventCardImageWrap}>
-        <Image source={event.image} style={styles.EventCardImage} resizeMode="cover" />
+        <Image
+          source={event.image}
+          style={styles.EventCardImage}
+          resizeMode="cover"
+        />
         <View style={styles.EventCardCategoryBadge}>
           <Text style={styles.EventCardCategoryText}>{event.category}</Text>
         </View>
@@ -151,21 +180,31 @@ function EventCard({
       <View style={styles.EventCardBody}>
         <Text style={styles.EventCardTitle}>{event.title}</Text>
         <Text style={styles.EventCardMeta}>
-          {getEventDayLabel(event.daysFromToday)} · {event.timeLabel} · {event.location}
+          {getEventDayLabel(event.daysFromToday)} · {event.timeLabel} ·{' '}
+          {event.location}
         </Text>
-        <Text style={styles.EventCardDescription}>{event.shortDescription}</Text>
+        <Text style={styles.EventCardDescription}>
+          {event.shortDescription}
+        </Text>
         <Text style={styles.EventCardPlaces}>{event.placesLabel}</Text>
 
         <View style={styles.EventCardActions}>
-          <TouchableOpacity style={styles.EventCardDetailsBtn} onPress={onViewDetails}>
+          <TouchableOpacity
+            style={styles.EventCardDetailsBtn}
+            onPress={onViewDetails}
+          >
             <Text style={styles.EventCardDetailsBtnText}>View Details</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.EventCardRequestBtnWrapper} onPress={onSendRequest}>
+          <TouchableOpacity
+            style={styles.EventCardRequestBtnWrapper}
+            onPress={onSendRequest}
+          >
             <LinearGradient
               colors={[Colors.goldLight, Colors.gold]}
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              style={styles.EventCardRequestBtn}>
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.EventCardRequestBtn}
+            >
               <Text style={styles.EventCardRequestBtnText}>Send Request</Text>
             </LinearGradient>
           </TouchableOpacity>

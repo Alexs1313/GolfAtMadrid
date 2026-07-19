@@ -239,9 +239,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GolfAtMadrid/Pods-GolfAtMadrid-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GolfAtMadrid/Pods-GolfAtMadrid-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -278,9 +282,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GolfAtMadrid/Pods-GolfAtMadrid-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-GolfAtMadrid/Pods-GolfAtMadrid-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -321,7 +329,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.GolfAtMadrid;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fhskjdnfk.dsjfnaslsd;
 				PRODUCT_NAME = GolfAtMadrid;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -353,7 +361,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.GolfAtMadrid;
+				PRODUCT_BUNDLE_IDENTIFIER = com.fhskjdnfk.dsjfnaslsd;
 				PRODUCT_NAME = GolfAtMadrid;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

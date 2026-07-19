@@ -76,8 +76,8 @@ export interface HoleItem {
   handicapIndex: number;
   beginnerTip: string;
   advancedTip: string;
-  markerXPct: number;
-  markerYPct: number;
+  latitude: number;
+  longitude: number;
 }
 
 export interface HoleScore {

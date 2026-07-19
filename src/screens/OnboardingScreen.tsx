@@ -65,7 +65,7 @@ const PAGES: Page[] = [
     icon: 'services',
     title: 'Services & Reservations',
     description:
-      'Request resort services, reserve equipment, book golf carts and select your parking space — all from one place.',
+      'Request reserve equipment, book golf carts and select your parking space — all from one place.',
     cta: 'Get Started',
   },
 ];

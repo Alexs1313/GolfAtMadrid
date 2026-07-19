@@ -21,20 +21,13 @@ import { Colors } from '../../theme/colors';
 import type { ServiceCategory, ServiceItem } from '../../types';
 import { MyParkingScreen } from './MyParkingScreen';
 import { ParkingMapScreen } from './ParkingMapScreen';
-
-const CATEGORIES: { key: ServiceCategory; label: string }[] = [
-  { key: 'resort', label: 'Resort' },
-  { key: 'golfClub', label: 'Golf Club' },
-  { key: 'parking', label: 'Parking' },
-];
-
-type ParkingSegment = 'map' | 'my';
+import { ServiceCategoryTabs, type ParkingSegment } from './ServicesTabs';
 
 export function ServicesScreen() {
   const { openServiceRequest, openServiceDetail, openRequestCenter } =
     useAppNavigation();
   const { submittedRequests } = useRequestsState();
-  const [category, setCategory] = useState<ServiceCategory>('resort');
+  const [category, setCategory] = useState<ServiceCategory>('golfClub');
   const [parkingSegment, setParkingSegment] = useState<ParkingSegment>('map');
 
   const activeRequestCount = submittedRequests.filter(
@@ -44,102 +37,51 @@ export function ServicesScreen() {
 
   return (
     <View style={styles.ServicesScreenContainer}>
-      <ScreenHeader
-        title="Services"
-        subtitle="Reservations & requests"
-        notificationCount={activeRequestCount}
-        onPressBell={openRequestCenter}
-      />
-
-      <View style={styles.ServicesScreenSegmentControl}>
-        {CATEGORIES.map(cat => {
-          const isActive = cat.key === category;
-          return (
-            <TouchableOpacity
-              key={cat.key}
-              style={styles.ServicesScreenSegmentButton}
-              onPress={() => setCategory(cat.key)}
-            >
-              {isActive ? (
-                <LinearGradient
-                  colors={[Colors.goldLight, Colors.gold]}
-                  style={styles.ServicesScreenSegmentFill}
-                >
-                  <Text style={styles.ServicesScreenSegmentTextActive}>
-                    {cat.label}
-                  </Text>
-                </LinearGradient>
-              ) : (
-                <Text style={styles.ServicesScreenSegmentText}>
-                  {cat.label}
-                </Text>
-              )}
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-
       {category === 'parking' ? (
-        <>
-          <View style={styles.ServicesScreenParkingSegment}>
-            <TouchableOpacity
-              style={[
-                styles.ServicesScreenParkingSegmentButton,
-                parkingSegment === 'map' &&
-                  styles.ServicesScreenParkingSegmentButtonActive,
-              ]}
-              onPress={() => setParkingSegment('map')}
-            >
-              <Text
-                style={[
-                  styles.ServicesScreenParkingSegmentText,
-                  parkingSegment === 'map' &&
-                    styles.ServicesScreenParkingSegmentTextActive,
-                ]}
-              >
-                Parking Map
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.ServicesScreenParkingSegmentButton,
-                parkingSegment === 'my' &&
-                  styles.ServicesScreenParkingSegmentButtonActive,
-              ]}
-              onPress={() => setParkingSegment('my')}
-            >
-              <Text
-                style={[
-                  styles.ServicesScreenParkingSegmentText,
-                  parkingSegment === 'my' &&
-                    styles.ServicesScreenParkingSegmentTextActive,
-                ]}
-              >
-                My Parking
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {parkingSegment === 'map' ? (
-            <ParkingMapScreen />
-          ) : (
-            <MyParkingScreen />
-          )}
-        </>
+        parkingSegment === 'map' ? (
+          <ParkingMapScreen
+            notificationCount={activeRequestCount}
+            onPressBell={openRequestCenter}
+            category={category}
+            onSelectCategory={setCategory}
+            parkingSegment={parkingSegment}
+            onSelectParkingSegment={setParkingSegment}
+          />
+        ) : (
+          <MyParkingScreen
+            notificationCount={activeRequestCount}
+            onPressBell={openRequestCenter}
+            category={category}
+            onSelectCategory={setCategory}
+            parkingSegment={parkingSegment}
+            onSelectParkingSegment={setParkingSegment}
+          />
+        )
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.ServicesScreenList}
         >
-          {items.map((service, i) => (
-            <FadeInItem key={service.id} index={i}>
-              <ServiceCard
-                service={service}
-                onDetails={() => openServiceDetail(service)}
-                onRequest={() => openServiceRequest(service)}
-              />
-            </FadeInItem>
-          ))}
+          <ScreenHeader
+            title="Services"
+            subtitle="Reservations & requests"
+            notificationCount={activeRequestCount}
+            onPressBell={openRequestCenter}
+          />
+
+          <View style={styles.ServicesScreenListBody}>
+            <ServiceCategoryTabs category={category} onSelect={setCategory} />
+
+            {items.map((service, i) => (
+              <FadeInItem key={service.id} index={i}>
+                <ServiceCard
+                  service={service}
+                  onDetails={() => openServiceDetail(service)}
+                  onRequest={() => openServiceRequest(service)}
+                />
+              </FadeInItem>
+            ))}
+          </View>
         </ScrollView>
       )}
     </View>
@@ -199,74 +141,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  ServicesScreenSegmentControl: {
-    flexDirection: 'row',
-    backgroundColor: Colors.surface,
-    borderWidth: 1,
-    borderColor: Colors.surfaceBorder,
-    borderRadius: 14,
-    marginHorizontal: 16,
-    marginTop: 16,
-    padding: 4,
-    gap: 4,
-  },
-  ServicesScreenSegmentButton: {
-    flex: 1,
-  },
-  ServicesScreenSegmentFill: {
-    height: 34.5,
-    borderRadius: 9,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  ServicesScreenSegmentText: {
-    height: 34.5,
-    fontSize: 12,
-    fontWeight: '600',
-    color: Colors.ivoryMuted,
-    textAlign: 'center',
-    lineHeight: 34.5,
-  },
-
-  ServicesScreenSegmentTextActive: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: Colors.buttonText,
-  },
-  ServicesScreenParkingSegment: {
-    flexDirection: 'row',
-    backgroundColor: '#1b1f27',
-    borderRadius: 10,
-    marginHorizontal: 16,
-    marginTop: 12,
-    padding: 3,
-    gap: 0,
-  },
-
-  ServicesScreenParkingSegmentButton: {
-    flex: 1,
-    height: 30.5,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  ServicesScreenParkingSegmentButtonActive: {
-    backgroundColor: Colors.surface,
-  },
-  ServicesScreenParkingSegmentText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: Colors.textFaint,
-  },
-
-  ServicesScreenParkingSegmentTextActive: {
-    color: Colors.goldLight,
-  },
   ServicesScreenList: {
+    paddingBottom: 24,
+  },
+  ServicesScreenListBody: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 24,
   },
   ServiceCardContainer: {
     flexDirection: 'row',

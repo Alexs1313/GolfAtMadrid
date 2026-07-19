@@ -15,8 +15,8 @@ export const HOLES: HoleItem[] = [
     beginnerTip: 'Play toward the widest part of the fairway and aim for the center of the green.',
     advancedTip:
       'Position the tee shot on the right side to improve the angle toward left-side pin locations.',
-    markerXPct: 39.9,
-    markerYPct: 77.3,
+    latitude: 40.484443,
+    longitude: -3.743944,
   },
   {
     number: 2,
@@ -32,8 +32,8 @@ export const HOLES: HoleItem[] = [
     beginnerTip: 'Play the hole in three controlled shots and remain on the left-center side.',
     advancedTip:
       'A strong drive can create a chance to reach the green in two, but the approach must safely carry the water.',
-    markerXPct: 21.8,
-    markerYPct: 78.1,
+    latitude: 40.485862,
+    longitude: -3.740323,
   },
   {
     number: 3,
@@ -48,8 +48,8 @@ export const HOLES: HoleItem[] = [
     handicapIndex: 17,
     beginnerTip: 'Use one club less than usual and aim for the middle of the green.',
     advancedTip: 'Land the ball below the flag to avoid a fast downhill putt.',
-    markerXPct: 14.6,
-    markerYPct: 60.2,
+    latitude: 40.484682,
+    longitude: -3.74207,
   },
   {
     number: 4,
@@ -65,8 +65,8 @@ export const HOLES: HoleItem[] = [
     beginnerTip:
       'Aim toward the left-center of the fairway to maintain a clear view of the green.',
     advancedTip: 'A controlled fade over the corner can significantly shorten the approach.',
-    markerXPct: 10.5,
-    markerYPct: 28.3,
+    latitude: 40.483383,
+    longitude: -3.742245,
   },
   {
     number: 5,
@@ -82,8 +82,8 @@ export const HOLES: HoleItem[] = [
     beginnerTip: 'Keep the tee shot short of the bunkers and accept a longer approach.',
     advancedTip:
       'Challenge the right-side bunker to open the best line into the narrow green entrance.',
-    markerXPct: 27.4,
-    markerYPct: 25.4,
+    latitude: 40.482931,
+    longitude: -3.74113,
   },
   {
     number: 6,
@@ -98,8 +98,8 @@ export const HOLES: HoleItem[] = [
     handicapIndex: 13,
     beginnerTip: 'Divide the hole into three comfortable shots and avoid forcing extra distance.',
     advancedTip: 'Place the second shot on the right side to create a direct wedge approach.',
-    markerXPct: 29.5,
-    markerYPct: 46.2,
+    latitude: 40.483949,
+    longitude: -3.740019,
   },
   {
     number: 7,
@@ -114,8 +114,8 @@ export const HOLES: HoleItem[] = [
     handicapIndex: 15,
     beginnerTip: 'Aim for the widest central section of the green.',
     advancedTip: 'Shape the shot against the wind and use the front slope to reduce rollout.',
-    markerXPct: 24.8,
-    markerYPct: 8.0,
+    latitude: 40.48541,
+    longitude: -3.739182,
   },
   {
     number: 8,
@@ -131,8 +131,8 @@ export const HOLES: HoleItem[] = [
     beginnerTip: 'Play safely to the center and take one extra club for the approach.',
     advancedTip:
       'Attack left-side pins only when the wind is favorable, as the nearby bunker punishes an inaccurate line.',
-    markerXPct: 52.9,
-    markerYPct: 18.0,
+    latitude: 40.483395,
+    longitude: -3.738722,
   },
   {
     number: 9,
@@ -147,8 +147,8 @@ export const HOLES: HoleItem[] = [
     handicapIndex: 9,
     beginnerTip: 'Prioritize a straight tee shot and aim for the middle of the green.',
     advancedTip: 'Play down the left side for a clearer approach, but avoid the false front.',
-    markerXPct: 46.9,
-    markerYPct: 32.5,
+    latitude: 40.48619,
+    longitude: -3.738671,
   },
   {
     number: 10,
@@ -163,8 +163,8 @@ export const HOLES: HoleItem[] = [
     handicapIndex: 10,
     beginnerTip: 'Use a reliable tee club and leave a comfortable distance for the approach.',
     advancedTip: 'Favor the left side to attack the green along its longest angle.',
-    markerXPct: 43.9,
-    markerYPct: 53.3,
+    latitude: 40.487002,
+    longitude: -3.737637,
   },
   {
     number: 11,
@@ -180,8 +180,8 @@ export const HOLES: HoleItem[] = [
     beginnerTip: 'Ignore the flag and aim confidently for the center.',
     advancedTip:
       'Use a high, controlled shot to prevent the ball from running through the back of the green.',
-    markerXPct: 57.0,
-    markerYPct: 60.2,
+    latitude: 40.48774,
+    longitude: -3.736323,
   },
   {
     number: 12,
@@ -197,8 +197,8 @@ export const HOLES: HoleItem[] = [
     beginnerTip: 'Follow the safer right-hand side and lay up before the second crossing.',
     advancedTip:
       'Carry the first corner from the tee to create a possible approach to the green in two.',
-    markerXPct: 70.9,
-    markerYPct: 62.8,
+    latitude: 40.487925,
+    longitude: -3.737217,
   },
   {
     number: 13,
@@ -213,8 +213,8 @@ export const HOLES: HoleItem[] = [
     handicapIndex: 14,
     beginnerTip: 'Aim toward the right-center and leave a clear approach.',
     advancedTip: 'Shape a controlled draw around the corner to leave a short wedge shot.',
-    markerXPct: 72.9,
-    markerYPct: 78.1,
+    latitude: 40.489871,
+    longitude: -3.735388,
   },
   {
     number: 14,
@@ -230,8 +230,8 @@ export const HOLES: HoleItem[] = [
     beginnerTip: 'Confirm the required carry distance and aim for the broad center of the fairway.',
     advancedTip:
       'Position the drive toward the left to open the safest approach between the bunkers.',
-    markerXPct: 86.7,
-    markerYPct: 59.4,
+    latitude: 40.490639,
+    longitude: -3.736254,
   },
   {
     number: 15,
@@ -246,8 +246,8 @@ export const HOLES: HoleItem[] = [
     handicapIndex: 16,
     beginnerTip: 'Focus on reaching the correct level rather than aiming directly at the flag.',
     advancedTip: 'Use a high shot with limited rollout when attacking an upper-tier pin.',
-    markerXPct: 79.1,
-    markerYPct: 38.6,
+    latitude: 40.489614,
+    longitude: -3.737482,
   },
   {
     number: 16,
@@ -262,8 +262,8 @@ export const HOLES: HoleItem[] = [
     handicapIndex: 2,
     beginnerTip: 'Plan three balanced shots and avoid using a long club from an uneven lie.',
     advancedTip: 'A powerful drive toward the left may create an aggressive second-shot opportunity.',
-    markerXPct: 88.2,
-    markerYPct: 26.1,
+    latitude: 40.490322,
+    longitude: -3.737253,
   },
   {
     number: 17,
@@ -279,8 +279,8 @@ export const HOLES: HoleItem[] = [
     beginnerTip: 'Use enough club to reach the top of the ridge and remain in the center.',
     advancedTip:
       'Favor the right side of the crest for the best approach angle to central and left pin positions.',
-    markerXPct: 70.4,
-    markerYPct: 6.9,
+    latitude: 40.487638,
+    longitude: -3.738726,
   },
   {
     number: 18,
@@ -296,7 +296,7 @@ export const HOLES: HoleItem[] = [
     beginnerTip: 'Keep the tee shot in play and use enough club to carry the bunker on the approach.',
     advancedTip:
       'Drive toward the left-center to open the full green, then control spin to avoid the runoff area behind it.',
-    markerXPct: 79.9,
-    markerYPct: 13.9,
+    latitude: 40.486684,
+    longitude: -3.739151,
   },
 ];

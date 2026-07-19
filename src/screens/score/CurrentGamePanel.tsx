@@ -9,11 +9,13 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
+import { ScreenHeader } from '../../components/ScreenHeader';
 import { Fonts } from '../../constants/theme';
 import { HOLES } from '../../data/holes';
 
 import { useScoreState } from '../../navigation/ScoreContext';
 import { Colors } from '../../theme/colors';
+import { ScoreSegmentTabs } from './ScoreSegmentTabs';
 
 function formatToPar(value: number): string {
   if (value === 0) {
@@ -22,8 +24,16 @@ function formatToPar(value: number): string {
   return value > 0 ? `+${value}` : `${value}`;
 }
 
-export function CurrentGamePanel() {
+export function CurrentGamePanel({
+  notificationCount,
+  onPressBell,
+}: {
+  notificationCount: number;
+  onPressBell: () => void;
+}) {
   const {
+    segment,
+    setSegment,
     holeIndex,
     holeScores,
     updateCurrentHole,
@@ -57,168 +67,185 @@ export function CurrentGamePanel() {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.CurrentGamePanelScroll}
     >
-      <View style={styles.CurrentGamePanelHoleCard}>
-        <View style={styles.CurrentGamePanelHoleRow}>
-          <View>
-            <Text style={styles.CurrentGamePanelLabel}>HOLE</Text>
-            <Text style={styles.CurrentGamePanelHoleNumber}>{hole.number}</Text>
-          </View>
-          <View style={styles.CurrentGamePanelScoreToParWrap}>
-            <Text style={styles.CurrentGamePanelLabel}>SCORE TO PAR</Text>
-            <Text style={styles.CurrentGamePanelScoreToPar}>
-              {formatToPar(cumulativeScoreToPar)}
-            </Text>
-          </View>
-        </View>
-        <Text style={styles.CurrentGamePanelMeta}>
-          Par {hole.par} Total strokes {score.strokes} Putts {score.putts}
-        </Text>
-      </View>
+      <ScreenHeader
+        title="Score"
+        subtitle="Track your round"
+        notificationCount={notificationCount}
+        onPressBell={onPressBell}
+      />
 
-      <View style={styles.CurrentGamePanelCountersRow}>
-        <Counter
-          label="STROKES"
-          value={score.strokes}
-          onDecrement={() => updateCurrentHole('strokes', -1)}
-          onIncrement={() => updateCurrentHole('strokes', 1)}
-        />
-        <Counter
-          label="PUTTS"
-          value={score.putts}
-          onDecrement={() => updateCurrentHole('putts', -1)}
-          onIncrement={() => updateCurrentHole('putts', 1)}
-        />
-      </View>
+      <View style={styles.CurrentGamePanelBody}>
+        <ScoreSegmentTabs segment={segment} onSelect={setSegment} />
 
-      <View style={styles.CurrentGamePanelNavRow}>
-        <TouchableOpacity
-          style={styles.CurrentGamePanelNavBtn}
-          onPress={() => goToHole(-1)}
-          disabled={holeIndex === 0}
-        >
-          <Text style={styles.CurrentGamePanelNavBtnText}>Previous Hole</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.CurrentGamePanelNavBtnWrapper}
-          onPress={() => goToHole(1)}
-          disabled={holeIndex === HOLES.length - 1}
-        >
-          <LinearGradient
-            colors={[Colors.goldLight, Colors.gold]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.CurrentGamePanelNextBtn}
-          >
-            <Text style={styles.CurrentGamePanelNextBtnText}>Next Hole</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.CurrentGamePanelActionsRow}>
-        <TouchableOpacity
-          style={[
-            styles.CurrentGamePanelActionBtn,
-            progressSaved && styles.CurrentGamePanelActionBtnSaved,
-          ]}
-          onPress={saveProgress}
-        >
-          <Text style={styles.CurrentGamePanelActionBtnText}>
-            {progressSaved ? 'Progress Saved ✓' : 'Save Progress'}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.CurrentGamePanelActionBtn}
-          onPress={pauseGame}
-        >
-          <Text style={styles.CurrentGamePanelActionBtnText}>Pause Game</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.CurrentGamePanelFinishBtn}
-          onPress={finishGame}
-        >
-          <Text style={styles.CurrentGamePanelFinishBtnText}>Finish Game</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.CurrentGamePanelScoreboardHeader}>
-        <Text style={styles.CurrentGamePanelScoreboardLabel}>Scoreboard</Text>
-        <Text style={styles.CurrentGamePanelScoreboardCount}>
-          {participants.length + 1} players
-        </Text>
-      </View>
-
-      <View style={styles.CurrentGamePanelPlayerRow}>
-        <View style={styles.CurrentGamePanelPlayerInfo}>
-          <View style={styles.CurrentGamePanelPlayerBadge}>
-            <Text style={styles.CurrentGamePanelPlayerBadgeTextActive}>1</Text>
-          </View>
-          <Text style={styles.CurrentGamePanelPlayerName}>You</Text>
-        </View>
-        <Text style={styles.CurrentGamePanelPlayerScore}>
-          {formatToPar(cumulativeScoreToPar)}
-        </Text>
-      </View>
-
-      {participants.map((participant, i) => (
-        <View
-          key={participant.id}
-          style={styles.CurrentGamePanelParticipantRow}
-        >
-          <View style={styles.CurrentGamePanelPlayerInfo}>
-            <View style={styles.CurrentGamePanelPlayerBadge}>
-              <Text style={styles.CurrentGamePanelPlayerBadgeText}>
-                {i + 2}
+        <View style={styles.CurrentGamePanelHoleCard}>
+          <View style={styles.CurrentGamePanelHoleRow}>
+            <View>
+              <Text style={styles.CurrentGamePanelLabel}>HOLE</Text>
+              <Text style={styles.CurrentGamePanelHoleNumber}>
+                {hole.number}
               </Text>
             </View>
-            <Text style={styles.CurrentGamePanelPlayerName}>
-              {participant.name}
-            </Text>
+            <View style={styles.CurrentGamePanelScoreToParWrap}>
+              <Text style={styles.CurrentGamePanelLabel}>SCORE TO PAR</Text>
+              <Text style={styles.CurrentGamePanelScoreToPar}>
+                {formatToPar(cumulativeScoreToPar)}
+              </Text>
+            </View>
           </View>
-          <View style={styles.CurrentGamePanelParticipantControls}>
-            <TouchableOpacity
-              style={styles.CurrentGamePanelParticipantBtn}
-              onPress={() => adjustParticipant(participant.id, -1)}
-            >
-              <Text style={styles.CurrentGamePanelParticipantBtnText}>–</Text>
-            </TouchableOpacity>
-            <Text style={styles.CurrentGamePanelParticipantScore}>
-              {formatToPar(participant.scoreToPar)}
-            </Text>
-            <TouchableOpacity
-              style={styles.CurrentGamePanelParticipantBtn}
-              onPress={() => adjustParticipant(participant.id, 1)}
-            >
-              <Text style={styles.CurrentGamePanelParticipantBtnText}>+</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.CurrentGamePanelRemoveBtn}
-              onPress={() => removeParticipant(participant.id)}
-            >
-              <Text style={styles.CurrentGamePanelRemoveBtnText}>✕</Text>
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.CurrentGamePanelMeta}>
+            Par {hole.par} Total strokes {score.strokes} Putts {score.putts}
+          </Text>
         </View>
-      ))}
 
-      <View style={styles.CurrentGamePanelAddRow}>
-        <TextInput
-          value={participantName}
-          onChangeText={setParticipantName}
-          placeholder="Add participant name…"
-          placeholderTextColor="#757575"
-          style={styles.CurrentGamePanelAddInput}
-          onSubmitEditing={submitParticipant}
-        />
-        <TouchableOpacity onPress={submitParticipant}>
-          <LinearGradient
-            colors={[Colors.goldLight, Colors.gold]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.CurrentGamePanelAddBtn}
+        <View style={styles.CurrentGamePanelCountersRow}>
+          <Counter
+            label="STROKES"
+            value={score.strokes}
+            onDecrement={() => updateCurrentHole('strokes', -1)}
+            onIncrement={() => updateCurrentHole('strokes', 1)}
+          />
+          <Counter
+            label="PUTTS"
+            value={score.putts}
+            onDecrement={() => updateCurrentHole('putts', -1)}
+            onIncrement={() => updateCurrentHole('putts', 1)}
+          />
+        </View>
+
+        <View style={styles.CurrentGamePanelNavRow}>
+          <TouchableOpacity
+            style={styles.CurrentGamePanelNavBtn}
+            onPress={() => goToHole(-1)}
+            disabled={holeIndex === 0}
           >
-            <Text style={styles.CurrentGamePanelAddBtnText}>Add</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+            <Text style={styles.CurrentGamePanelNavBtnText}>Previous Hole</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.CurrentGamePanelNavBtnWrapper}
+            onPress={() => goToHole(1)}
+            disabled={holeIndex === HOLES.length - 1}
+          >
+            <LinearGradient
+              colors={[Colors.goldLight, Colors.gold]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.CurrentGamePanelNextBtn}
+            >
+              <Text style={styles.CurrentGamePanelNextBtnText}>Next Hole</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.CurrentGamePanelActionsRow}>
+          <TouchableOpacity
+            style={[
+              styles.CurrentGamePanelActionBtn,
+              progressSaved && styles.CurrentGamePanelActionBtnSaved,
+            ]}
+            onPress={saveProgress}
+          >
+            <Text style={styles.CurrentGamePanelActionBtnText}>
+              {progressSaved ? 'Progress Saved ✓' : 'Save Progress'}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.CurrentGamePanelActionBtn}
+            onPress={pauseGame}
+          >
+            <Text style={styles.CurrentGamePanelActionBtnText}>Pause Game</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.CurrentGamePanelFinishBtn}
+            onPress={finishGame}
+          >
+            <Text style={styles.CurrentGamePanelFinishBtnText}>
+              Finish Game
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.CurrentGamePanelScoreboardHeader}>
+          <Text style={styles.CurrentGamePanelScoreboardLabel}>Scoreboard</Text>
+          <Text style={styles.CurrentGamePanelScoreboardCount}>
+            {participants.length + 1} players
+          </Text>
+        </View>
+
+        <View style={styles.CurrentGamePanelPlayerRow}>
+          <View style={styles.CurrentGamePanelPlayerInfo}>
+            <View style={styles.CurrentGamePanelPlayerBadge}>
+              <Text style={styles.CurrentGamePanelPlayerBadgeTextActive}>
+                1
+              </Text>
+            </View>
+            <Text style={styles.CurrentGamePanelPlayerName}>You</Text>
+          </View>
+          <Text style={styles.CurrentGamePanelPlayerScore}>
+            {formatToPar(cumulativeScoreToPar)}
+          </Text>
+        </View>
+
+        {participants.map((participant, i) => (
+          <View
+            key={participant.id}
+            style={styles.CurrentGamePanelParticipantRow}
+          >
+            <View style={styles.CurrentGamePanelPlayerInfo}>
+              <View style={styles.CurrentGamePanelPlayerBadge}>
+                <Text style={styles.CurrentGamePanelPlayerBadgeText}>
+                  {i + 2}
+                </Text>
+              </View>
+              <Text style={styles.CurrentGamePanelPlayerName}>
+                {participant.name}
+              </Text>
+            </View>
+            <View style={styles.CurrentGamePanelParticipantControls}>
+              <TouchableOpacity
+                style={styles.CurrentGamePanelParticipantBtn}
+                onPress={() => adjustParticipant(participant.id, -1)}
+              >
+                <Text style={styles.CurrentGamePanelParticipantBtnText}>–</Text>
+              </TouchableOpacity>
+              <Text style={styles.CurrentGamePanelParticipantScore}>
+                {formatToPar(participant.scoreToPar)}
+              </Text>
+              <TouchableOpacity
+                style={styles.CurrentGamePanelParticipantBtn}
+                onPress={() => adjustParticipant(participant.id, 1)}
+              >
+                <Text style={styles.CurrentGamePanelParticipantBtnText}>+</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.CurrentGamePanelRemoveBtn}
+                onPress={() => removeParticipant(participant.id)}
+              >
+                <Text style={styles.CurrentGamePanelRemoveBtnText}>✕</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ))}
+
+        <View style={styles.CurrentGamePanelAddRow}>
+          <TextInput
+            value={participantName}
+            onChangeText={setParticipantName}
+            placeholder="Add participant name…"
+            placeholderTextColor="#757575"
+            style={styles.CurrentGamePanelAddInput}
+            onSubmitEditing={submitParticipant}
+          />
+          <TouchableOpacity onPress={submitParticipant}>
+            <LinearGradient
+              colors={[Colors.goldLight, Colors.gold]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.CurrentGamePanelAddBtn}
+            >
+              <Text style={styles.CurrentGamePanelAddBtnText}>Add</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -253,9 +280,11 @@ function Counter({
 
 const styles = StyleSheet.create({
   CurrentGamePanelScroll: {
+    paddingBottom: 24,
+  },
+  CurrentGamePanelBody: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 24,
   },
 
   CurrentGamePanelHoleCard: {

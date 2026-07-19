@@ -11,10 +11,12 @@ import { BarChart, LineChart } from 'react-native-gifted-charts';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { FadeInItem } from '../../components/FadeInItem';
+import { ScreenHeader } from '../../components/ScreenHeader';
 import { Fonts } from '../../constants/theme';
 
 import { useScoreState } from '../../navigation/ScoreContext';
 import { Colors } from '../../theme/colors';
+import { ScoreSegmentTabs } from './ScoreSegmentTabs';
 
 import type { SavedGame } from '../../types';
 
@@ -37,8 +39,14 @@ const DEMO_STATS = {
   holesPlayed: '396',
   improvement: '+8%',
 };
-const DEMO_SCORE_HISTORY = [9, 14, 8, 12, 6, 11];
-const DEMO_STROKES = [44, 36, 32, 40, 24, 36];
+const DEMO_SCORE_HISTORY = [9, 14, 8, 12, 6, 11].map((value, i) => ({
+  value,
+  label: `R${i + 1}`,
+}));
+const DEMO_STROKES = [44, 36, 32, 40, 24, 36].map((value, i) => ({
+  value,
+  label: `R${i + 1}`,
+}));
 
 function formatToPar(value: number): string {
   if (value === 0) {
@@ -47,122 +55,175 @@ function formatToPar(value: number): string {
   return value > 0 ? `+${value}` : `${value}`;
 }
 
-export function GameStatisticsPanel() {
-  const { previousGames } = useScoreState();
-  const [period, setPeriod] = useState('30d');
+export function GameStatisticsPanel({
+  notificationCount,
+  onPressBell,
+}: {
+  notificationCount: number;
+  onPressBell: () => void;
+}) {
+  const { segment, setSegment, previousGames } = useScoreState();
+  const [period, setPeriod] = useState('all');
   const isDemo = previousGames.length === 0;
 
   const periodMs = PERIODS.find(p => p.key === period)?.ms ?? Infinity;
-  const filtered = useMemo(() => {
+
+  const listGames = useMemo(() => {
     const now = Date.now();
-    return previousGames
-      .filter(game => now - game.timestamp <= periodMs)
-      .sort((a, b) => a.timestamp - b.timestamp);
+    return previousGames.filter(game => now - game.timestamp <= periodMs);
   }, [previousGames, periodMs]);
 
-  const stats = isDemo ? DEMO_STATS : computeStats(filtered);
+  const games = useMemo(
+    () => [...listGames].sort((a, b) => a.timestamp - b.timestamp),
+    [listGames],
+  );
+
+  const stats = isDemo ? DEMO_STATS : computeStats(games);
 
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.GameStatisticsPanelScroll}
     >
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.GameStatisticsPanelPeriodRow}
-      >
-        {PERIODS.map(p => {
-          const isActive = p.key === period;
-          return (
-            <TouchableOpacity key={p.key} onPress={() => setPeriod(p.key)}>
-              {isActive ? (
-                <View style={styles.GameStatisticsPanelPeriodChip}>
-                  <LinearGradient
-                    colors={[Colors.goldLight, Colors.gold]}
-                    style={styles.GameStatisticsPanelPeriodChipFill}
-                  />
-                  <Text style={styles.GameStatisticsPanelPeriodTextActive}>
-                    {p.label}
-                  </Text>
-                </View>
-              ) : (
-                <View style={styles.GameStatisticsPanelPeriodChipInactive}>
-                  <Text style={styles.GameStatisticsPanelPeriodText}>
-                    {p.label}
-                  </Text>
-                </View>
-              )}
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+      <ScreenHeader
+        title="Score"
+        subtitle="Track your round"
+        notificationCount={notificationCount}
+        onPressBell={onPressBell}
+      />
 
-      <View style={styles.GameStatisticsPanelStatsGrid}>
-        <StatCard label="GAMES PLAYED" value={stats.gamesPlayed} />
-        <StatCard label="BEST SCORE" value={stats.bestScore} />
-        <StatCard label="AVG SCORE" value={stats.avgScore} />
-        <StatCard label="AVG PUTTS" value={stats.avgPutts} />
-        <StatCard label="HOLES PLAYED" value={stats.holesPlayed} />
-        <StatCard label="IMPROVEMENT" value={stats.improvement} />
-      </View>
+      <View style={styles.GameStatisticsPanelBody}>
+        <ScoreSegmentTabs segment={segment} onSelect={setSegment} />
 
-      <View style={styles.GameStatisticsPanelChartCard}>
-        <Text style={styles.GameStatisticsPanelChartTitle}>Score History</Text>
-        {isDemo ? (
-          <ScoreLineChart values={DEMO_SCORE_HISTORY} />
-        ) : filtered.length >= 2 ? (
-          <ScoreLineChart values={filtered.map(g => g.summary.scoreToPar)} />
-        ) : (
-          <Text style={styles.GameStatisticsPanelChartEmpty}>
-            Play and save at least 2 games to see your trend.
-          </Text>
-        )}
-      </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.GameStatisticsPanelPeriodRow}
+        >
+          {PERIODS.map(p => {
+            const isActive = p.key === period;
+            return (
+              <TouchableOpacity key={p.key} onPress={() => setPeriod(p.key)}>
+                {isActive ? (
+                  <View style={styles.GameStatisticsPanelPeriodChip}>
+                    <LinearGradient
+                      colors={[Colors.goldLight, Colors.gold]}
+                      style={styles.GameStatisticsPanelPeriodChipFill}
+                    />
+                    <Text style={styles.GameStatisticsPanelPeriodTextActive}>
+                      {p.label}
+                    </Text>
+                  </View>
+                ) : (
+                  <View style={styles.GameStatisticsPanelPeriodChipInactive}>
+                    <Text style={styles.GameStatisticsPanelPeriodText}>
+                      {p.label}
+                    </Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
 
-      <View style={styles.GameStatisticsPanelChartCard}>
-        <Text style={styles.GameStatisticsPanelChartTitle}>
-          Average Strokes per Round
-        </Text>
-        {isDemo ? (
-          <StrokesBarChart values={DEMO_STROKES} />
-        ) : filtered.length >= 1 ? (
-          <StrokesBarChart
-            values={filtered.slice(-6).map(g => g.summary.finalStrokes)}
+        <View style={styles.GameStatisticsPanelStatsGrid}>
+          <StatCard
+            label="GAMES PLAYED"
+            value={stats.gamesPlayed}
+            unit="rounds"
           />
-        ) : (
-          <Text style={styles.GameStatisticsPanelChartEmpty}>
-            No rounds saved in this period yet.
+          <StatCard label="BEST SCORE" value={stats.bestScore} unit="vs par" />
+          <StatCard label="AVG SCORE" value={stats.avgScore} unit="vs par" />
+          <StatCard label="AVG PUTTS" value={stats.avgPutts} unit="per round" />
+          <StatCard
+            label="HOLES PLAYED"
+            value={stats.holesPlayed}
+            unit="holes"
+          />
+          <StatCard
+            label="IMPROVEMENT"
+            value={stats.improvement}
+            unit="recent vs early rounds"
+          />
+        </View>
+
+        <View style={styles.GameStatisticsPanelChartCard}>
+          <Text style={styles.GameStatisticsPanelChartTitle}>
+            Score History (strokes vs par)
           </Text>
+          {isDemo ? (
+            <ScoreLineChart data={DEMO_SCORE_HISTORY} />
+          ) : games.length >= 2 ? (
+            <ScoreLineChart
+              key={period}
+              data={games.map(g => ({
+                value: g.summary.scoreToPar,
+                label: g.dateLabel,
+              }))}
+            />
+          ) : (
+            <Text style={styles.GameStatisticsPanelChartEmpty}>
+              {previousGames.length === 0
+                ? 'Play and save at least 2 games to see your trend.'
+                : 'Not enough rounds in this period to show a trend.'}
+            </Text>
+          )}
+        </View>
+
+        <View style={styles.GameStatisticsPanelChartCard}>
+          <Text style={styles.GameStatisticsPanelChartTitle}>
+            Strokes per Round (last 6)
+          </Text>
+          {isDemo ? (
+            <StrokesBarChart data={DEMO_STROKES} />
+          ) : games.length >= 1 ? (
+            <StrokesBarChart
+              key={period}
+              data={games.slice(-6).map(g => ({
+                value: g.summary.finalStrokes,
+                label: g.dateLabel,
+              }))}
+            />
+          ) : (
+            <Text style={styles.GameStatisticsPanelChartEmpty}>
+              {previousGames.length === 0
+                ? 'No rounds saved yet.'
+                : 'No rounds saved in this period yet.'}
+            </Text>
+          )}
+        </View>
+
+        <Text style={styles.GameStatisticsPanelPreviousLabel}>
+          Previous Games
+        </Text>
+        {previousGames.length === 0 ? (
+          <Text style={styles.GameStatisticsPanelEmptyText}>
+            No saved games yet. Finish a round and tap Save Game to see it here.
+          </Text>
+        ) : listGames.length === 0 ? (
+          <Text style={styles.GameStatisticsPanelEmptyText}>
+            No saved games in this period.
+          </Text>
+        ) : (
+          listGames.map((game, i) => (
+            <FadeInItem
+              key={game.id}
+              index={i}
+              style={styles.GameStatisticsPanelGameRow}
+            >
+              <Text style={styles.GameStatisticsPanelGameDate}>
+                {game.dateLabel}
+              </Text>
+              <Text style={styles.GameStatisticsPanelGameStrokes}>
+                {game.summary.finalStrokes} strokes
+              </Text>
+              <Text style={styles.GameStatisticsPanelGameScore}>
+                {formatToPar(game.summary.scoreToPar)}
+              </Text>
+            </FadeInItem>
+          ))
         )}
       </View>
-
-      <Text style={styles.GameStatisticsPanelPreviousLabel}>
-        Previous Games
-      </Text>
-      {previousGames.length === 0 ? (
-        <Text style={styles.GameStatisticsPanelEmptyText}>
-          No saved games yet. Finish a round and tap Save Game to see it here.
-        </Text>
-      ) : (
-        previousGames.map((game, i) => (
-          <FadeInItem
-            key={game.id}
-            index={i}
-            style={styles.GameStatisticsPanelGameRow}
-          >
-            <Text style={styles.GameStatisticsPanelGameDate}>
-              {game.dateLabel}
-            </Text>
-            <Text style={styles.GameStatisticsPanelGameStrokes}>
-              {game.summary.finalStrokes} strokes
-            </Text>
-            <Text style={styles.GameStatisticsPanelGameScore}>
-              {formatToPar(game.summary.scoreToPar)}
-            </Text>
-          </FadeInItem>
-        ))
-      )}
     </ScrollView>
   );
 }
@@ -208,23 +269,37 @@ function computeStats(games: SavedGame[]) {
   };
 }
 
-function StatCard({ label, value }: { label: string; value: string }) {
+function StatCard({
+  label,
+  value,
+  unit,
+}: {
+  label: string;
+  value: string;
+  unit: string;
+}) {
   return (
     <View style={styles.StatCardContainer}>
       <Text style={styles.StatCardLabel}>{label}</Text>
       <Text style={styles.StatCardValue}>{value}</Text>
+      <Text style={styles.StatCardUnit}>{unit}</Text>
     </View>
   );
 }
 
-function ScoreLineChart({ values }: { values: number[] }) {
-  const data = values.map(value => ({ value }));
+type ChartPoint = { value: number; label: string };
+
+function ScoreLineChart({ data }: { data: ChartPoint[] }) {
+  const points = data.map(point => ({
+    value: point.value,
+    label: point.label,
+    dataPointText: formatToPar(point.value),
+  }));
 
   return (
     <LineChart
-      data={data}
-      width={CHART_WIDTH}
-      height={110}
+      data={points}
+      height={140}
       adjustToWidth
       parentWidth={CHART_WIDTH}
       color={Colors.goldLight}
@@ -239,37 +314,49 @@ function ScoreLineChart({ values }: { values: number[] }) {
       endFillColor={Colors.goldLight}
       startOpacity={0.28}
       endOpacity={0.02}
-      hideYAxisText
-      hideRules
-      hideAxesAndRules
-      xAxisThickness={0}
-      yAxisThickness={0}
-      initialSpacing={4}
-      endSpacing={4}
+      textColor={Colors.ivoryMuted}
+      textFontSize={10}
+      textShiftY={-10}
+      yAxisTextStyle={styles.GameStatisticsPanelYAxisLabel}
+      xAxisLabelTextStyle={styles.GameStatisticsPanelXAxisLabel}
+      yAxisColor={Colors.surfaceBorder}
+      xAxisColor={Colors.surfaceBorder}
+      rulesColor={Colors.surfaceBorderSoft}
+      noOfSections={4}
+      xAxisThickness={1}
+      yAxisThickness={1}
+      initialSpacing={12}
+      endSpacing={12}
       disableScroll
     />
   );
 }
 
-function StrokesBarChart({ values }: { values: number[] }) {
-  const data = values.map(value => ({
-    value,
+function StrokesBarChart({ data }: { data: ChartPoint[] }) {
+  const bars = data.map(point => ({
+    value: point.value,
+    label: point.label,
     frontColor: Colors.goldLight,
-    gradientColor: Colors.gold,
   }));
 
   return (
     <BarChart
-      data={data}
+      data={bars}
       width={CHART_WIDTH}
       height={80}
       adjustToWidth
       parentWidth={CHART_WIDTH}
-      showGradient
       barBorderRadius={6}
-      hideYAxisText
-      hideRules
-      hideAxesAndRules
+      isAnimated
+      animationDuration={700}
+      showValuesAsTopLabel
+      topLabelTextStyle={styles.GameStatisticsPanelBarTopLabel}
+      yAxisTextStyle={styles.GameStatisticsPanelYAxisLabel}
+      xAxisLabelTextStyle={styles.GameStatisticsPanelXAxisLabel}
+      yAxisColor={Colors.surfaceBorder}
+      xAxisColor={Colors.surfaceBorder}
+      rulesColor={Colors.surfaceBorderSoft}
+      noOfSections={4}
       xAxisThickness={0}
       yAxisThickness={0}
       initialSpacing={8}
@@ -281,9 +368,11 @@ function StrokesBarChart({ values }: { values: number[] }) {
 
 const styles = StyleSheet.create({
   GameStatisticsPanelScroll: {
+    paddingBottom: 24,
+  },
+  GameStatisticsPanelBody: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 24,
   },
   GameStatisticsPanelPeriodRow: {
     marginBottom: 16,
@@ -315,7 +404,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 8,
   },
-
   GameStatisticsPanelPeriodText: {
     fontSize: 12,
     fontWeight: '600',
@@ -326,7 +414,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.buttonText,
   },
-
   GameStatisticsPanelStatsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -350,6 +437,25 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.headingSemiBold,
     fontSize: 21,
     color: Colors.ivory,
+  },
+  StatCardUnit: {
+    fontSize: 10,
+    color: Colors.textFainter,
+    marginTop: 2,
+  },
+  GameStatisticsPanelYAxisLabel: {
+    color: Colors.textFainter,
+    fontSize: 10,
+  },
+  GameStatisticsPanelXAxisLabel: {
+    color: Colors.textFainter,
+    fontSize: 9,
+  },
+  GameStatisticsPanelBarTopLabel: {
+    fontSize: 10.5,
+    fontWeight: '600',
+    color: Colors.ivoryMuted,
+    marginBottom: 4,
   },
   GameStatisticsPanelChartCard: {
     borderWidth: 1,

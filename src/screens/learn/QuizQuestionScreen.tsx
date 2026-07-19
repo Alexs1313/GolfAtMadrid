@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import {
   Animated,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -80,70 +81,72 @@ export function QuizQuestionScreen() {
 
   return (
     <Animated.View style={[styles.QuizQuestionScreenContainer, animatedStyle]}>
-      <View style={styles.QuizQuestionScreenHeader}>
-        <View style={styles.QuizQuestionScreenHeaderRow}>
-          <Text style={styles.QuizQuestionScreenProgressLabel}>
-            Question {renderedValue.currentIndex + 1} of {total}
-          </Text>
-          <TouchableOpacity
-            style={styles.QuizQuestionScreenPauseBtn}
-            onPress={pauseQuiz}
-          >
-            <Text style={styles.QuizQuestionScreenPauseBtnText}>Pause</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.QuizQuestionScreenProgressTrack}>
-          <Animated.View
-            style={[
-              styles.QuizQuestionScreenProgressFill,
-              {
-                width: progressAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: ['0%', '100%'],
-                }),
-              },
-            ]}
-          />
-        </View>
-      </View>
-
-      <Animated.View
-        style={[styles.QuizQuestionScreenBody, questionAnimatedStyle]}
-      >
-        <Text style={styles.QuizQuestionScreenQuestion}>
-          {question.question}
-        </Text>
-
-        {question.options.map((option, index) => {
-          const isSelected = selectedIndex !== null;
-          const isCorrectOption = index === question.correctIndex;
-          const isWrongSelected =
-            isSelected && index === selectedIndex && !isCorrectOption;
-
-          let optionStyle = styles.QuizQuestionScreenOption;
-          let textStyle = styles.QuizQuestionScreenOptionText;
-          if (isSelected && isCorrectOption) {
-            optionStyle = styles.QuizQuestionScreenOptionCorrect;
-            textStyle = styles.QuizQuestionScreenOptionTextCorrect;
-          } else if (isWrongSelected) {
-            optionStyle = styles.QuizQuestionScreenOptionWrong;
-            textStyle = styles.QuizQuestionScreenOptionTextWrong;
-          }
-
-          return (
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.QuizQuestionScreenHeader}>
+          <View style={styles.QuizQuestionScreenHeaderRow}>
+            <Text style={styles.QuizQuestionScreenProgressLabel}>
+              Question {renderedValue.currentIndex + 1} of {total}
+            </Text>
             <TouchableOpacity
-              key={index}
-              style={optionStyle}
-              disabled={isSelected}
-              onPress={() => answerCurrentQuestion(index)}
+              style={styles.QuizQuestionScreenPauseBtn}
+              onPress={pauseQuiz}
             >
-              <Text style={textStyle}>{option}</Text>
+              <Text style={styles.QuizQuestionScreenPauseBtnText}>Pause</Text>
             </TouchableOpacity>
-          );
-        })}
-      </Animated.View>
+          </View>
+          <View style={styles.QuizQuestionScreenProgressTrack}>
+            <Animated.View
+              style={[
+                styles.QuizQuestionScreenProgressFill,
+                {
+                  width: progressAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: ['0%', '100%'],
+                  }),
+                },
+              ]}
+            />
+          </View>
+        </View>
 
-      {renderedValue.isPaused && <QuizPausedModal />}
+        <Animated.View
+          style={[styles.QuizQuestionScreenBody, questionAnimatedStyle]}
+        >
+          <Text style={styles.QuizQuestionScreenQuestion}>
+            {question.question}
+          </Text>
+
+          {question.options.map((option, index) => {
+            const isSelected = selectedIndex !== null;
+            const isCorrectOption = index === question.correctIndex;
+            const isWrongSelected =
+              isSelected && index === selectedIndex && !isCorrectOption;
+
+            let optionStyle = styles.QuizQuestionScreenOption;
+            let textStyle = styles.QuizQuestionScreenOptionText;
+            if (isSelected && isCorrectOption) {
+              optionStyle = styles.QuizQuestionScreenOptionCorrect;
+              textStyle = styles.QuizQuestionScreenOptionTextCorrect;
+            } else if (isWrongSelected) {
+              optionStyle = styles.QuizQuestionScreenOptionWrong;
+              textStyle = styles.QuizQuestionScreenOptionTextWrong;
+            }
+
+            return (
+              <TouchableOpacity
+                key={index}
+                style={optionStyle}
+                disabled={isSelected}
+                onPress={() => answerCurrentQuestion(index)}
+              >
+                <Text style={textStyle}>{option}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </Animated.View>
+
+        {renderedValue.isPaused && <QuizPausedModal />}
+      </ScrollView>
     </Animated.View>
   );
 }

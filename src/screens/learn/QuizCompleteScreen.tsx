@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Animated,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -36,52 +37,56 @@ export function QuizCompleteScreen() {
 
   return (
     <Animated.View style={[styles.QuizCompleteScreenContainer, animatedStyle]}>
-      <Text style={styles.QuizCompleteScreenEyebrow}>Quiz Complete</Text>
-      <Text style={styles.QuizCompleteScreenScore}>
-        {renderedValue.correct}/{renderedValue.total}
-      </Text>
-      <Text style={styles.QuizCompleteScreenSubtitle}>
-        {performanceLabel(renderedValue.accuracyPct)} · Best{' '}
-        {renderedValue.bestScore}/{renderedValue.total}
-      </Text>
-
-      <View style={styles.QuizCompleteScreenStatsRow}>
-        <StatCard
-          label="CORRECT"
-          value={String(renderedValue.correct)}
-          valueColor="#7bc17b"
-        />
-        <StatCard
-          label="INCORRECT"
-          value={String(renderedValue.incorrect)}
-          valueColor="#e08876"
-        />
-        <StatCard
-          label="ACCURACY"
-          value={`${renderedValue.accuracyPct}%`}
-          valueColor={Colors.ivory}
-        />
-      </View>
-
-      <TouchableOpacity onPress={retryQuiz}>
-        <LinearGradient
-          colors={[Colors.goldLight, Colors.gold]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.QuizCompleteScreenPrimaryBtn}
-        >
-          <Text style={styles.QuizCompleteScreenPrimaryBtnText}>Try Again</Text>
-        </LinearGradient>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.QuizCompleteScreenSecondaryBtn}
-        onPress={closeQuizResult}
-      >
-        <Text style={styles.QuizCompleteScreenSecondaryBtnText}>
-          Return to Learn
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Text style={styles.QuizCompleteScreenEyebrow}>Quiz Complete</Text>
+        <Text style={styles.QuizCompleteScreenScore}>
+          {renderedValue.correct}/{renderedValue.total}
         </Text>
-      </TouchableOpacity>
+        <Text style={styles.QuizCompleteScreenSubtitle}>
+          {performanceLabel(renderedValue.accuracyPct)} · Best{' '}
+          {renderedValue.bestScore}/{renderedValue.total}
+        </Text>
+
+        <View style={styles.QuizCompleteScreenStatsRow}>
+          <StatCard
+            label="CORRECT"
+            value={String(renderedValue.correct)}
+            valueColor="#7bc17b"
+          />
+          <StatCard
+            label="INCORRECT"
+            value={String(renderedValue.incorrect)}
+            valueColor="#e08876"
+          />
+          <StatCard
+            label="ACCURACY"
+            value={`${renderedValue.accuracyPct}%`}
+            valueColor={Colors.ivory}
+          />
+        </View>
+
+        <TouchableOpacity onPress={retryQuiz}>
+          <LinearGradient
+            colors={[Colors.goldLight, Colors.gold]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.QuizCompleteScreenPrimaryBtn}
+          >
+            <Text style={styles.QuizCompleteScreenPrimaryBtnText}>
+              Try Again
+            </Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.QuizCompleteScreenSecondaryBtn}
+          onPress={closeQuizResult}
+        >
+          <Text style={styles.QuizCompleteScreenSecondaryBtnText}>
+            Return to Learn
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
     </Animated.View>
   );
 }

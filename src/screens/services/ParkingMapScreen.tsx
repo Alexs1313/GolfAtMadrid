@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
+import { ScreenHeader } from '../../components/ScreenHeader';
 import { PARKING_SPACES } from '../../data/parking';
 import { useAppNavigation } from '../../navigation/NavigationContext';
 
@@ -16,7 +17,12 @@ import { useRequestsState } from '../../navigation/RequestsContext';
 import { Colors } from '../../theme/colors';
 
 import { Fonts } from '../../constants/theme';
-import type { ParkingSpaceStatus } from '../../types';
+import type { ParkingSpaceStatus, ServiceCategory } from '../../types';
+import {
+  ParkingSubTabs,
+  ServiceCategoryTabs,
+  type ParkingSegment,
+} from './ServicesTabs';
 
 const GRID_COLUMNS = 6;
 const GRID_GAP = 7;
@@ -38,7 +44,21 @@ const STATUS_COLORS: Record<ParkingSpaceStatus, string> = {
   evCharging: '#2c3a4a',
 };
 
-export function ParkingMapScreen() {
+export function ParkingMapScreen({
+  notificationCount,
+  onPressBell,
+  category,
+  onSelectCategory,
+  parkingSegment,
+  onSelectParkingSegment,
+}: {
+  notificationCount: number;
+  onPressBell: () => void;
+  category: ServiceCategory;
+  onSelectCategory: (category: ServiceCategory) => void;
+  parkingSegment: ParkingSegment;
+  onSelectParkingSegment: (segment: ParkingSegment) => void;
+}) {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const { showRequestSent } = useAppNavigation();
   const { reserveParkingSpace } = useRequestsState();
@@ -59,100 +79,120 @@ export function ParkingMapScreen() {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.ParkingMapScreenScroll}
     >
-      <View style={styles.ParkingMapScreenLegendRow}>
-        {LEGEND.map(item => (
-          <View key={item.status} style={styles.ParkingMapScreenLegendItem}>
-            <View
-              style={[
-                styles.ParkingMapScreenLegendDot,
-                { backgroundColor: item.color },
-              ]}
-            />
-            <Text style={styles.ParkingMapScreenLegendText}>{item.label}</Text>
-          </View>
-        ))}
-      </View>
+      <ScreenHeader
+        title="Services"
+        subtitle="Reservations & requests"
+        notificationCount={notificationCount}
+        onPressBell={onPressBell}
+      />
 
-      <View style={styles.ParkingMapScreenGrid}>
-        {PARKING_SPACES.map(space => {
-          const isSelectable = space.status === 'available';
-          const isSelected = space.id === selectedId;
-          const cellStyle = [
-            styles.ParkingMapScreenCell,
-            {
-              width: CELL_SIZE,
-              height: CELL_SIZE,
-              backgroundColor: STATUS_COLORS[space.status],
-            },
-            space.status === 'reserved' && styles.ParkingMapScreenCellDisabled,
-          ];
+      <View style={styles.ParkingMapScreenBody}>
+        <ServiceCategoryTabs category={category} onSelect={onSelectCategory} />
+        <ParkingSubTabs
+          parkingSegment={parkingSegment}
+          onSelect={onSelectParkingSegment}
+        />
 
-          return (
-            <TouchableOpacity
-              key={space.id}
-              disabled={!isSelectable}
-              onPress={() => setSelectedId(space.id)}
-              style={cellStyle}
-            >
-              {isSelected && (
-                <LinearGradient
-                  colors={[Colors.goldLight, Colors.gold]}
-                  style={styles.ParkingMapScreenCellFill}
-                />
-              )}
-              <Text
+        <View style={styles.ParkingMapScreenLegendRow}>
+          {LEGEND.map(item => (
+            <View key={item.status} style={styles.ParkingMapScreenLegendItem}>
+              <View
                 style={[
-                  styles.ParkingMapScreenCellText,
-                  space.status === 'reserved' &&
-                    styles.ParkingMapScreenCellTextDisabled,
-                  isSelected && styles.ParkingMapScreenCellTextSelected,
+                  styles.ParkingMapScreenLegendDot,
+                  { backgroundColor: item.color },
                 ]}
-              >
-                {space.id}
+              />
+              <Text style={styles.ParkingMapScreenLegendText}>
+                {item.label}
               </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-
-      {selectedSpace && (
-        <View style={styles.ParkingMapScreenDetailCard}>
-          <Text style={styles.ParkingMapScreenDetailTitle}>
-            Space {selectedSpace.id}
-          </Text>
-          <Text style={styles.ParkingMapScreenDetailLine}>
-            {selectedSpace.zone} · {selectedSpace.distanceLabel}
-          </Text>
-          <Text style={styles.ParkingMapScreenDetailLine}>
-            Type: {selectedSpace.type}
-          </Text>
-
-          <TouchableOpacity
-            style={styles.ParkingMapScreenConfirmBtnWrap}
-            onPress={confirm}
-          >
-            <LinearGradient
-              colors={[Colors.goldLight, Colors.gold]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.ParkingMapScreenConfirmBtn}
-            >
-              <Text style={styles.ParkingMapScreenConfirmBtnText}>
-                Confirm Parking Request
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
+            </View>
+          ))}
         </View>
-      )}
+
+        <View style={styles.ParkingMapScreenGrid}>
+          {PARKING_SPACES.map(space => {
+            const isSelectable = space.status === 'available';
+            const isSelected = space.id === selectedId;
+            const cellStyle = [
+              styles.ParkingMapScreenCell,
+              {
+                width: CELL_SIZE,
+                height: CELL_SIZE,
+                backgroundColor: STATUS_COLORS[space.status],
+              },
+              space.status === 'reserved' &&
+                styles.ParkingMapScreenCellDisabled,
+            ];
+
+            return (
+              <TouchableOpacity
+                key={space.id}
+                disabled={!isSelectable}
+                onPress={() => setSelectedId(space.id)}
+                style={cellStyle}
+              >
+                {isSelected && (
+                  <LinearGradient
+                    colors={[Colors.goldLight, Colors.gold]}
+                    style={styles.ParkingMapScreenCellFill}
+                  />
+                )}
+                <Text
+                  style={[
+                    styles.ParkingMapScreenCellText,
+                    space.status === 'reserved' &&
+                      styles.ParkingMapScreenCellTextDisabled,
+                    isSelected && styles.ParkingMapScreenCellTextSelected,
+                  ]}
+                >
+                  {space.id}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        {selectedSpace && (
+          <View style={styles.ParkingMapScreenDetailCard}>
+            <Text style={styles.ParkingMapScreenDetailTitle}>
+              Space {selectedSpace.id}
+            </Text>
+            <Text style={styles.ParkingMapScreenDetailLine}>
+              {selectedSpace.zone} · {selectedSpace.distanceLabel}
+            </Text>
+            <Text style={styles.ParkingMapScreenDetailLine}>
+              Type: {selectedSpace.type}
+            </Text>
+
+            <TouchableOpacity
+              style={styles.ParkingMapScreenConfirmBtnWrap}
+              onPress={confirm}
+            >
+              <LinearGradient
+                colors={[Colors.goldLight, Colors.gold]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.ParkingMapScreenConfirmBtn}
+              >
+                <Text style={styles.ParkingMapScreenConfirmBtnText}>
+                  Confirm Parking Request
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   ParkingMapScreenScroll: {
+    paddingBottom: 24,
+  },
+  ParkingMapScreenBody: {
     paddingHorizontal: 16,
     paddingTop: 12,
-    paddingBottom: 24,
   },
 
   ParkingMapScreenLegendRow: {

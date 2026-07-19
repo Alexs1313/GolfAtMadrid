@@ -84,171 +84,177 @@ export function LearnScreen() {
 
   return (
     <View style={styles.LearnScreenContainer}>
-      <ScreenHeader
-        title="Learn"
-        subtitle="Terminology & quiz"
-        notificationCount={activeRequestCount}
-        onPressBell={openRequestCenter}
-      />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.LearnScreenScroll}
       >
-        <View style={styles.LearnScreenSegmentControl}>
-          <TouchableOpacity
-            style={styles.LearnScreenSegmentButton}
-            onPress={() => setSegment('dictionary')}
-          >
-            {segment === 'dictionary' ? (
-              <LinearGradient
-                colors={[Colors.goldLight, Colors.gold]}
-                style={styles.LearnScreenSegmentFill}
-              >
-                <Text style={styles.LearnScreenSegmentTextActive}>
+        <ScreenHeader
+          title="Learn"
+          subtitle="Terminology & quiz"
+          notificationCount={activeRequestCount}
+          onPressBell={openRequestCenter}
+        />
+
+        <View style={styles.LearnScreenBody}>
+          <View style={styles.LearnScreenSegmentControl}>
+            <TouchableOpacity
+              style={styles.LearnScreenSegmentButton}
+              onPress={() => setSegment('dictionary')}
+            >
+              {segment === 'dictionary' ? (
+                <LinearGradient
+                  colors={[Colors.goldLight, Colors.gold]}
+                  style={styles.LearnScreenSegmentFill}
+                >
+                  <Text style={styles.LearnScreenSegmentTextActive}>
+                    Golf Dictionary
+                  </Text>
+                </LinearGradient>
+              ) : (
+                <Text style={styles.LearnScreenSegmentText}>
                   Golf Dictionary
                 </Text>
-              </LinearGradient>
-            ) : (
-              <Text style={styles.LearnScreenSegmentText}>Golf Dictionary</Text>
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.LearnScreenSegmentButton}
-            onPress={() => setSegment('saved')}
-          >
-            {segment === 'saved' ? (
-              <LinearGradient
-                colors={[Colors.goldLight, Colors.gold]}
-                style={styles.LearnScreenSegmentFill}
-              >
-                <Text style={styles.LearnScreenSegmentTextActive}>
-                  Saved Terms
-                </Text>
-              </LinearGradient>
-            ) : (
-              <Text style={styles.LearnScreenSegmentText}>Saved Terms</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.LearnScreenQuizCard}>
-          <Text style={styles.LearnScreenQuizTitle}>
-            Test Your Golf Knowledge
-          </Text>
-          <Text style={styles.LearnScreenQuizSubtitle}>
-            {QUIZ_LENGTH} questions
-            {bestScore !== null
-              ? ` · Best score ${bestScore}/${QUIZ_LENGTH}`
-              : ''}
-          </Text>
-
-          <View style={styles.LearnScreenDifficultyRow}>
-            {DIFFICULTIES.map(difficulty => {
-              const isActive = difficulty === quizDifficulty;
-              return (
-                <TouchableOpacity
-                  key={difficulty}
-                  style={[
-                    styles.LearnScreenDifficultyChip,
-                    isActive && styles.LearnScreenDifficultyChipActive,
-                  ]}
-                  onPress={() => setQuizDifficulty(difficulty)}
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.LearnScreenSegmentButton}
+              onPress={() => setSegment('saved')}
+            >
+              {segment === 'saved' ? (
+                <LinearGradient
+                  colors={[Colors.goldLight, Colors.gold]}
+                  style={styles.LearnScreenSegmentFill}
                 >
-                  <Text
-                    style={[
-                      styles.LearnScreenDifficultyText,
-                      isActive && styles.LearnScreenDifficultyTextActive,
-                    ]}
-                  >
-                    {difficulty}
+                  <Text style={styles.LearnScreenSegmentTextActive}>
+                    Saved Terms
                   </Text>
-                </TouchableOpacity>
-              );
-            })}
+                </LinearGradient>
+              ) : (
+                <Text style={styles.LearnScreenSegmentText}>Saved Terms</Text>
+              )}
+            </TouchableOpacity>
           </View>
 
-          <TouchableOpacity onPress={startQuiz}>
-            <LinearGradient
-              colors={[Colors.goldLight, Colors.gold]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.LearnScreenStartQuizBtn}
-            >
-              <Text style={styles.LearnScreenStartQuizBtnText}>Start Quiz</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.LearnScreenQuizCard}>
+            <Text style={styles.LearnScreenQuizTitle}>
+              Test Your Golf Knowledge
+            </Text>
+            <Text style={styles.LearnScreenQuizSubtitle}>
+              {QUIZ_LENGTH} questions
+              {bestScore !== null
+                ? ` · Best score ${bestScore}/${QUIZ_LENGTH}`
+                : ''}
+            </Text>
 
-        {segment === 'dictionary' && (
-          <>
-            <View style={styles.LearnScreenSearchWrap}>
-              <TextInput
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                placeholder="Search terms…"
-                placeholderTextColor="#757575"
-                style={styles.LearnScreenSearchInput}
-              />
-            </View>
-
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.LearnScreenCategoryRow}
-            >
-              {CATEGORIES.map(category => {
-                const isActive = category === selectedCategory;
+            <View style={styles.LearnScreenDifficultyRow}>
+              {DIFFICULTIES.map(difficulty => {
+                const isActive = difficulty === quizDifficulty;
                 return (
                   <TouchableOpacity
-                    key={category}
-                    onPress={() => setSelectedCategory(category)}
+                    key={difficulty}
                     style={[
-                      styles.LearnScreenCategoryChipWrap,
-                      isActive
-                        ? styles.LearnScreenCategoryChipActive
-                        : styles.LearnScreenCategoryChipInactive,
+                      styles.LearnScreenDifficultyChip,
+                      isActive && styles.LearnScreenDifficultyChipActive,
                     ]}
+                    onPress={() => setQuizDifficulty(difficulty)}
                   >
-                    {isActive && (
-                      <LinearGradient
-                        colors={[Colors.goldLight, Colors.gold]}
-                        style={styles.LearnScreenCategoryChipFill}
-                      />
-                    )}
                     <Text
-                      style={
-                        isActive
-                          ? styles.LearnScreenCategoryTextActive
-                          : styles.LearnScreenCategoryText
-                      }
+                      style={[
+                        styles.LearnScreenDifficultyText,
+                        isActive && styles.LearnScreenDifficultyTextActive,
+                      ]}
                     >
-                      {category}
+                      {difficulty}
                     </Text>
                   </TouchableOpacity>
                 );
               })}
-            </ScrollView>
-          </>
-        )}
+            </View>
 
-        {visibleTerms.length === 0 ? (
-          <Text style={styles.LearnScreenEmptyText}>
-            {segment === 'saved'
-              ? 'No saved terms yet. Tap the star on any term to save it here.'
-              : 'No terms match your search.'}
-          </Text>
-        ) : (
-          visibleTerms.map((term, i) => (
-            <FadeInItem key={term.id} index={i}>
-              <TermCard
-                term={term}
-                isSaved={savedTermIds.has(term.id)}
-                onToggleSaved={() => toggleSavedTerm(term.id)}
-              />
-            </FadeInItem>
-          ))
-        )}
+            <TouchableOpacity onPress={startQuiz}>
+              <LinearGradient
+                colors={[Colors.goldLight, Colors.gold]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.LearnScreenStartQuizBtn}
+              >
+                <Text style={styles.LearnScreenStartQuizBtnText}>
+                  Start Quiz
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+
+          {segment === 'dictionary' && (
+            <>
+              <View style={styles.LearnScreenSearchWrap}>
+                <TextInput
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  placeholder="Search terms…"
+                  placeholderTextColor="#757575"
+                  style={styles.LearnScreenSearchInput}
+                />
+              </View>
+
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={styles.LearnScreenCategoryRow}
+              >
+                {CATEGORIES.map(category => {
+                  const isActive = category === selectedCategory;
+                  return (
+                    <TouchableOpacity
+                      key={category}
+                      onPress={() => setSelectedCategory(category)}
+                      style={[
+                        styles.LearnScreenCategoryChipWrap,
+                        isActive
+                          ? styles.LearnScreenCategoryChipActive
+                          : styles.LearnScreenCategoryChipInactive,
+                      ]}
+                    >
+                      {isActive && (
+                        <LinearGradient
+                          colors={[Colors.goldLight, Colors.gold]}
+                          style={styles.LearnScreenCategoryChipFill}
+                        />
+                      )}
+                      <Text
+                        style={
+                          isActive
+                            ? styles.LearnScreenCategoryTextActive
+                            : styles.LearnScreenCategoryText
+                        }
+                      >
+                        {category}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </ScrollView>
+            </>
+          )}
+
+          {visibleTerms.length === 0 ? (
+            <Text style={styles.LearnScreenEmptyText}>
+              {segment === 'saved'
+                ? 'No saved terms yet. Tap the star on any term to save it here.'
+                : 'No terms match your search.'}
+            </Text>
+          ) : (
+            visibleTerms.map((term, i) => (
+              <FadeInItem key={term.id} index={i}>
+                <TermCard
+                  term={term}
+                  isSaved={savedTermIds.has(term.id)}
+                  onToggleSaved={() => toggleSavedTerm(term.id)}
+                />
+              </FadeInItem>
+            ))
+          )}
+        </View>
       </ScrollView>
     </View>
   );
@@ -291,9 +297,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   LearnScreenScroll: {
+    paddingBottom: 24,
+  },
+  LearnScreenBody: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 24,
   },
 
   LearnScreenSegmentControl: {

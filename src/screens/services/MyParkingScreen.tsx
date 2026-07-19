@@ -2,10 +2,32 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { FadeInItem } from '../../components/FadeInItem';
+import { ScreenHeader } from '../../components/ScreenHeader';
 import { useRequestsState } from '../../navigation/RequestsContext';
 import { Colors } from '../../theme/colors';
 
-export function MyParkingScreen() {
+import type { ServiceCategory } from '../../types';
+import {
+  ParkingSubTabs,
+  ServiceCategoryTabs,
+  type ParkingSegment,
+} from './ServicesTabs';
+
+export function MyParkingScreen({
+  notificationCount,
+  onPressBell,
+  category,
+  onSelectCategory,
+  parkingSegment,
+  onSelectParkingSegment,
+}: {
+  notificationCount: number;
+  onPressBell: () => void;
+  category: ServiceCategory;
+  onSelectCategory: (category: ServiceCategory) => void;
+  parkingSegment: ParkingSegment;
+  onSelectParkingSegment: (segment: ParkingSegment) => void;
+}) {
   const { parkingReservations } = useRequestsState();
 
   return (
@@ -13,45 +35,62 @@ export function MyParkingScreen() {
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.MyParkingScreenScroll}
     >
-      <Text style={styles.MyParkingScreenLabel}>Current & Upcoming</Text>
+      <ScreenHeader
+        title="Services"
+        subtitle="Reservations & requests"
+        notificationCount={notificationCount}
+        onPressBell={onPressBell}
+      />
 
-      {parkingReservations.length === 0 ? (
-        <Text style={styles.MyParkingScreenEmptyText}>
-          No parking reservations yet. Confirm a space on the Parking Map to see
-          it here.
-        </Text>
-      ) : (
-        parkingReservations.map((reservation, i) => (
-          <FadeInItem
-            key={reservation.id}
-            index={i}
-            style={styles.MyParkingScreenRow}
-          >
-            <View>
-              <Text style={styles.MyParkingScreenTitle}>
-                Space {reservation.spaceId} · {reservation.zone}
-              </Text>
-              <Text style={styles.MyParkingScreenSubtitle}>
-                {reservation.dateLabel} · {reservation.timeLabel}
-              </Text>
-            </View>
-            <View style={styles.MyParkingScreenBadge}>
-              <Text style={styles.MyParkingScreenBadgeText}>
-                {reservation.status}
-              </Text>
-            </View>
-          </FadeInItem>
-        ))
-      )}
+      <View style={styles.MyParkingScreenBody}>
+        <ServiceCategoryTabs category={category} onSelect={onSelectCategory} />
+        <ParkingSubTabs
+          parkingSegment={parkingSegment}
+          onSelect={onSelectParkingSegment}
+        />
+
+        <Text style={styles.MyParkingScreenLabel}>Current & Upcoming</Text>
+
+        {parkingReservations.length === 0 ? (
+          <Text style={styles.MyParkingScreenEmptyText}>
+            No parking reservations yet. Confirm a space on the Parking Map to
+            see it here.
+          </Text>
+        ) : (
+          parkingReservations.map((reservation, i) => (
+            <FadeInItem
+              key={reservation.id}
+              index={i}
+              style={styles.MyParkingScreenRow}
+            >
+              <View>
+                <Text style={styles.MyParkingScreenTitle}>
+                  Space {reservation.spaceId} · {reservation.zone}
+                </Text>
+                <Text style={styles.MyParkingScreenSubtitle}>
+                  {reservation.dateLabel} · {reservation.timeLabel}
+                </Text>
+              </View>
+              <View style={styles.MyParkingScreenBadge}>
+                <Text style={styles.MyParkingScreenBadgeText}>
+                  {reservation.status}
+                </Text>
+              </View>
+            </FadeInItem>
+          ))
+        )}
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   MyParkingScreenScroll: {
+    paddingBottom: 24,
+  },
+  MyParkingScreenBody: {
     paddingHorizontal: 16,
     paddingTop: 12,
-    paddingBottom: 24,
   },
   MyParkingScreenLabel: {
     fontSize: 12,

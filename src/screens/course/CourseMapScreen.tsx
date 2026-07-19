@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import MapView, { Marker } from 'react-native-maps';
 
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { Fonts } from '../../constants/theme';
@@ -27,6 +27,32 @@ const LEGEND = [
   { label: 'Rest area', color: Colors.legendRest },
 ];
 
+const CLUBHOUSE_COORDINATE = { latitude: 40.4869667, longitude: -3.7383436 };
+const INITIAL_MAP_REGION = {
+  latitude: 40.4870069,
+  longitude: -3.7374985,
+  latitudeDelta: 0.016,
+  longitudeDelta: 0.021,
+};
+
+const FACILITY_MARKERS = [
+  {
+    label: 'Practice area',
+    color: Colors.legendPractice,
+    coordinate: { latitude: 40.487065, longitude: -3.738451 },
+  },
+  {
+    label: 'Cart station',
+    color: Colors.legendCart,
+    coordinate: { latitude: 40.485689, longitude: -3.738436 },
+  },
+  {
+    label: 'Rest area',
+    color: Colors.legendRest,
+    coordinate: { latitude: 40.485699, longitude: -3.737086 },
+  },
+];
+
 export function CourseMapScreen() {
   const {
     selectedMapHole,
@@ -42,49 +68,66 @@ export function CourseMapScreen() {
 
   return (
     <View style={styles.CourseMapScreenContainer}>
-      <ScreenHeader
-        title="Course Map"
-        subtitle="18 holes · Par 72"
-        notificationCount={activeRequestCount}
-        onPressBell={openRequestCenter}
-      />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.CourseMapScreenScrollContent}
       >
-        <View style={styles.CourseMapScreenMapCard}>
-          <Image
-            source={require('../../assets/golf-at-course-map.png')}
-            style={styles.CourseMapScreenMapImage}
-            resizeMode="stretch"
-          />
-          {HOLES.map(hole => (
-            <TouchableOpacity
-              key={hole.number}
-              style={[
-                styles.CourseMapScreenMarker,
-                { left: `${hole.markerXPct}%`, top: `${hole.markerYPct}%` },
-              ]}
-              onPress={() => selectMapHole(hole)}
-            />
-          ))}
-        </View>
-
-        <View style={styles.CourseMapScreenLegendRow}>
-          {LEGEND.map(item => (
-            <View key={item.label} style={styles.CourseMapScreenLegendItem}>
-              <View
-                style={[
-                  styles.CourseMapScreenLegendDot,
-                  { backgroundColor: item.color },
-                ]}
+        <ScreenHeader
+          title="Course Map"
+          subtitle="18 holes · Par 72"
+          notificationCount={activeRequestCount}
+          onPressBell={openRequestCenter}
+        />
+        <View style={styles.CourseMapScreenBody}>
+          <View style={styles.CourseMapScreenMapCard}>
+            <MapView
+              style={styles.CourseMapScreenMap}
+              initialRegion={INITIAL_MAP_REGION}
+            >
+              <Marker
+                coordinate={CLUBHOUSE_COORDINATE}
+                title="Clubhouse"
+                pinColor={Colors.legendClubhouse}
               />
-              <Text style={styles.CourseMapScreenLegendLabel}>
-                {item.label}
-              </Text>
-            </View>
-          ))}
+              {HOLES.map(hole => (
+                <Marker
+                  key={hole.number}
+                  coordinate={{
+                    latitude: hole.latitude,
+                    longitude: hole.longitude,
+                  }}
+                  title={`Hole ${hole.number}`}
+                  description={`Par ${hole.par} · ${hole.yards} yds`}
+                  pinColor={Colors.legendStart}
+                  onPress={() => selectMapHole(hole)}
+                />
+              ))}
+              {FACILITY_MARKERS.map(facility => (
+                <Marker
+                  key={facility.label}
+                  coordinate={facility.coordinate}
+                  title={facility.label}
+                  pinColor={facility.color}
+                />
+              ))}
+            </MapView>
+          </View>
+
+          <View style={styles.CourseMapScreenLegendRow}>
+            {LEGEND.map(item => (
+              <View key={item.label} style={styles.CourseMapScreenLegendItem}>
+                <View
+                  style={[
+                    styles.CourseMapScreenLegendDot,
+                    { backgroundColor: item.color },
+                  ]}
+                />
+                <Text style={styles.CourseMapScreenLegendLabel}>
+                  {item.label}
+                </Text>
+              </View>
+            ))}
+          </View>
         </View>
       </ScrollView>
 
@@ -174,8 +217,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   CourseMapScreenScrollContent: {
-    padding: 16,
     paddingBottom: 24,
+  },
+  CourseMapScreenBody: {
+    padding: 16,
   },
 
   CourseMapScreenMapCard: {
@@ -186,18 +231,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.surfaceBorder,
   },
-  CourseMapScreenMapImage: {
+  CourseMapScreenMap: {
     width: '100%',
     height: '100%',
-  },
-
-  CourseMapScreenMarker: {
-    position: 'absolute',
-    width: 34,
-    height: 34,
-    marginLeft: -17,
-    marginTop: -17,
-    borderRadius: 17,
   },
   CourseMapScreenLegendRow: {
     flexDirection: 'row',

@@ -16,6 +16,7 @@
     "react-native": "0.86.0",
     "react-native-gifted-charts": "^1.4.77",
     "react-native-linear-gradient": "^2.8.3",
+    "react-native-maps": "^1.29.0",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-svg": "^15.15.5",
     "react-native-video": "^6.9.1"
