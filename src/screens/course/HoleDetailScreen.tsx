@@ -53,70 +53,72 @@ export function HoleDetailScreen() {
   };
 
   return (
-    <Animated.View style={[styles.HoleDetailScreenContainer, animatedStyle]}>
+    <Animated.View style={[styles.HoleDetailScreenWrapper, animatedStyle]}>
       <BackHeader title={`Hole ${hole.number}`} onBack={closeHoleDetail} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.HoleDetailScreenBody}
+        contentContainerStyle={styles.HoleDetailScreenContent}
       >
         <Image
-          source={require('../../assets/golf-at-hole-hero.png')}
-          style={styles.HoleDetailScreenImage}
+          source={require('../../assets/guide-at-mdrd-hole-hero.png')}
+          style={styles.HoleDetailScreenHero}
           resizeMode="cover"
         />
 
-        <View style={styles.HoleDetailScreenStatsGrid}>
-          <View style={styles.HoleDetailScreenStatCard}>
-            <Text style={styles.HoleDetailScreenStatLabel}>PAR</Text>
-            <Text style={styles.HoleDetailScreenStatValue}>{hole.par}</Text>
+        <View style={styles.HoleDetailScreenStatsBoard}>
+          <View style={styles.HoleDetailScreenStatTile}>
+            <Text style={styles.HoleDetailScreenStatCaption}>PAR</Text>
+            <Text style={styles.HoleDetailScreenStatFigure}>{hole.par}</Text>
           </View>
-          <View style={styles.HoleDetailScreenStatCard}>
-            <Text style={styles.HoleDetailScreenStatLabel}>DISTANCE</Text>
-            <Text style={styles.HoleDetailScreenStatValue}>
+          <View style={styles.HoleDetailScreenStatTile}>
+            <Text style={styles.HoleDetailScreenStatCaption}>DISTANCE</Text>
+            <Text style={styles.HoleDetailScreenStatFigure}>
               {hole.yards} yds
             </Text>
           </View>
-          <View style={styles.HoleDetailScreenStatCard}>
-            <Text style={styles.HoleDetailScreenStatLabel}>HANDICAP INDEX</Text>
-            <Text style={styles.HoleDetailScreenStatValue}>
+          <View style={styles.HoleDetailScreenStatTile}>
+            <Text style={styles.HoleDetailScreenStatCaption}>
+              HANDICAP INDEX
+            </Text>
+            <Text style={styles.HoleDetailScreenStatFigure}>
               {hole.handicapIndex}
             </Text>
           </View>
-          <View style={styles.HoleDetailScreenStatCard}>
-            <Text style={styles.HoleDetailScreenStatLabel}>TERRAIN</Text>
-            <Text style={styles.HoleDetailScreenStatValueSmall}>
+          <View style={styles.HoleDetailScreenStatTile}>
+            <Text style={styles.HoleDetailScreenStatCaption}>TERRAIN</Text>
+            <Text style={styles.HoleDetailScreenStatFigureCompact}>
               {hole.terrain}
             </Text>
           </View>
         </View>
 
-        <Text style={styles.HoleDetailScreenDescription}>
-          {hole.description}
-        </Text>
+        <Text style={styles.HoleDetailScreenSummary}>{hole.description}</Text>
 
-        <Text style={styles.HoleDetailScreenSectionLabel}>Strategy</Text>
-        <Text style={styles.HoleDetailScreenTip}>
-          <Text style={styles.HoleDetailScreenTipLabel}>Beginner tip: </Text>
+        <Text style={styles.HoleDetailScreenSectionCaption}>Strategy</Text>
+        <Text style={styles.HoleDetailScreenNote}>
+          <Text style={styles.HoleDetailScreenNoteCaption}>Beginner tip: </Text>
           {hole.beginnerTip}
         </Text>
-        <Text style={styles.HoleDetailScreenTip}>
-          <Text style={styles.HoleDetailScreenTipLabel}>Advanced tip: </Text>
+        <Text style={styles.HoleDetailScreenNote}>
+          <Text style={styles.HoleDetailScreenNoteCaption}>Advanced tip: </Text>
           {hole.advancedTip}
         </Text>
 
-        <View style={styles.HoleDetailScreenNavRow}>
+        <View style={styles.HoleDetailScreenNavLine}>
           <TouchableOpacity
-            style={styles.HoleDetailScreenNavBtn}
+            style={styles.HoleDetailScreenNavControl}
             onPress={() => openHoleDetail(previousHole)}
           >
-            <Text style={styles.HoleDetailScreenNavBtnText}>Previous Hole</Text>
+            <Text style={styles.HoleDetailScreenNavControlCopy}>
+              Previous Hole
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.HoleDetailScreenNavBtn}
+            style={styles.HoleDetailScreenNavControl}
             onPress={() => openHoleDetail(nextHole)}
           >
-            <Text style={styles.HoleDetailScreenNavBtnText}>Next Hole</Text>
+            <Text style={styles.HoleDetailScreenNavControlCopy}>Next Hole</Text>
           </TouchableOpacity>
         </View>
 
@@ -129,9 +131,9 @@ export function HoleDetailScreen() {
             colors={[Colors.goldLight, Colors.gold]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.HoleDetailScreenCta}
+            style={styles.HoleDetailScreenPrimaryAction}
           >
-            <Text style={styles.HoleDetailScreenCtaText}>
+            <Text style={styles.HoleDetailScreenPrimaryActionCopy}>
               {added ? 'Added ✓' : 'Add to Current Game'}
             </Text>
           </LinearGradient>
@@ -142,7 +144,7 @@ export function HoleDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  HoleDetailScreenContainer: {
+  HoleDetailScreenWrapper: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -150,76 +152,76 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: Colors.background,
   },
-  HoleDetailScreenBody: {
+  HoleDetailScreenContent: {
     paddingHorizontal: 18,
     paddingBottom: 32,
   },
 
-  HoleDetailScreenImage: {
+  HoleDetailScreenHero: {
     width: '100%',
     height: 140,
     borderRadius: 19,
     marginBottom: 18,
   },
 
-  HoleDetailScreenStatsGrid: {
+  HoleDetailScreenStatsBoard: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
     marginBottom: 20,
   },
-  HoleDetailScreenStatCard: {
+  HoleDetailScreenStatTile: {
     width: '48%',
     backgroundColor: Colors.surface,
     borderRadius: 14,
     padding: 12,
   },
-  HoleDetailScreenStatLabel: {
+  HoleDetailScreenStatCaption: {
     fontSize: 10,
     color: Colors.textFaint,
     marginBottom: 8,
   },
 
-  HoleDetailScreenStatValue: {
+  HoleDetailScreenStatFigure: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 16,
     color: Colors.ivory,
   },
-  HoleDetailScreenStatValueSmall: {
+  HoleDetailScreenStatFigureCompact: {
     fontSize: 14,
     fontWeight: '600',
     color: Colors.ivory,
   },
-  HoleDetailScreenDescription: {
+  HoleDetailScreenSummary: {
     fontSize: 12.5,
     lineHeight: 20,
     color: Colors.ivoryMuted,
     marginBottom: 20,
   },
 
-  HoleDetailScreenSectionLabel: {
+  HoleDetailScreenSectionCaption: {
     fontSize: 12,
     color: Colors.textFaint,
     marginBottom: 12,
   },
-  HoleDetailScreenTip: {
+  HoleDetailScreenNote: {
     fontSize: 12.5,
     lineHeight: 19.375,
     color: Colors.ivoryMuted,
     marginBottom: 12,
   },
-  HoleDetailScreenTipLabel: {
+  HoleDetailScreenNoteCaption: {
     color: Colors.ivoryMuted,
     fontWeight: '700',
   },
-  HoleDetailScreenNavRow: {
+  HoleDetailScreenNavLine: {
     flexDirection: 'row',
     gap: 10,
     marginTop: 16,
     marginBottom: 12,
   },
 
-  HoleDetailScreenNavBtn: {
+  HoleDetailScreenNavControl: {
     flex: 1,
     height: 41,
     borderRadius: 14,
@@ -229,20 +231,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  HoleDetailScreenNavBtnText: {
+  HoleDetailScreenNavControlCopy: {
     fontSize: 12.5,
     fontWeight: '600',
     color: Colors.ivory,
   },
 
-  HoleDetailScreenCta: {
+  HoleDetailScreenPrimaryAction: {
     height: 42.5,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  HoleDetailScreenCtaText: {
+  HoleDetailScreenPrimaryActionCopy: {
     fontSize: 13.5,
     fontWeight: '700',
     color: Colors.buttonText,

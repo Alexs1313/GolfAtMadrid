@@ -80,24 +80,26 @@ export function QuizQuestionScreen() {
   };
 
   return (
-    <Animated.View style={[styles.QuizQuestionScreenContainer, animatedStyle]}>
+    <Animated.View style={[styles.QuizQuestionScreenWrapper, animatedStyle]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.QuizQuestionScreenHeader}>
-          <View style={styles.QuizQuestionScreenHeaderRow}>
-            <Text style={styles.QuizQuestionScreenProgressLabel}>
+        <View style={styles.QuizQuestionScreenTopSection}>
+          <View style={styles.QuizQuestionScreenTopLine}>
+            <Text style={styles.QuizQuestionScreenProgressCaption}>
               Question {renderedValue.currentIndex + 1} of {total}
             </Text>
             <TouchableOpacity
-              style={styles.QuizQuestionScreenPauseBtn}
+              style={styles.QuizQuestionScreenPauseAction}
               onPress={pauseQuiz}
             >
-              <Text style={styles.QuizQuestionScreenPauseBtnText}>Pause</Text>
+              <Text style={styles.QuizQuestionScreenPauseActionLabel}>
+                Pause
+              </Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.QuizQuestionScreenProgressTrack}>
+          <View style={styles.QuizQuestionScreenProgressRail}>
             <Animated.View
               style={[
-                styles.QuizQuestionScreenProgressFill,
+                styles.QuizQuestionScreenProgressIndicator,
                 {
                   width: progressAnim.interpolate({
                     inputRange: [0, 1],
@@ -110,9 +112,9 @@ export function QuizQuestionScreen() {
         </View>
 
         <Animated.View
-          style={[styles.QuizQuestionScreenBody, questionAnimatedStyle]}
+          style={[styles.QuizQuestionScreenContent, questionAnimatedStyle]}
         >
-          <Text style={styles.QuizQuestionScreenQuestion}>
+          <Text style={styles.QuizQuestionScreenPrompt}>
             {question.question}
           </Text>
 
@@ -122,14 +124,14 @@ export function QuizQuestionScreen() {
             const isWrongSelected =
               isSelected && index === selectedIndex && !isCorrectOption;
 
-            let optionStyle = styles.QuizQuestionScreenOption;
-            let textStyle = styles.QuizQuestionScreenOptionText;
+            let optionStyle = styles.QuizQuestionScreenChoice;
+            let textStyle = styles.QuizQuestionScreenChoiceLabel;
             if (isSelected && isCorrectOption) {
-              optionStyle = styles.QuizQuestionScreenOptionCorrect;
-              textStyle = styles.QuizQuestionScreenOptionTextCorrect;
+              optionStyle = styles.QuizQuestionScreenChoiceCorrect;
+              textStyle = styles.QuizQuestionScreenChoiceLabelCorrect;
             } else if (isWrongSelected) {
-              optionStyle = styles.QuizQuestionScreenOptionWrong;
-              textStyle = styles.QuizQuestionScreenOptionTextWrong;
+              optionStyle = styles.QuizQuestionScreenChoiceIncorrect;
+              textStyle = styles.QuizQuestionScreenChoiceLabelIncorrect;
             }
 
             return (
@@ -152,7 +154,7 @@ export function QuizQuestionScreen() {
 }
 
 const styles = StyleSheet.create({
-  QuizQuestionScreenContainer: {
+  QuizQuestionScreenWrapper: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -161,25 +163,25 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
 
-  QuizQuestionScreenHeader: {
+  QuizQuestionScreenTopSection: {
     paddingTop: 56,
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
 
-  QuizQuestionScreenHeaderRow: {
+  QuizQuestionScreenTopLine: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 12,
   },
 
-  QuizQuestionScreenProgressLabel: {
+  QuizQuestionScreenProgressCaption: {
     fontSize: 12.5,
     color: Colors.ivoryMuted,
   },
 
-  QuizQuestionScreenPauseBtn: {
+  QuizQuestionScreenPauseAction: {
     height: 28,
     paddingHorizontal: 14,
     borderRadius: 20,
@@ -189,34 +191,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  QuizQuestionScreenPauseBtnText: {
+  QuizQuestionScreenPauseActionLabel: {
     fontSize: 11.5,
     fontWeight: '600',
     color: Colors.goldLight,
   },
-  QuizQuestionScreenProgressTrack: {
+  QuizQuestionScreenProgressRail: {
     height: 5,
     borderRadius: 3,
     backgroundColor: '#1b1f27',
     overflow: 'hidden',
   },
-  QuizQuestionScreenProgressFill: {
+  QuizQuestionScreenProgressIndicator: {
     height: 5,
     borderRadius: 3,
     backgroundColor: Colors.goldLight,
   },
-  QuizQuestionScreenBody: {
+  QuizQuestionScreenContent: {
     paddingHorizontal: 20,
   },
 
-  QuizQuestionScreenQuestion: {
+  QuizQuestionScreenPrompt: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 20,
     lineHeight: 27,
     color: Colors.ivory,
     marginBottom: 24,
   },
-  QuizQuestionScreenOption: {
+  QuizQuestionScreenChoice: {
     minHeight: 49,
     borderRadius: 14,
     backgroundColor: Colors.surface,
@@ -228,13 +230,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  QuizQuestionScreenOptionText: {
+  QuizQuestionScreenChoiceLabel: {
     fontSize: 14,
     fontWeight: '600',
     color: Colors.ivory,
   },
 
-  QuizQuestionScreenOptionCorrect: {
+  QuizQuestionScreenChoiceCorrect: {
     minHeight: 49,
     borderRadius: 14,
     backgroundColor: 'rgba(123,193,123,0.16)',
@@ -245,13 +247,13 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     marginBottom: 12,
   },
-  QuizQuestionScreenOptionTextCorrect: {
+  QuizQuestionScreenChoiceLabelCorrect: {
     fontSize: 14,
     fontWeight: '600',
     color: '#9edb9e',
   },
 
-  QuizQuestionScreenOptionWrong: {
+  QuizQuestionScreenChoiceIncorrect: {
     minHeight: 49,
     borderRadius: 14,
     backgroundColor: 'rgba(196,90,70,0.16)',
@@ -262,7 +264,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     marginBottom: 12,
   },
-  QuizQuestionScreenOptionTextWrong: {
+  QuizQuestionScreenChoiceLabelIncorrect: {
     fontSize: 14,
     fontWeight: '600',
     color: '#e08876',

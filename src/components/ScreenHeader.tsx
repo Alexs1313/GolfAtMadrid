@@ -19,23 +19,21 @@ export function ScreenHeader({
   onPressBell,
 }: Props) {
   return (
-    <View style={styles.ScreenHeaderContainer}>
+    <View style={styles.ScreenHeaderWrapper}>
       <View>
-        <Text style={styles.ScreenHeaderTitle}>{title}</Text>
-        <Text style={styles.ScreenHeaderSubtitle}>{subtitle}</Text>
+        <Text style={styles.ScreenHeaderHeading}>{title}</Text>
+        <Text style={styles.ScreenHeaderCaption}>{subtitle}</Text>
       </View>
 
       <TouchableOpacity
-        style={styles.ScreenHeaderBell}
+        style={styles.ScreenHeaderAlert}
         onPress={onPressBell}
         disabled={!onPressBell}
       >
         <AppIcon name="bell" size={18} />
         {notificationCount > 0 && (
-          <View style={styles.ScreenHeaderBadge}>
-            <Text style={styles.ScreenHeaderBadgeText}>
-              {notificationCount}
-            </Text>
+          <View style={styles.ScreenHeaderChip}>
+            <Text style={styles.ScreenHeaderChipCopy}>{notificationCount}</Text>
           </View>
         )}
       </TouchableOpacity>
@@ -44,7 +42,7 @@ export function ScreenHeader({
 }
 
 const styles = StyleSheet.create({
-  ScreenHeaderContainer: {
+  ScreenHeaderWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
@@ -56,19 +54,19 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.headerBg,
   },
 
-  ScreenHeaderTitle: {
+  ScreenHeaderHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 23,
     color: Colors.ivory,
   },
-  ScreenHeaderSubtitle: {
+  ScreenHeaderCaption: {
     fontSize: 11.5,
     color: Colors.textFaint,
     letterSpacing: 0.5,
     marginTop: 4,
   },
 
-  ScreenHeaderBell: {
+  ScreenHeaderAlert: {
     width: 40,
     height: 40,
     borderRadius: 20,
@@ -78,7 +76,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  ScreenHeaderBadge: {
+  ScreenHeaderChip: {
     position: 'absolute',
     top: -2,
     right: -4,
@@ -93,7 +91,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  ScreenHeaderBadgeText: {
+  ScreenHeaderChipCopy: {
     fontSize: 9.5,
     fontWeight: '700',
     color: '#fff',

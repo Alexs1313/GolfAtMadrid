@@ -83,7 +83,7 @@ export function GameStatisticsPanel({
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.GameStatisticsPanelScroll}
+      contentContainerStyle={styles.GameStatisticsPanelScroller}
     >
       <ScreenHeader
         title="Score"
@@ -92,31 +92,31 @@ export function GameStatisticsPanel({
         onPressBell={onPressBell}
       />
 
-      <View style={styles.GameStatisticsPanelBody}>
+      <View style={styles.GameStatisticsPanelContent}>
         <ScoreSegmentTabs segment={segment} onSelect={setSegment} />
 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          style={styles.GameStatisticsPanelPeriodRow}
+          style={styles.GameStatisticsPanelPeriodLine}
         >
           {PERIODS.map(p => {
             const isActive = p.key === period;
             return (
               <TouchableOpacity key={p.key} onPress={() => setPeriod(p.key)}>
                 {isActive ? (
-                  <View style={styles.GameStatisticsPanelPeriodChip}>
+                  <View style={styles.GameStatisticsPanelPeriodTag}>
                     <LinearGradient
                       colors={[Colors.goldLight, Colors.gold]}
-                      style={styles.GameStatisticsPanelPeriodChipFill}
+                      style={styles.GameStatisticsPanelPeriodTagFill}
                     />
-                    <Text style={styles.GameStatisticsPanelPeriodTextActive}>
+                    <Text style={styles.GameStatisticsPanelPeriodLabelActive}>
                       {p.label}
                     </Text>
                   </View>
                 ) : (
-                  <View style={styles.GameStatisticsPanelPeriodChipInactive}>
-                    <Text style={styles.GameStatisticsPanelPeriodText}>
+                  <View style={styles.GameStatisticsPanelPeriodTagInactive}>
+                    <Text style={styles.GameStatisticsPanelPeriodLabel}>
                       {p.label}
                     </Text>
                   </View>
@@ -126,7 +126,7 @@ export function GameStatisticsPanel({
           })}
         </ScrollView>
 
-        <View style={styles.GameStatisticsPanelStatsGrid}>
+        <View style={styles.GameStatisticsPanelStatsLayout}>
           <StatCard
             label="GAMES PLAYED"
             value={stats.gamesPlayed}
@@ -147,8 +147,8 @@ export function GameStatisticsPanel({
           />
         </View>
 
-        <View style={styles.GameStatisticsPanelChartCard}>
-          <Text style={styles.GameStatisticsPanelChartTitle}>
+        <View style={styles.GameStatisticsPanelChartTile}>
+          <Text style={styles.GameStatisticsPanelChartHeading}>
             Score History (strokes vs par)
           </Text>
           {isDemo ? (
@@ -162,7 +162,7 @@ export function GameStatisticsPanel({
               }))}
             />
           ) : (
-            <Text style={styles.GameStatisticsPanelChartEmpty}>
+            <Text style={styles.GameStatisticsPanelChartPlaceholder}>
               {previousGames.length === 0
                 ? 'Play and save at least 2 games to see your trend.'
                 : 'Not enough rounds in this period to show a trend.'}
@@ -170,8 +170,8 @@ export function GameStatisticsPanel({
           )}
         </View>
 
-        <View style={styles.GameStatisticsPanelChartCard}>
-          <Text style={styles.GameStatisticsPanelChartTitle}>
+        <View style={styles.GameStatisticsPanelChartTile}>
+          <Text style={styles.GameStatisticsPanelChartHeading}>
             Strokes per Round (last 6)
           </Text>
           {isDemo ? (
@@ -185,7 +185,7 @@ export function GameStatisticsPanel({
               }))}
             />
           ) : (
-            <Text style={styles.GameStatisticsPanelChartEmpty}>
+            <Text style={styles.GameStatisticsPanelChartPlaceholder}>
               {previousGames.length === 0
                 ? 'No rounds saved yet.'
                 : 'No rounds saved in this period yet.'}
@@ -193,15 +193,15 @@ export function GameStatisticsPanel({
           )}
         </View>
 
-        <Text style={styles.GameStatisticsPanelPreviousLabel}>
+        <Text style={styles.GameStatisticsPanelPreviousCaption}>
           Previous Games
         </Text>
         {previousGames.length === 0 ? (
-          <Text style={styles.GameStatisticsPanelEmptyText}>
+          <Text style={styles.GameStatisticsPanelEmptyCopy}>
             No saved games yet. Finish a round and tap Save Game to see it here.
           </Text>
         ) : listGames.length === 0 ? (
-          <Text style={styles.GameStatisticsPanelEmptyText}>
+          <Text style={styles.GameStatisticsPanelEmptyCopy}>
             No saved games in this period.
           </Text>
         ) : (
@@ -209,15 +209,15 @@ export function GameStatisticsPanel({
             <FadeInItem
               key={game.id}
               index={i}
-              style={styles.GameStatisticsPanelGameRow}
+              style={styles.GameStatisticsPanelGameLine}
             >
-              <Text style={styles.GameStatisticsPanelGameDate}>
+              <Text style={styles.GameStatisticsPanelGameDay}>
                 {game.dateLabel}
               </Text>
-              <Text style={styles.GameStatisticsPanelGameStrokes}>
+              <Text style={styles.GameStatisticsPanelGameStrokeCount}>
                 {game.summary.finalStrokes} strokes
               </Text>
-              <Text style={styles.GameStatisticsPanelGameScore}>
+              <Text style={styles.GameStatisticsPanelGameTally}>
                 {formatToPar(game.summary.scoreToPar)}
               </Text>
             </FadeInItem>
@@ -279,10 +279,10 @@ function StatCard({
   unit: string;
 }) {
   return (
-    <View style={styles.StatCardContainer}>
-      <Text style={styles.StatCardLabel}>{label}</Text>
-      <Text style={styles.StatCardValue}>{value}</Text>
-      <Text style={styles.StatCardUnit}>{unit}</Text>
+    <View style={styles.StatCardWrapper}>
+      <Text style={styles.StatCardCaption}>{label}</Text>
+      <Text style={styles.StatCardFigure}>{value}</Text>
+      <Text style={styles.StatCardSuffix}>{unit}</Text>
     </View>
   );
 }
@@ -317,8 +317,8 @@ function ScoreLineChart({ data }: { data: ChartPoint[] }) {
       textColor={Colors.ivoryMuted}
       textFontSize={10}
       textShiftY={-10}
-      yAxisTextStyle={styles.GameStatisticsPanelYAxisLabel}
-      xAxisLabelTextStyle={styles.GameStatisticsPanelXAxisLabel}
+      yAxisTextStyle={styles.GameStatisticsPanelYAxisCaption}
+      xAxisLabelTextStyle={styles.GameStatisticsPanelXAxisCaption}
       yAxisColor={Colors.surfaceBorder}
       xAxisColor={Colors.surfaceBorder}
       rulesColor={Colors.surfaceBorderSoft}
@@ -350,9 +350,9 @@ function StrokesBarChart({ data }: { data: ChartPoint[] }) {
       isAnimated
       animationDuration={700}
       showValuesAsTopLabel
-      topLabelTextStyle={styles.GameStatisticsPanelBarTopLabel}
-      yAxisTextStyle={styles.GameStatisticsPanelYAxisLabel}
-      xAxisLabelTextStyle={styles.GameStatisticsPanelXAxisLabel}
+      topLabelTextStyle={styles.GameStatisticsPanelBarTopCaption}
+      yAxisTextStyle={styles.GameStatisticsPanelYAxisCaption}
+      xAxisLabelTextStyle={styles.GameStatisticsPanelXAxisCaption}
       yAxisColor={Colors.surfaceBorder}
       xAxisColor={Colors.surfaceBorder}
       rulesColor={Colors.surfaceBorderSoft}
@@ -367,17 +367,17 @@ function StrokesBarChart({ data }: { data: ChartPoint[] }) {
 }
 
 const styles = StyleSheet.create({
-  GameStatisticsPanelScroll: {
+  GameStatisticsPanelScroller: {
     paddingBottom: 24,
   },
-  GameStatisticsPanelBody: {
+  GameStatisticsPanelContent: {
     paddingHorizontal: 16,
     paddingTop: 16,
   },
-  GameStatisticsPanelPeriodRow: {
+  GameStatisticsPanelPeriodLine: {
     marginBottom: 16,
   },
-  GameStatisticsPanelPeriodChip: {
+  GameStatisticsPanelPeriodTag: {
     height: 32.5,
     paddingHorizontal: 16,
     borderRadius: 20,
@@ -386,14 +386,14 @@ const styles = StyleSheet.create({
     marginRight: 8,
     overflow: 'hidden',
   },
-  GameStatisticsPanelPeriodChipFill: {
+  GameStatisticsPanelPeriodTagFill: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
-  GameStatisticsPanelPeriodChipInactive: {
+  GameStatisticsPanelPeriodTagInactive: {
     height: 32.5,
     paddingHorizontal: 16,
     borderRadius: 20,
@@ -404,60 +404,60 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 8,
   },
-  GameStatisticsPanelPeriodText: {
+  GameStatisticsPanelPeriodLabel: {
     fontSize: 12,
     fontWeight: '600',
     color: Colors.ivoryMuted,
   },
-  GameStatisticsPanelPeriodTextActive: {
+  GameStatisticsPanelPeriodLabelActive: {
     fontSize: 12,
     fontWeight: '600',
     color: Colors.buttonText,
   },
-  GameStatisticsPanelStatsGrid: {
+  GameStatisticsPanelStatsLayout: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
     marginBottom: 16,
   },
-  StatCardContainer: {
+  StatCardWrapper: {
     width: '48%',
     borderWidth: 1,
     borderColor: Colors.surfaceBorder,
     borderRadius: 16,
     padding: 13,
   },
-  StatCardLabel: {
+  StatCardCaption: {
     fontSize: 10.5,
     color: Colors.textFaint,
     marginBottom: 8,
   },
 
-  StatCardValue: {
+  StatCardFigure: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 21,
     color: Colors.ivory,
   },
-  StatCardUnit: {
+  StatCardSuffix: {
     fontSize: 10,
     color: Colors.textFainter,
     marginTop: 2,
   },
-  GameStatisticsPanelYAxisLabel: {
+  GameStatisticsPanelYAxisCaption: {
     color: Colors.textFainter,
     fontSize: 10,
   },
-  GameStatisticsPanelXAxisLabel: {
+  GameStatisticsPanelXAxisCaption: {
     color: Colors.textFainter,
     fontSize: 9,
   },
-  GameStatisticsPanelBarTopLabel: {
+  GameStatisticsPanelBarTopCaption: {
     fontSize: 10.5,
     fontWeight: '600',
     color: Colors.ivoryMuted,
     marginBottom: 4,
   },
-  GameStatisticsPanelChartCard: {
+  GameStatisticsPanelChartTile: {
     borderWidth: 1,
     borderColor: Colors.surfaceBorder,
     borderRadius: 19,
@@ -465,31 +465,31 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
-  GameStatisticsPanelChartTitle: {
+  GameStatisticsPanelChartHeading: {
     fontSize: 12.5,
     color: Colors.ivoryMuted,
     marginBottom: 12,
   },
-  GameStatisticsPanelChartEmpty: {
+  GameStatisticsPanelChartPlaceholder: {
     fontSize: 12,
     color: Colors.textFainter,
     paddingVertical: 20,
     textAlign: 'center',
   },
-  GameStatisticsPanelPreviousLabel: {
+  GameStatisticsPanelPreviousCaption: {
     fontSize: 12,
     color: Colors.textFaint,
     marginBottom: 10,
   },
 
-  GameStatisticsPanelEmptyText: {
+  GameStatisticsPanelEmptyCopy: {
     fontSize: 12.5,
     color: 'rgba(244,241,234,0.45)',
     textAlign: 'center',
     paddingVertical: 30,
   },
 
-  GameStatisticsPanelGameRow: {
+  GameStatisticsPanelGameLine: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -497,19 +497,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.headerBorder,
   },
-  GameStatisticsPanelGameDate: {
+  GameStatisticsPanelGameDay: {
     fontSize: 12.5,
     color: Colors.ivoryMuted,
     flex: 1,
   },
 
-  GameStatisticsPanelGameStrokes: {
+  GameStatisticsPanelGameStrokeCount: {
     fontSize: 12,
     color: Colors.textFainter,
     marginRight: 12,
   },
 
-  GameStatisticsPanelGameScore: {
+  GameStatisticsPanelGameTally: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 15,
     color: Colors.goldLight,

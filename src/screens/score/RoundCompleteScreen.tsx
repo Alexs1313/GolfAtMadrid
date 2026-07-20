@@ -48,12 +48,12 @@ export function RoundCompleteScreen() {
   };
 
   return (
-    <Animated.View style={[styles.RoundCompleteScreenContainer, animatedStyle]}>
-      <View style={styles.RoundCompleteScreenHeader}>
-        <Text style={styles.RoundCompleteScreenEyebrow}>ROUND COMPLETE</Text>
-        <Text style={styles.RoundCompleteScreenTitle}>
+    <Animated.View style={[styles.RoundCompleteScreenWrapper, animatedStyle]}>
+      <View style={styles.RoundCompleteScreenTopSection}>
+        <Text style={styles.RoundCompleteScreenOverline}>ROUND COMPLETE</Text>
+        <Text style={styles.RoundCompleteScreenHeading}>
           {formatToPar(summary.scoreToPar)}{' '}
-          <Text style={styles.RoundCompleteScreenTitleSub}>
+          <Text style={styles.RoundCompleteScreenHeadingDetail}>
             ({summary.finalStrokes} strokes)
           </Text>
         </Text>
@@ -61,9 +61,9 @@ export function RoundCompleteScreen() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.RoundCompleteScreenBody}
+        contentContainerStyle={styles.RoundCompleteScreenContent}
       >
-        <View style={styles.RoundCompleteScreenGrid}>
+        <View style={styles.RoundCompleteScreenLayout}>
           <StatCard label="FINAL SCORE" value={String(summary.finalStrokes)} />
           <StatCard
             label="SCORE TO PAR"
@@ -84,24 +84,24 @@ export function RoundCompleteScreen() {
         </View>
       </ScrollView>
 
-      <View style={styles.RoundCompleteScreenFooter}>
-        <View style={styles.RoundCompleteScreenRow}>
+      <View style={styles.RoundCompleteScreenBottomSection}>
+        <View style={styles.RoundCompleteScreenLine}>
           <TouchableOpacity
             style={[
-              styles.RoundCompleteScreenSecondaryBtn,
-              gameSaved && styles.RoundCompleteScreenSecondaryBtnSaved,
+              styles.RoundCompleteScreenSecondaryAction,
+              gameSaved && styles.RoundCompleteScreenSecondaryActionSaved,
             ]}
             onPress={handleSaveGame}
           >
-            <Text style={styles.RoundCompleteScreenSecondaryBtnText}>
+            <Text style={styles.RoundCompleteScreenSecondaryActionLabel}>
               {gameSaved ? 'Game Saved ✓' : 'Save Game'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.RoundCompleteScreenSecondaryBtn}
+            style={styles.RoundCompleteScreenSecondaryAction}
             onPress={viewStatistics}
           >
-            <Text style={styles.RoundCompleteScreenSecondaryBtnText}>
+            <Text style={styles.RoundCompleteScreenSecondaryActionLabel}>
               View Statistics
             </Text>
           </TouchableOpacity>
@@ -111,9 +111,9 @@ export function RoundCompleteScreen() {
             colors={[Colors.goldLight, Colors.gold]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.RoundCompleteScreenCta}
+            style={styles.RoundCompleteScreenPrimaryAction}
           >
-            <Text style={styles.RoundCompleteScreenCtaText}>
+            <Text style={styles.RoundCompleteScreenPrimaryActionLabel}>
               Start New Game
             </Text>
           </LinearGradient>
@@ -125,15 +125,15 @@ export function RoundCompleteScreen() {
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <View style={styles.StatCardContainer}>
-      <Text style={styles.StatCardLabel}>{label}</Text>
-      <Text style={styles.StatCardValue}>{value}</Text>
+    <View style={styles.StatCardShell}>
+      <Text style={styles.StatCardCaption}>{label}</Text>
+      <Text style={styles.StatCardFigure}>{value}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  RoundCompleteScreenContainer: {
+  RoundCompleteScreenWrapper: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
 
-  RoundCompleteScreenHeader: {
+  RoundCompleteScreenTopSection: {
     alignItems: 'center',
     paddingTop: 56,
     paddingBottom: 20,
@@ -150,60 +150,60 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.headerBorder,
   },
 
-  RoundCompleteScreenEyebrow: {
+  RoundCompleteScreenOverline: {
     fontSize: 11,
     color: Colors.goldLight,
     letterSpacing: 2,
     marginBottom: 10,
   },
-  RoundCompleteScreenTitle: {
+  RoundCompleteScreenHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 26,
     color: Colors.ivory,
   },
 
-  RoundCompleteScreenTitleSub: {
+  RoundCompleteScreenHeadingDetail: {
     fontSize: 16,
     color: Colors.textFaint,
   },
-  RoundCompleteScreenBody: {
+  RoundCompleteScreenContent: {
     padding: 18,
   },
-  RoundCompleteScreenGrid: {
+  RoundCompleteScreenLayout: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
   },
 
-  StatCardContainer: {
+  StatCardShell: {
     width: '48%',
     borderWidth: 1,
     borderColor: Colors.surfaceBorder,
     borderRadius: 16,
     padding: 13,
   },
-  StatCardLabel: {
+  StatCardCaption: {
     fontSize: 10.5,
     color: Colors.textFaint,
     marginBottom: 8,
   },
-  StatCardValue: {
+  StatCardFigure: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 18,
     color: Colors.ivory,
   },
-  RoundCompleteScreenFooter: {
+  RoundCompleteScreenBottomSection: {
     borderTopWidth: 1,
     borderTopColor: Colors.headerBorder,
     padding: 18,
     gap: 12,
     marginBottom: 25,
   },
-  RoundCompleteScreenRow: {
+  RoundCompleteScreenLine: {
     flexDirection: 'row',
     gap: 10,
   },
-  RoundCompleteScreenSecondaryBtn: {
+  RoundCompleteScreenSecondaryAction: {
     flex: 1,
     height: 41,
     borderRadius: 14,
@@ -212,22 +212,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  RoundCompleteScreenSecondaryBtnSaved: {
+  RoundCompleteScreenSecondaryActionSaved: {
     backgroundColor: Colors.goldSoftBg,
   },
-  RoundCompleteScreenSecondaryBtnText: {
+  RoundCompleteScreenSecondaryActionLabel: {
     fontSize: 12.5,
     fontWeight: '600',
     color: Colors.goldLight,
   },
-  RoundCompleteScreenCta: {
+  RoundCompleteScreenPrimaryAction: {
     height: 43,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  RoundCompleteScreenCtaText: {
+  RoundCompleteScreenPrimaryActionLabel: {
     fontSize: 14,
     fontWeight: '700',
     color: Colors.buttonText,

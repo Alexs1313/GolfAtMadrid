@@ -29,7 +29,7 @@ interface Page {
 
 const PAGES: Page[] = [
   {
-    bg: require('../assets/golf-at-onboard-bg1.png'),
+    bg: require('../assets/guide-at-mdrd-onboard-bg1.png'),
     icon: 'venueEvents',
     title: 'Venue Events',
     description:
@@ -37,7 +37,7 @@ const PAGES: Page[] = [
     cta: 'Continue',
   },
   {
-    bg: require('../assets/golf-at-onboard-bg2.png'),
+    bg: require('../assets/guide-at-mdrd-onboard-bg2.png'),
     icon: 'courseMap',
     title: 'Course Map',
     description:
@@ -45,23 +45,23 @@ const PAGES: Page[] = [
     cta: 'Continue',
   },
   {
-    bg: require('../assets/golf-at-onboard-bg3.png'),
+    bg: require('../assets/guide-at-mdrd-onboard-bg3.png'),
     icon: 'scoreTracking',
     title: 'Live Golf Score Tracking',
     description:
-      'Track strokes, putts, penalties and progress in real time as you play — solo or with your group.',
+      'Track strokes, putts, penalties and progress in real time on the course — solo or with your group.',
     cta: 'Continue',
   },
   {
-    bg: require('../assets/golf-at-onboard-bg4.png'),
+    bg: require('../assets/guide-at-mdrd-onboard-bg4.png'),
     icon: 'golfLearning',
     title: 'Golf Learning',
     description:
-      'Study golf terminology in the dictionary and put your knowledge to the test with an interactive quiz.',
+      'Study golf terminology in the dictionary and put your knowledge to the test with a quick quiz.',
     cta: 'Continue',
   },
   {
-    bg: require('../assets/golf-at-onboard-bg5.png'),
+    bg: require('../assets/guide-at-mdrd-onboard-bg5.png'),
     icon: 'services',
     title: 'Services & Reservations',
     description:
@@ -167,7 +167,7 @@ export function OnboardingScreen({ onFinish }: Props) {
   };
 
   return (
-    <View style={styles.OnboardingScreenContainer}>
+    <View style={styles.OnboardingScreenWrapper}>
       <Image source={bottomBg.current} style={FILL} resizeMode="cover" />
       {topBg !== null && (
         <Animated.Image
@@ -183,31 +183,31 @@ export function OnboardingScreen({ onFinish }: Props) {
       >
         {!isLast && (
           <TouchableOpacity
-            style={styles.OnboardingScreenSkipBtn}
+            style={styles.OnboardingScreenSkipAction}
             onPress={complete}
           >
-            <Text style={styles.OnboardingScreenSkipBtnText}>Skip</Text>
+            <Text style={styles.OnboardingScreenSkipActionCopy}>Skip</Text>
           </TouchableOpacity>
         )}
 
-        <View style={styles.OnboardingScreenContentCard}>
+        <View style={styles.OnboardingScreenContentPanel}>
           <Animated.View style={contentAnimatedStyle}>
-            <View style={styles.OnboardingScreenIconBadge}>
+            <View style={styles.OnboardingScreenIconChip}>
               <OnboardingIcon name={current.icon} />
             </View>
 
-            <Text style={styles.OnboardingScreenTitle}>{current.title}</Text>
-            <Text style={styles.OnboardingScreenDescription}>
+            <Text style={styles.OnboardingScreenHeadline}>{current.title}</Text>
+            <Text style={styles.OnboardingScreenCaption}>
               {current.description}
             </Text>
           </Animated.View>
 
-          <View style={styles.OnboardingScreenDotsRow}>
+          <View style={styles.OnboardingScreenDotsLine}>
             {PAGES.map((_, i) => (
               <Animated.View
                 key={i}
                 style={[
-                  styles.OnboardingScreenDot,
+                  styles.OnboardingScreenMarker,
                   {
                     width: dotAnims[i].interpolate({
                       inputRange: [0, 1],
@@ -228,9 +228,11 @@ export function OnboardingScreen({ onFinish }: Props) {
               colors={[Colors.goldLight, Colors.gold]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={styles.OnboardingScreenCta}
+              style={styles.OnboardingScreenPrimaryAction}
             >
-              <Text style={styles.OnboardingScreenCtaText}>{current.cta}</Text>
+              <Text style={styles.OnboardingScreenPrimaryActionCopy}>
+                {current.cta}
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -240,11 +242,11 @@ export function OnboardingScreen({ onFinish }: Props) {
 }
 
 const styles = StyleSheet.create({
-  OnboardingScreenContainer: {
+  OnboardingScreenWrapper: {
     flex: 1,
     backgroundColor: Colors.background,
   },
-  OnboardingScreenOverlay: {
+  OnboardingScreenScrim: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -252,7 +254,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
 
-  OnboardingScreenSkipBtn: {
+  OnboardingScreenSkipAction: {
     position: 'absolute',
     top: 56,
     right: 20,
@@ -263,12 +265,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
-  OnboardingScreenSkipBtnText: {
+  OnboardingScreenSkipActionCopy: {
     color: Colors.goldLight,
     fontSize: 13,
     fontWeight: '600',
   },
-  OnboardingScreenContentCard: {
+  OnboardingScreenContentPanel: {
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -276,7 +278,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 26,
     paddingBottom: 48,
   },
-  OnboardingScreenIconBadge: {
+  OnboardingScreenIconChip: {
     width: 52,
     height: 52,
     borderRadius: 19,
@@ -288,7 +290,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
-  OnboardingScreenTitle: {
+  OnboardingScreenHeadline: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 25,
     lineHeight: 30,
@@ -296,24 +298,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
-  OnboardingScreenDescription: {
+  OnboardingScreenCaption: {
     fontSize: 14.5,
     lineHeight: 22.5,
     color: Colors.ivoryMuted,
     marginBottom: 24,
   },
 
-  OnboardingScreenDotsRow: {
+  OnboardingScreenDotsLine: {
     flexDirection: 'row',
     gap: 7,
     marginBottom: 26,
   },
-  OnboardingScreenDot: {
+  OnboardingScreenMarker: {
     height: 6,
     borderRadius: 3,
   },
 
-  OnboardingScreenCta: {
+  OnboardingScreenPrimaryAction: {
     height: 51.5,
     borderRadius: 16,
     alignItems: 'center',
@@ -324,7 +326,7 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
   },
 
-  OnboardingScreenCtaText: {
+  OnboardingScreenPrimaryActionCopy: {
     color: Colors.buttonText,
     fontSize: 16,
     fontWeight: '700',

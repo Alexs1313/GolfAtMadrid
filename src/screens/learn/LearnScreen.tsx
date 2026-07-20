@@ -83,10 +83,10 @@ export function LearnScreen() {
   const bestScore = bestScores[quizDifficulty];
 
   return (
-    <View style={styles.LearnScreenContainer}>
+    <View style={styles.LearnScreenWrapper}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.LearnScreenScroll}
+        contentContainerStyle={styles.LearnScreenScrollArea}
       >
         <ScreenHeader
           title="Learn"
@@ -95,73 +95,73 @@ export function LearnScreen() {
           onPressBell={openRequestCenter}
         />
 
-        <View style={styles.LearnScreenBody}>
-          <View style={styles.LearnScreenSegmentControl}>
+        <View style={styles.LearnScreenContent}>
+          <View style={styles.LearnScreenSegmentGroup}>
             <TouchableOpacity
-              style={styles.LearnScreenSegmentButton}
+              style={styles.LearnScreenSegmentAction}
               onPress={() => setSegment('dictionary')}
             >
               {segment === 'dictionary' ? (
                 <LinearGradient
                   colors={[Colors.goldLight, Colors.gold]}
-                  style={styles.LearnScreenSegmentFill}
+                  style={styles.LearnScreenSegmentHighlight}
                 >
-                  <Text style={styles.LearnScreenSegmentTextActive}>
+                  <Text style={styles.LearnScreenSegmentLabelActive}>
                     Golf Dictionary
                   </Text>
                 </LinearGradient>
               ) : (
-                <Text style={styles.LearnScreenSegmentText}>
+                <Text style={styles.LearnScreenSegmentLabel}>
                   Golf Dictionary
                 </Text>
               )}
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.LearnScreenSegmentButton}
+              style={styles.LearnScreenSegmentAction}
               onPress={() => setSegment('saved')}
             >
               {segment === 'saved' ? (
                 <LinearGradient
                   colors={[Colors.goldLight, Colors.gold]}
-                  style={styles.LearnScreenSegmentFill}
+                  style={styles.LearnScreenSegmentHighlight}
                 >
-                  <Text style={styles.LearnScreenSegmentTextActive}>
+                  <Text style={styles.LearnScreenSegmentLabelActive}>
                     Saved Terms
                   </Text>
                 </LinearGradient>
               ) : (
-                <Text style={styles.LearnScreenSegmentText}>Saved Terms</Text>
+                <Text style={styles.LearnScreenSegmentLabel}>Saved Terms</Text>
               )}
             </TouchableOpacity>
           </View>
 
-          <View style={styles.LearnScreenQuizCard}>
-            <Text style={styles.LearnScreenQuizTitle}>
+          <View style={styles.LearnScreenQuizPanel}>
+            <Text style={styles.LearnScreenQuizHeading}>
               Test Your Golf Knowledge
             </Text>
-            <Text style={styles.LearnScreenQuizSubtitle}>
+            <Text style={styles.LearnScreenQuizCaption}>
               {QUIZ_LENGTH} questions
               {bestScore !== null
                 ? ` · Best score ${bestScore}/${QUIZ_LENGTH}`
                 : ''}
             </Text>
 
-            <View style={styles.LearnScreenDifficultyRow}>
+            <View style={styles.LearnScreenDifficultyLine}>
               {DIFFICULTIES.map(difficulty => {
                 const isActive = difficulty === quizDifficulty;
                 return (
                   <TouchableOpacity
                     key={difficulty}
                     style={[
-                      styles.LearnScreenDifficultyChip,
-                      isActive && styles.LearnScreenDifficultyChipActive,
+                      styles.LearnScreenDifficultyTag,
+                      isActive && styles.LearnScreenDifficultyTagActive,
                     ]}
                     onPress={() => setQuizDifficulty(difficulty)}
                   >
                     <Text
                       style={[
-                        styles.LearnScreenDifficultyText,
-                        isActive && styles.LearnScreenDifficultyTextActive,
+                        styles.LearnScreenDifficultyLabel,
+                        isActive && styles.LearnScreenDifficultyLabelActive,
                       ]}
                     >
                       {difficulty}
@@ -176,9 +176,9 @@ export function LearnScreen() {
                 colors={[Colors.goldLight, Colors.gold]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
-                style={styles.LearnScreenStartQuizBtn}
+                style={styles.LearnScreenStartQuizAction}
               >
-                <Text style={styles.LearnScreenStartQuizBtnText}>
+                <Text style={styles.LearnScreenStartQuizActionLabel}>
                   Start Quiz
                 </Text>
               </LinearGradient>
@@ -187,20 +187,20 @@ export function LearnScreen() {
 
           {segment === 'dictionary' && (
             <>
-              <View style={styles.LearnScreenSearchWrap}>
+              <View style={styles.LearnScreenSearchShell}>
                 <TextInput
                   value={searchQuery}
                   onChangeText={setSearchQuery}
                   placeholder="Search terms…"
                   placeholderTextColor="#757575"
-                  style={styles.LearnScreenSearchInput}
+                  style={styles.LearnScreenSearchField}
                 />
               </View>
 
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                style={styles.LearnScreenCategoryRow}
+                style={styles.LearnScreenCategoryLine}
               >
                 {CATEGORIES.map(category => {
                   const isActive = category === selectedCategory;
@@ -209,23 +209,23 @@ export function LearnScreen() {
                       key={category}
                       onPress={() => setSelectedCategory(category)}
                       style={[
-                        styles.LearnScreenCategoryChipWrap,
+                        styles.LearnScreenCategoryTagWrap,
                         isActive
-                          ? styles.LearnScreenCategoryChipActive
-                          : styles.LearnScreenCategoryChipInactive,
+                          ? styles.LearnScreenCategoryTagActive
+                          : styles.LearnScreenCategoryTagInactive,
                       ]}
                     >
                       {isActive && (
                         <LinearGradient
                           colors={[Colors.goldLight, Colors.gold]}
-                          style={styles.LearnScreenCategoryChipFill}
+                          style={styles.LearnScreenCategoryTagHighlight}
                         />
                       )}
                       <Text
                         style={
                           isActive
-                            ? styles.LearnScreenCategoryTextActive
-                            : styles.LearnScreenCategoryText
+                            ? styles.LearnScreenCategoryLabelActive
+                            : styles.LearnScreenCategoryLabel
                         }
                       >
                         {category}
@@ -238,7 +238,7 @@ export function LearnScreen() {
           )}
 
           {visibleTerms.length === 0 ? (
-            <Text style={styles.LearnScreenEmptyText}>
+            <Text style={styles.LearnScreenPlaceholderLabel}>
               {segment === 'saved'
                 ? 'No saved terms yet. Tap the star on any term to save it here.'
                 : 'No terms match your search.'}
@@ -270,17 +270,20 @@ function TermCard({
   onToggleSaved: () => void;
 }) {
   return (
-    <View style={styles.TermCardContainer}>
-      <View style={styles.TermCardBody}>
-        <View style={styles.TermCardTitleRow}>
-          <Text style={styles.TermCardTitle}>{term.term}</Text>
-          <View style={styles.TermCardBadge}>
-            <Text style={styles.TermCardBadgeText}>{term.category}</Text>
+    <View style={styles.TermCardWrapper}>
+      <View style={styles.TermCardContent}>
+        <View style={styles.TermCardTitleLine}>
+          <Text style={styles.TermCardHeading}>{term.term}</Text>
+          <View style={styles.TermCardTag}>
+            <Text style={styles.TermCardTagLabel}>{term.category}</Text>
           </View>
         </View>
-        <Text style={styles.TermCardDefinition}>{term.definition}</Text>
+        <Text style={styles.TermCardDescription}>{term.definition}</Text>
       </View>
-      <TouchableOpacity style={styles.TermCardStarBtn} onPress={onToggleSaved}>
+      <TouchableOpacity
+        style={styles.TermCardStarAction}
+        onPress={onToggleSaved}
+      >
         <AppIcon
           name={isSaved ? 'starFilled' : 'star'}
           size={18}
@@ -292,19 +295,19 @@ function TermCard({
 }
 
 const styles = StyleSheet.create({
-  LearnScreenContainer: {
+  LearnScreenWrapper: {
     flex: 1,
     backgroundColor: Colors.background,
   },
-  LearnScreenScroll: {
+  LearnScreenScrollArea: {
     paddingBottom: 24,
   },
-  LearnScreenBody: {
+  LearnScreenContent: {
     paddingHorizontal: 16,
     paddingTop: 16,
   },
 
-  LearnScreenSegmentControl: {
+  LearnScreenSegmentGroup: {
     flexDirection: 'row',
     backgroundColor: Colors.surface,
     borderWidth: 1,
@@ -315,16 +318,16 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
-  LearnScreenSegmentButton: {
+  LearnScreenSegmentAction: {
     flex: 1,
   },
-  LearnScreenSegmentFill: {
+  LearnScreenSegmentHighlight: {
     height: 35,
     borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  LearnScreenSegmentText: {
+  LearnScreenSegmentLabel: {
     height: 35,
     fontSize: 12.5,
     fontWeight: '600',
@@ -332,12 +335,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 35,
   },
-  LearnScreenSegmentTextActive: {
+  LearnScreenSegmentLabelActive: {
     fontSize: 12.5,
     fontWeight: '600',
     color: Colors.buttonText,
   },
-  LearnScreenQuizCard: {
+  LearnScreenQuizPanel: {
     borderWidth: 1,
     borderColor: Colors.surfaceBorder,
     borderRadius: 19,
@@ -346,24 +349,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
-  LearnScreenQuizTitle: {
+  LearnScreenQuizHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 16.5,
     color: Colors.ivory,
     marginBottom: 4,
   },
-  LearnScreenQuizSubtitle: {
+  LearnScreenQuizCaption: {
     fontSize: 12,
     color: Colors.ivoryMuted,
     marginBottom: 16,
   },
-  LearnScreenDifficultyRow: {
+  LearnScreenDifficultyLine: {
     flexDirection: 'row',
     gap: 8,
     marginBottom: 12,
   },
 
-  LearnScreenDifficultyChip: {
+  LearnScreenDifficultyTag: {
     flex: 1,
     height: 30,
     borderRadius: 8,
@@ -372,32 +375,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  LearnScreenDifficultyChipActive: {
+  LearnScreenDifficultyTagActive: {
     backgroundColor: Colors.goldSoftBg,
     borderWidth: 1,
     borderColor: Colors.goldSoftBorder,
   },
-  LearnScreenDifficultyText: {
+  LearnScreenDifficultyLabel: {
     fontSize: 11.5,
     fontWeight: '600',
     color: Colors.textFainter,
   },
-  LearnScreenDifficultyTextActive: {
+  LearnScreenDifficultyLabelActive: {
     color: Colors.goldLight,
   },
-  LearnScreenStartQuizBtn: {
+  LearnScreenStartQuizAction: {
     height: 41,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  LearnScreenStartQuizBtnText: {
+  LearnScreenStartQuizActionLabel: {
     fontSize: 14,
     fontWeight: '700',
     color: Colors.buttonText,
   },
 
-  LearnScreenSearchWrap: {
+  LearnScreenSearchShell: {
     height: 42.5,
     borderRadius: 14,
     borderWidth: 1,
@@ -406,17 +409,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  LearnScreenSearchInput: {
+  LearnScreenSearchField: {
     height: 42.5,
     paddingHorizontal: 14,
     color: Colors.ivory,
     fontSize: 13.5,
   },
-  LearnScreenCategoryRow: {
+  LearnScreenCategoryLine: {
     marginBottom: 16,
   },
 
-  LearnScreenCategoryChipWrap: {
+  LearnScreenCategoryTagWrap: {
     height: 30,
     paddingHorizontal: 16,
     borderRadius: 20,
@@ -425,38 +428,38 @@ const styles = StyleSheet.create({
     marginRight: 8,
     overflow: 'hidden',
   },
-  LearnScreenCategoryChipFill: {
+  LearnScreenCategoryTagHighlight: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
-  LearnScreenCategoryChipActive: {},
-  LearnScreenCategoryChipInactive: {
+  LearnScreenCategoryTagActive: {},
+  LearnScreenCategoryTagInactive: {
     backgroundColor: Colors.surface,
     borderWidth: 1,
     borderColor: Colors.surfaceBorderSoft,
   },
 
-  LearnScreenCategoryText: {
+  LearnScreenCategoryLabel: {
     fontSize: 11.5,
     fontWeight: '600',
     color: Colors.ivoryMuted,
   },
-  LearnScreenCategoryTextActive: {
+  LearnScreenCategoryLabelActive: {
     fontSize: 11.5,
     fontWeight: '600',
     color: Colors.buttonText,
   },
 
-  LearnScreenEmptyText: {
+  LearnScreenPlaceholderLabel: {
     fontSize: 12.5,
     color: Colors.textFainter,
     textAlign: 'center',
     paddingVertical: 40,
   },
-  TermCardContainer: {
+  TermCardWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
@@ -465,40 +468,40 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 10,
   },
-  TermCardBody: {
+  TermCardContent: {
     flex: 1,
   },
 
-  TermCardTitleRow: {
+  TermCardTitleLine: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 6,
     gap: 8,
   },
 
-  TermCardTitle: {
+  TermCardHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 15.5,
     color: Colors.ivory,
   },
-  TermCardBadge: {
+  TermCardTag: {
     backgroundColor: Colors.goldSoftBg,
     borderRadius: 20,
     paddingHorizontal: 7,
     paddingVertical: 2,
   },
-  TermCardBadgeText: {
+  TermCardTagLabel: {
     fontSize: 9,
     color: Colors.goldLight,
   },
 
-  TermCardDefinition: {
+  TermCardDescription: {
     fontSize: 12,
     color: Colors.ivoryMuted,
     lineHeight: 17,
   },
 
-  TermCardStarBtn: {
+  TermCardStarAction: {
     width: 34,
     height: 34,
     alignItems: 'center',

@@ -14,37 +14,37 @@ export function ScoreSegmentTabs({
   onSelect: (segment: ScoreSegment) => void;
 }) {
   return (
-    <View style={styles.ScoreSegmentTabsControl}>
+    <View style={styles.ScoreSegmentTabsShell}>
       <TouchableOpacity
-        style={styles.ScoreSegmentTabsButton}
+        style={styles.ScoreSegmentTabsAction}
         onPress={() => onSelect('current')}
       >
         {segment === 'current' ? (
           <LinearGradient
             colors={[Colors.goldLight, Colors.gold]}
-            style={styles.ScoreSegmentTabsFill}
+            style={styles.ScoreSegmentTabsBackdrop}
           >
-            <Text style={styles.ScoreSegmentTabsTextActive}>Current Game</Text>
+            <Text style={styles.ScoreSegmentTabsLabelActive}>Current Game</Text>
           </LinearGradient>
         ) : (
-          <Text style={styles.ScoreSegmentTabsText}>Current Game</Text>
+          <Text style={styles.ScoreSegmentTabsLabel}>Current Game</Text>
         )}
       </TouchableOpacity>
       <TouchableOpacity
-        style={styles.ScoreSegmentTabsButton}
+        style={styles.ScoreSegmentTabsAction}
         onPress={() => onSelect('stats')}
       >
         {segment === 'stats' ? (
           <LinearGradient
             colors={[Colors.goldLight, Colors.gold]}
-            style={styles.ScoreSegmentTabsFill}
+            style={styles.ScoreSegmentTabsBackdrop}
           >
-            <Text style={styles.ScoreSegmentTabsTextActive}>
+            <Text style={styles.ScoreSegmentTabsLabelActive}>
               Game Statistics
             </Text>
           </LinearGradient>
         ) : (
-          <Text style={styles.ScoreSegmentTabsText}>Game Statistics</Text>
+          <Text style={styles.ScoreSegmentTabsLabel}>Game Statistics</Text>
         )}
       </TouchableOpacity>
     </View>
@@ -52,7 +52,7 @@ export function ScoreSegmentTabs({
 }
 
 const styles = StyleSheet.create({
-  ScoreSegmentTabsControl: {
+  ScoreSegmentTabsShell: {
     flexDirection: 'row',
     backgroundColor: Colors.surface,
     borderWidth: 1,
@@ -62,16 +62,16 @@ const styles = StyleSheet.create({
     gap: 4,
     marginBottom: 16,
   },
-  ScoreSegmentTabsButton: {
+  ScoreSegmentTabsAction: {
     flex: 1,
   },
-  ScoreSegmentTabsFill: {
+  ScoreSegmentTabsBackdrop: {
     height: 35,
     borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  ScoreSegmentTabsText: {
+  ScoreSegmentTabsLabel: {
     height: 35,
     fontSize: 12.5,
     fontWeight: '600',
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 35,
   },
-  ScoreSegmentTabsTextActive: {
+  ScoreSegmentTabsLabelActive: {
     fontSize: 12.5,
     fontWeight: '600',
     color: Colors.buttonText,

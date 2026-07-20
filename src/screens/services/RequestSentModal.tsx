@@ -21,35 +21,35 @@ export function RequestSentModal() {
   };
 
   return (
-    <View style={styles.RequestSentModalScrim}>
-      <View style={styles.RequestSentModalCard}>
-        <View style={styles.RequestSentModalIconWrap}>
+    <View style={styles.RequestSentModalOverlay}>
+      <View style={styles.RequestSentModalPanel}>
+        <View style={styles.RequestSentModalIconHolder}>
           <AppIcon name="checkmark" size={26} />
         </View>
 
-        <Text style={styles.RequestSentModalTitle}>Request Sent</Text>
-        <Text style={styles.RequestSentModalSubject}>{requestSentTitle}</Text>
-        <Text style={styles.RequestSentModalDescription}>
+        <Text style={styles.RequestSentModalHeading}>Request Sent</Text>
+        <Text style={styles.RequestSentModalTopic}>{requestSentTitle}</Text>
+        <Text style={styles.RequestSentModalDetail}>
           Your request has been successfully submitted. The venue team will
           review the details and update its status in the Request Center. Open
           the notification bell to follow progress and view further
           instructions.
         </Text>
 
-        <View style={styles.RequestSentModalActions}>
+        <View style={styles.RequestSentModalControls}>
           <TouchableOpacity
-            style={styles.RequestSentModalSecondaryBtn}
+            style={styles.RequestSentModalSecondaryAction}
             onPress={closeRequestSent}
           >
-            <Text style={styles.RequestSentModalSecondaryBtnText}>
+            <Text style={styles.RequestSentModalSecondaryActionLabel}>
               Continue Browsing
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.RequestSentModalPrimaryBtn}
+            style={styles.RequestSentModalPrimaryAction}
             onPress={viewRequest}
           >
-            <Text style={styles.RequestSentModalPrimaryBtnText}>
+            <Text style={styles.RequestSentModalPrimaryActionLabel}>
               View Request
             </Text>
           </TouchableOpacity>
@@ -60,7 +60,7 @@ export function RequestSentModal() {
 }
 
 const styles = StyleSheet.create({
-  RequestSentModalScrim: {
+  RequestSentModalOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-  RequestSentModalCard: {
+  RequestSentModalPanel: {
     width: '100%',
     maxWidth: 340,
     backgroundColor: Colors.surface,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
   },
-  RequestSentModalIconWrap: {
+  RequestSentModalIconHolder: {
     width: 56,
     height: 56,
     borderRadius: 28,
@@ -90,19 +90,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 16,
   },
-  RequestSentModalTitle: {
+  RequestSentModalHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 19,
     color: Colors.ivory,
     marginBottom: 6,
   },
-  RequestSentModalSubject: {
+  RequestSentModalTopic: {
     fontSize: 12.5,
     color: Colors.textFainter,
     marginBottom: 14,
     textAlign: 'center',
   },
-  RequestSentModalDescription: {
+  RequestSentModalDetail: {
     fontSize: 13,
     lineHeight: 20.15,
     color: Colors.ivoryMuted,
@@ -110,12 +110,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  RequestSentModalActions: {
+  RequestSentModalControls: {
     flexDirection: 'row',
     gap: 10,
     width: '100%',
   },
-  RequestSentModalSecondaryBtn: {
+  RequestSentModalSecondaryAction: {
     flex: 1,
     height: 48,
     borderRadius: 14,
@@ -125,14 +125,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  RequestSentModalSecondaryBtnText: {
+  RequestSentModalSecondaryActionLabel: {
     fontSize: 12.5,
     fontWeight: '600',
     color: Colors.goldLight,
     textAlign: 'center',
   },
 
-  RequestSentModalPrimaryBtn: {
+  RequestSentModalPrimaryAction: {
     flex: 1,
     height: 48,
     borderRadius: 14,
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  RequestSentModalPrimaryBtnText: {
+  RequestSentModalPrimaryActionLabel: {
     fontSize: 12.5,
     fontWeight: '700',
     color: Colors.buttonText,

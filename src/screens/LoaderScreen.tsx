@@ -45,30 +45,30 @@ export function LoaderScreen({ onFinish }: Props) {
 
   return (
     <ImageBackground
-      source={require('../assets/golf-at-loader-bg.png')}
-      style={styles.LoaderScreenContainer}
+      source={require('../assets/guide-at-mdrd-loader-bg.png')}
+      style={styles.LoaderScreenWrapper}
       resizeMode="cover"
     >
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.LoaderScreenContent}>
-          <View style={styles.LoaderScreenCrestWrap}>
+        <View style={styles.LoaderScreenBody}>
+          <View style={styles.LoaderScreenCrestFrame}>
             <Image
-              source={require('../assets/golf-at-loader-icon.png')}
+              source={require('../assets/guide-at-mdrd-loader-icon.png')}
               resizeMode="contain"
             />
           </View>
 
-          <Text style={styles.LoaderScreenTitle}>
+          <Text style={styles.LoaderScreenHeading}>
             Golf at Casino{'\n'}De Madrid
           </Text>
-          <Text style={styles.LoaderScreenSubtitle}>Est. 1836</Text>
+          <Text style={styles.LoaderScreenCaption}>Est. 1836</Text>
         </View>
 
         <Animated.View
-          style={[styles.LoaderScreenRing, { transform: [{ rotate }] }]}
+          style={[styles.LoaderScreenHalo, { transform: [{ rotate }] }]}
         />
       </ScrollView>
     </ImageBackground>
@@ -76,30 +76,30 @@ export function LoaderScreen({ onFinish }: Props) {
 }
 
 const styles = StyleSheet.create({
-  LoaderScreenContainer: {
+  LoaderScreenWrapper: {
     flex: 1,
     backgroundColor: Colors.background,
   },
 
-  LoaderScreenOverlay: {
+  LoaderScreenScrim: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
   },
-  LoaderScreenContent: {
+  LoaderScreenBody: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 32,
   },
 
-  LoaderScreenCrestWrap: {
+  LoaderScreenCrestFrame: {
     marginBottom: 24,
   },
 
-  LoaderScreenTitle: {
+  LoaderScreenHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 29,
     lineHeight: 34,
@@ -108,14 +108,14 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
     marginBottom: 12,
   },
-  LoaderScreenSubtitle: {
+  LoaderScreenCaption: {
     fontSize: 12.5,
     color: Colors.gold,
     letterSpacing: 2.5,
     textTransform: 'uppercase',
   },
 
-  LoaderScreenRing: {
+  LoaderScreenHalo: {
     position: 'absolute',
     bottom: 56,
     alignSelf: 'center',

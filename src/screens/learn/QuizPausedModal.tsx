@@ -15,35 +15,35 @@ export function QuizPausedModal() {
   }
 
   return (
-    <View style={styles.QuizPausedModalScrim}>
-      <View style={styles.QuizPausedModalCard}>
-        <Text style={styles.QuizPausedModalTitle}>Quiz Paused</Text>
-        <Text style={styles.QuizPausedModalSubtitle}>
+    <View style={styles.QuizPausedModalOverlay}>
+      <View style={styles.QuizPausedModalPanel}>
+        <Text style={styles.QuizPausedModalHeading}>Quiz Paused</Text>
+        <Text style={styles.QuizPausedModalCaption}>
           Question {activeQuiz.currentIndex + 1} of{' '}
           {activeQuiz.questions.length}
         </Text>
 
         <TouchableOpacity
-          style={styles.QuizPausedModalPrimaryBtnWrap}
+          style={styles.QuizPausedModalPrimaryActionWrap}
           onPress={resumeQuiz}
         >
           <LinearGradient
             colors={[Colors.goldLight, Colors.gold]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.QuizPausedModalPrimaryBtn}
+            style={styles.QuizPausedModalPrimaryAction}
           >
-            <Text style={styles.QuizPausedModalPrimaryBtnText}>
+            <Text style={styles.QuizPausedModalPrimaryActionLabel}>
               Resume Quiz
             </Text>
           </LinearGradient>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.QuizPausedModalDangerBtn}
+          style={styles.QuizPausedModalDangerAction}
           onPress={exitQuiz}
         >
-          <Text style={styles.QuizPausedModalDangerBtnText}>Exit Quiz</Text>
+          <Text style={styles.QuizPausedModalDangerActionLabel}>Exit Quiz</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -51,7 +51,7 @@ export function QuizPausedModal() {
 }
 
 const styles = StyleSheet.create({
-  QuizPausedModalScrim: {
+  QuizPausedModalOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-  QuizPausedModalCard: {
+  QuizPausedModalPanel: {
     width: '100%',
     maxWidth: 300,
     backgroundColor: Colors.surface,
@@ -73,37 +73,37 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     alignItems: 'center',
   },
-  QuizPausedModalTitle: {
+  QuizPausedModalHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 19,
     color: Colors.ivory,
     marginBottom: 8,
   },
 
-  QuizPausedModalSubtitle: {
+  QuizPausedModalCaption: {
     fontSize: 12.5,
     color: Colors.textFainter,
     marginBottom: 22,
     textAlign: 'center',
   },
 
-  QuizPausedModalPrimaryBtnWrap: {
+  QuizPausedModalPrimaryActionWrap: {
     width: '100%',
     marginBottom: 12,
   },
-  QuizPausedModalPrimaryBtn: {
+  QuizPausedModalPrimaryAction: {
     height: 43,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  QuizPausedModalPrimaryBtnText: {
+  QuizPausedModalPrimaryActionLabel: {
     fontSize: 14,
     fontWeight: '700',
     color: Colors.buttonText,
   },
 
-  QuizPausedModalDangerBtn: {
+  QuizPausedModalDangerAction: {
     width: '100%',
     height: 41.5,
     borderRadius: 14,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  QuizPausedModalDangerBtnText: {
+  QuizPausedModalDangerActionLabel: {
     fontSize: 13,
     fontWeight: '600',
     color: '#e08876',

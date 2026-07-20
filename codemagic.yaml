@@ -10,9 +10,9 @@ workflows:
       vars:
         XCODE_WORKSPACE: 'GolfAtMadrid.xcworkspace' # <----
         XCODE_SCHEME: 'GolfAtMadrid' # <----
-        BUNDLE_ID: 'com.fhskjdnfk.dsjfnaslsd' # <----
-        APP_STORE_APP_ID: 6792511107 # <----
-        APP_STORE_CONNECT_KEY_ID: '7TLZVH7X7U' # <----
+        BUNDLE_ID: 'com.djdhakeo.eoujwndmdsd' # <----
+        APP_STORE_APP_ID: 6792793812 # <----
+        APP_STORE_CONNECT_KEY_ID: '3KDBX6WG9Y' # <----
         APP_STORE_CONNECT_ISSUER_ID: '6a3bab37-6e68-4e92-86cf-0dcc2ae668f5' # <----
         node: latest
         xcode: latest

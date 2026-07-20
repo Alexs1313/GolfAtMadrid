@@ -15,6 +15,7 @@ import { HOLES } from '../../data/holes';
 
 import { useScoreState } from '../../navigation/ScoreContext';
 import { Colors } from '../../theme/colors';
+
 import { ScoreSegmentTabs } from './ScoreSegmentTabs';
 
 function formatToPar(value: number): string {
@@ -65,7 +66,7 @@ export function CurrentGamePanel({
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.CurrentGamePanelScroll}
+      contentContainerStyle={styles.CurrentGamePanelScroller}
     >
       <ScreenHeader
         title="Score"
@@ -74,30 +75,30 @@ export function CurrentGamePanel({
         onPressBell={onPressBell}
       />
 
-      <View style={styles.CurrentGamePanelBody}>
+      <View style={styles.CurrentGamePanelContent}>
         <ScoreSegmentTabs segment={segment} onSelect={setSegment} />
 
-        <View style={styles.CurrentGamePanelHoleCard}>
-          <View style={styles.CurrentGamePanelHoleRow}>
+        <View style={styles.CurrentGamePanelHoleTile}>
+          <View style={styles.CurrentGamePanelHoleLine}>
             <View>
-              <Text style={styles.CurrentGamePanelLabel}>HOLE</Text>
-              <Text style={styles.CurrentGamePanelHoleNumber}>
+              <Text style={styles.CurrentGamePanelCaption}>HOLE</Text>
+              <Text style={styles.CurrentGamePanelHoleFigure}>
                 {hole.number}
               </Text>
             </View>
-            <View style={styles.CurrentGamePanelScoreToParWrap}>
-              <Text style={styles.CurrentGamePanelLabel}>SCORE TO PAR</Text>
-              <Text style={styles.CurrentGamePanelScoreToPar}>
+            <View style={styles.CurrentGamePanelScoreVersusParGroup}>
+              <Text style={styles.CurrentGamePanelCaption}>SCORE TO PAR</Text>
+              <Text style={styles.CurrentGamePanelScoreVersusPar}>
                 {formatToPar(cumulativeScoreToPar)}
               </Text>
             </View>
           </View>
-          <Text style={styles.CurrentGamePanelMeta}>
+          <Text style={styles.CurrentGamePanelSummary}>
             Par {hole.par} Total strokes {score.strokes} Putts {score.putts}
           </Text>
         </View>
 
-        <View style={styles.CurrentGamePanelCountersRow}>
+        <View style={styles.CurrentGamePanelCountersLine}>
           <Counter
             label="STROKES"
             value={score.strokes}
@@ -112,16 +113,18 @@ export function CurrentGamePanel({
           />
         </View>
 
-        <View style={styles.CurrentGamePanelNavRow}>
+        <View style={styles.CurrentGamePanelNavLine}>
           <TouchableOpacity
-            style={styles.CurrentGamePanelNavBtn}
+            style={styles.CurrentGamePanelNavAction}
             onPress={() => goToHole(-1)}
             disabled={holeIndex === 0}
           >
-            <Text style={styles.CurrentGamePanelNavBtnText}>Previous Hole</Text>
+            <Text style={styles.CurrentGamePanelNavActionLabel}>
+              Previous Hole
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.CurrentGamePanelNavBtnWrapper}
+            style={styles.CurrentGamePanelNavActionShell}
             onPress={() => goToHole(1)}
             disabled={holeIndex === HOLES.length - 1}
           >
@@ -129,58 +132,64 @@ export function CurrentGamePanel({
               colors={[Colors.goldLight, Colors.gold]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={styles.CurrentGamePanelNextBtn}
+              style={styles.CurrentGamePanelNextAction}
             >
-              <Text style={styles.CurrentGamePanelNextBtnText}>Next Hole</Text>
+              <Text style={styles.CurrentGamePanelNextActionLabel}>
+                Next Hole
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.CurrentGamePanelActionsRow}>
+        <View style={styles.CurrentGamePanelActionsLine}>
           <TouchableOpacity
             style={[
-              styles.CurrentGamePanelActionBtn,
-              progressSaved && styles.CurrentGamePanelActionBtnSaved,
+              styles.CurrentGamePanelActionControl,
+              progressSaved && styles.CurrentGamePanelActionControlSaved,
             ]}
             onPress={saveProgress}
           >
-            <Text style={styles.CurrentGamePanelActionBtnText}>
+            <Text style={styles.CurrentGamePanelActionControlLabel}>
               {progressSaved ? 'Progress Saved ✓' : 'Save Progress'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.CurrentGamePanelActionBtn}
+            style={styles.CurrentGamePanelActionControl}
             onPress={pauseGame}
           >
-            <Text style={styles.CurrentGamePanelActionBtnText}>Pause Game</Text>
+            <Text style={styles.CurrentGamePanelActionControlLabel}>
+              Pause Game
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.CurrentGamePanelFinishBtn}
+            style={styles.CurrentGamePanelFinishAction}
             onPress={finishGame}
           >
-            <Text style={styles.CurrentGamePanelFinishBtnText}>
+            <Text style={styles.CurrentGamePanelFinishActionLabel}>
               Finish Game
             </Text>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.CurrentGamePanelScoreboardHeader}>
-          <Text style={styles.CurrentGamePanelScoreboardLabel}>Scoreboard</Text>
-          <Text style={styles.CurrentGamePanelScoreboardCount}>
+        <View style={styles.CurrentGamePanelScoreboardHeading}>
+          <Text style={styles.CurrentGamePanelScoreboardCaption}>
+            Scoreboard
+          </Text>
+          <Text style={styles.CurrentGamePanelScoreboardTotal}>
             {participants.length + 1} players
           </Text>
         </View>
 
-        <View style={styles.CurrentGamePanelPlayerRow}>
-          <View style={styles.CurrentGamePanelPlayerInfo}>
-            <View style={styles.CurrentGamePanelPlayerBadge}>
-              <Text style={styles.CurrentGamePanelPlayerBadgeTextActive}>
+        <View style={styles.CurrentGamePanelPlayerLine}>
+          <View style={styles.CurrentGamePanelPlayerDetails}>
+            <View style={styles.CurrentGamePanelPlayerChip}>
+              <Text style={styles.CurrentGamePanelPlayerChipLabelActive}>
                 1
               </Text>
             </View>
-            <Text style={styles.CurrentGamePanelPlayerName}>You</Text>
+            <Text style={styles.CurrentGamePanelPlayerLabel}>You</Text>
           </View>
-          <Text style={styles.CurrentGamePanelPlayerScore}>
+          <Text style={styles.CurrentGamePanelPlayerTally}>
             {formatToPar(cumulativeScoreToPar)}
           </Text>
         </View>
@@ -188,51 +197,55 @@ export function CurrentGamePanel({
         {participants.map((participant, i) => (
           <View
             key={participant.id}
-            style={styles.CurrentGamePanelParticipantRow}
+            style={styles.CurrentGamePanelParticipantLine}
           >
-            <View style={styles.CurrentGamePanelPlayerInfo}>
-              <View style={styles.CurrentGamePanelPlayerBadge}>
-                <Text style={styles.CurrentGamePanelPlayerBadgeText}>
+            <View style={styles.CurrentGamePanelPlayerDetails}>
+              <View style={styles.CurrentGamePanelPlayerChip}>
+                <Text style={styles.CurrentGamePanelPlayerChipLabel}>
                   {i + 2}
                 </Text>
               </View>
-              <Text style={styles.CurrentGamePanelPlayerName}>
+              <Text style={styles.CurrentGamePanelPlayerLabel}>
                 {participant.name}
               </Text>
             </View>
-            <View style={styles.CurrentGamePanelParticipantControls}>
+            <View style={styles.CurrentGamePanelParticipantActions}>
               <TouchableOpacity
-                style={styles.CurrentGamePanelParticipantBtn}
+                style={styles.CurrentGamePanelParticipantAction}
                 onPress={() => adjustParticipant(participant.id, -1)}
               >
-                <Text style={styles.CurrentGamePanelParticipantBtnText}>–</Text>
+                <Text style={styles.CurrentGamePanelParticipantActionLabel}>
+                  –
+                </Text>
               </TouchableOpacity>
-              <Text style={styles.CurrentGamePanelParticipantScore}>
+              <Text style={styles.CurrentGamePanelParticipantTally}>
                 {formatToPar(participant.scoreToPar)}
               </Text>
               <TouchableOpacity
-                style={styles.CurrentGamePanelParticipantBtn}
+                style={styles.CurrentGamePanelParticipantAction}
                 onPress={() => adjustParticipant(participant.id, 1)}
               >
-                <Text style={styles.CurrentGamePanelParticipantBtnText}>+</Text>
+                <Text style={styles.CurrentGamePanelParticipantActionLabel}>
+                  +
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={styles.CurrentGamePanelRemoveBtn}
+                style={styles.CurrentGamePanelRemoveAction}
                 onPress={() => removeParticipant(participant.id)}
               >
-                <Text style={styles.CurrentGamePanelRemoveBtnText}>✕</Text>
+                <Text style={styles.CurrentGamePanelRemoveActionLabel}>✕</Text>
               </TouchableOpacity>
             </View>
           </View>
         ))}
 
-        <View style={styles.CurrentGamePanelAddRow}>
+        <View style={styles.CurrentGamePanelAddLine}>
           <TextInput
             value={participantName}
             onChangeText={setParticipantName}
             placeholder="Add participant name…"
             placeholderTextColor="#757575"
-            style={styles.CurrentGamePanelAddInput}
+            style={styles.CurrentGamePanelAddField}
             onSubmitEditing={submitParticipant}
           />
           <TouchableOpacity onPress={submitParticipant}>
@@ -240,9 +253,9 @@ export function CurrentGamePanel({
               colors={[Colors.goldLight, Colors.gold]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={styles.CurrentGamePanelAddBtn}
+              style={styles.CurrentGamePanelAddAction}
             >
-              <Text style={styles.CurrentGamePanelAddBtnText}>Add</Text>
+              <Text style={styles.CurrentGamePanelAddActionLabel}>Add</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -263,15 +276,15 @@ function Counter({
   onIncrement: () => void;
 }) {
   return (
-    <View style={styles.CounterContainer}>
-      <Text style={styles.CounterLabel}>{label}</Text>
-      <View style={styles.CounterRow}>
-        <TouchableOpacity style={styles.CounterBtn} onPress={onDecrement}>
-          <Text style={styles.CounterBtnText}>–</Text>
+    <View style={styles.CounterWrapper}>
+      <Text style={styles.CounterCaption}>{label}</Text>
+      <View style={styles.CounterLine}>
+        <TouchableOpacity style={styles.CounterAction} onPress={onDecrement}>
+          <Text style={styles.CounterActionLabel}>–</Text>
         </TouchableOpacity>
-        <Text style={styles.CounterValue}>{value}</Text>
-        <TouchableOpacity style={styles.CounterBtn} onPress={onIncrement}>
-          <Text style={styles.CounterBtnText}>+</Text>
+        <Text style={styles.CounterFigure}>{value}</Text>
+        <TouchableOpacity style={styles.CounterAction} onPress={onIncrement}>
+          <Text style={styles.CounterActionLabel}>+</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -279,15 +292,15 @@ function Counter({
 }
 
 const styles = StyleSheet.create({
-  CurrentGamePanelScroll: {
+  CurrentGamePanelScroller: {
     paddingBottom: 24,
   },
-  CurrentGamePanelBody: {
+  CurrentGamePanelContent: {
     paddingHorizontal: 16,
     paddingTop: 16,
   },
 
-  CurrentGamePanelHoleCard: {
+  CurrentGamePanelHoleTile: {
     borderWidth: 1,
     borderColor: Colors.goldSoftBorder,
     borderRadius: 22,
@@ -295,46 +308,46 @@ const styles = StyleSheet.create({
     padding: 18,
     marginBottom: 16,
   },
-  CurrentGamePanelHoleRow: {
+  CurrentGamePanelHoleLine: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
   },
-  CurrentGamePanelScoreToParWrap: {
+  CurrentGamePanelScoreVersusParGroup: {
     alignItems: 'flex-end',
   },
-  CurrentGamePanelLabel: {
+  CurrentGamePanelCaption: {
     fontSize: 11,
     color: Colors.textFaint,
     marginBottom: 8,
   },
-  CurrentGamePanelHoleNumber: {
+  CurrentGamePanelHoleFigure: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 32,
     color: Colors.ivory,
   },
-  CurrentGamePanelScoreToPar: {
+  CurrentGamePanelScoreVersusPar: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 32,
     color: Colors.goldLight,
   },
 
-  CurrentGamePanelMeta: {
+  CurrentGamePanelSummary: {
     fontSize: 12,
     color: Colors.ivoryMuted,
   },
-  CurrentGamePanelCountersRow: {
+  CurrentGamePanelCountersLine: {
     flexDirection: 'row',
     gap: 12,
     marginBottom: 16,
   },
-  CurrentGamePanelNavRow: {
+  CurrentGamePanelNavLine: {
     flexDirection: 'row',
     gap: 12,
     marginBottom: 12,
   },
 
-  CurrentGamePanelNavBtn: {
+  CurrentGamePanelNavAction: {
     flex: 1,
     height: 41.5,
     borderRadius: 14,
@@ -344,32 +357,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  CurrentGamePanelNavBtnText: {
+  CurrentGamePanelNavActionLabel: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.ivory,
   },
 
-  CurrentGamePanelNavBtnWrapper: {
+  CurrentGamePanelNavActionShell: {
     flex: 1,
   },
-  CurrentGamePanelNextBtn: {
+  CurrentGamePanelNextAction: {
     height: 41.5,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  CurrentGamePanelNextBtnText: {
+  CurrentGamePanelNextActionLabel: {
     fontSize: 13,
     fontWeight: '700',
     color: Colors.buttonText,
   },
-  CurrentGamePanelActionsRow: {
+  CurrentGamePanelActionsLine: {
     flexDirection: 'row',
     gap: 10,
     marginBottom: 20,
   },
-  CurrentGamePanelActionBtn: {
+  CurrentGamePanelActionControl: {
     flex: 1,
     height: 37,
     borderRadius: 10,
@@ -379,15 +392,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  CurrentGamePanelActionBtnSaved: {
+  CurrentGamePanelActionControlSaved: {
     backgroundColor: Colors.goldSoftBg,
   },
-  CurrentGamePanelActionBtnText: {
+  CurrentGamePanelActionControlLabel: {
     fontSize: 12.5,
     fontWeight: '600',
     color: Colors.goldLight,
   },
-  CurrentGamePanelFinishBtn: {
+  CurrentGamePanelFinishAction: {
     flex: 1,
     height: 37,
     borderRadius: 10,
@@ -397,25 +410,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  CurrentGamePanelFinishBtnText: {
+  CurrentGamePanelFinishActionLabel: {
     fontSize: 12.5,
     fontWeight: '600',
     color: '#e08876',
   },
-  CurrentGamePanelScoreboardHeader: {
+  CurrentGamePanelScoreboardHeading: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 10,
   },
-  CurrentGamePanelScoreboardLabel: {
+  CurrentGamePanelScoreboardCaption: {
     fontSize: 12,
     color: Colors.textFaint,
   },
-  CurrentGamePanelScoreboardCount: {
+  CurrentGamePanelScoreboardTotal: {
     fontSize: 11.5,
     color: Colors.goldLight,
   },
-  CurrentGamePanelPlayerRow: {
+  CurrentGamePanelPlayerLine: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -428,7 +441,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(233,205,110,0.06)',
   },
 
-  CurrentGamePanelParticipantRow: {
+  CurrentGamePanelParticipantLine: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -440,13 +453,13 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginBottom: 10,
   },
-  CurrentGamePanelPlayerInfo: {
+  CurrentGamePanelPlayerDetails: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
   },
 
-  CurrentGamePanelPlayerBadge: {
+  CurrentGamePanelPlayerChip: {
     width: 24,
     height: 24,
     borderRadius: 12,
@@ -454,34 +467,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  CurrentGamePanelPlayerBadgeText: {
+  CurrentGamePanelPlayerChipLabel: {
     fontSize: 11,
     fontWeight: '700',
     color: Colors.ivoryMuted,
   },
-  CurrentGamePanelPlayerBadgeTextActive: {
+  CurrentGamePanelPlayerChipLabelActive: {
     fontSize: 11,
     fontWeight: '700',
     color: Colors.goldLight,
   },
-  CurrentGamePanelPlayerName: {
+  CurrentGamePanelPlayerLabel: {
     fontSize: 13.5,
     fontWeight: '600',
     color: Colors.ivory,
   },
 
-  CurrentGamePanelPlayerScore: {
+  CurrentGamePanelPlayerTally: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 16,
     color: Colors.goldLight,
   },
-  CurrentGamePanelParticipantControls: {
+  CurrentGamePanelParticipantActions: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
 
-  CurrentGamePanelParticipantBtn: {
+  CurrentGamePanelParticipantAction: {
     width: 26,
     height: 26,
     borderRadius: 8,
@@ -492,19 +505,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  CurrentGamePanelParticipantBtnText: {
+  CurrentGamePanelParticipantActionLabel: {
     fontSize: 14,
     fontWeight: '700',
     color: Colors.goldLight,
   },
-  CurrentGamePanelParticipantScore: {
+  CurrentGamePanelParticipantTally: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 16,
     color: Colors.goldLight,
     minWidth: 30,
     textAlign: 'center',
   },
-  CurrentGamePanelRemoveBtn: {
+  CurrentGamePanelRemoveAction: {
     width: 26,
     height: 26,
     borderRadius: 8,
@@ -514,16 +527,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  CurrentGamePanelRemoveBtnText: {
+  CurrentGamePanelRemoveActionLabel: {
     fontSize: 13,
     color: '#e08876',
   },
-  CurrentGamePanelAddRow: {
+  CurrentGamePanelAddLine: {
     flexDirection: 'row',
     gap: 8,
     marginTop: 4,
   },
-  CurrentGamePanelAddInput: {
+  CurrentGamePanelAddField: {
     flex: 1,
     height: 37.5,
     borderRadius: 10,
@@ -534,20 +547,20 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 
-  CurrentGamePanelAddBtn: {
+  CurrentGamePanelAddAction: {
     width: 58,
     height: 37.5,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  CurrentGamePanelAddBtnText: {
+  CurrentGamePanelAddActionLabel: {
     fontSize: 13,
     fontWeight: '700',
     color: Colors.buttonText,
   },
 
-  CounterContainer: {
+  CounterWrapper: {
     flex: 1,
     borderWidth: 1,
     borderColor: Colors.surfaceBorder,
@@ -556,17 +569,17 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
   },
-  CounterLabel: {
+  CounterCaption: {
     fontSize: 11,
     color: Colors.textFaint,
     marginBottom: 12,
   },
-  CounterRow: {
+  CounterLine: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 18,
   },
-  CounterBtn: {
+  CounterAction: {
     width: 34,
     height: 34,
     borderRadius: 17,
@@ -577,13 +590,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  CounterBtnText: {
+  CounterActionLabel: {
     fontSize: 18,
     fontWeight: '700',
     color: Colors.goldLight,
   },
 
-  CounterValue: {
+  CounterFigure: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 26,
     color: Colors.ivory,

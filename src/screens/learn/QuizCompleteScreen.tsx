@@ -12,6 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Fonts } from '../../constants/theme';
 import { useOverlayAnimation } from '../../hooks/useOverlayAnimation';
 import { useLearnState } from '../../navigation/LearnContext';
+
 import { Colors } from '../../theme/colors';
 
 function performanceLabel(accuracyPct: number): string {
@@ -36,18 +37,18 @@ export function QuizCompleteScreen() {
   }
 
   return (
-    <Animated.View style={[styles.QuizCompleteScreenContainer, animatedStyle]}>
+    <Animated.View style={[styles.QuizCompleteScreenWrapper, animatedStyle]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.QuizCompleteScreenEyebrow}>Quiz Complete</Text>
-        <Text style={styles.QuizCompleteScreenScore}>
+        <Text style={styles.QuizCompleteScreenOverline}>Quiz Complete</Text>
+        <Text style={styles.QuizCompleteScreenTally}>
           {renderedValue.correct}/{renderedValue.total}
         </Text>
-        <Text style={styles.QuizCompleteScreenSubtitle}>
+        <Text style={styles.QuizCompleteScreenCaption}>
           {performanceLabel(renderedValue.accuracyPct)} · Best{' '}
           {renderedValue.bestScore}/{renderedValue.total}
         </Text>
 
-        <View style={styles.QuizCompleteScreenStatsRow}>
+        <View style={styles.QuizCompleteScreenStatsLine}>
           <StatCard
             label="CORRECT"
             value={String(renderedValue.correct)}
@@ -70,19 +71,19 @@ export function QuizCompleteScreen() {
             colors={[Colors.goldLight, Colors.gold]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.QuizCompleteScreenPrimaryBtn}
+            style={styles.QuizCompleteScreenPrimaryAction}
           >
-            <Text style={styles.QuizCompleteScreenPrimaryBtnText}>
+            <Text style={styles.QuizCompleteScreenPrimaryActionLabel}>
               Try Again
             </Text>
           </LinearGradient>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.QuizCompleteScreenSecondaryBtn}
+          style={styles.QuizCompleteScreenSecondaryAction}
           onPress={closeQuizResult}
         >
-          <Text style={styles.QuizCompleteScreenSecondaryBtnText}>
+          <Text style={styles.QuizCompleteScreenSecondaryActionLabel}>
             Return to Learn
           </Text>
         </TouchableOpacity>
@@ -101,15 +102,17 @@ function StatCard({
   valueColor: string;
 }) {
   return (
-    <View style={styles.StatCardContainer}>
-      <Text style={styles.StatCardLabel}>{label}</Text>
-      <Text style={[styles.StatCardValue, { color: valueColor }]}>{value}</Text>
+    <View style={styles.StatCardShell}>
+      <Text style={styles.StatCardCaption}>{label}</Text>
+      <Text style={[styles.StatCardFigure, { color: valueColor }]}>
+        {value}
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  QuizCompleteScreenContainer: {
+  QuizCompleteScreenWrapper: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -120,7 +123,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 
-  QuizCompleteScreenEyebrow: {
+  QuizCompleteScreenOverline: {
     fontSize: 11,
     color: Colors.goldLight,
     letterSpacing: 2,
@@ -128,7 +131,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  QuizCompleteScreenScore: {
+  QuizCompleteScreenTally: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 34,
     color: Colors.ivory,
@@ -136,19 +139,19 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  QuizCompleteScreenSubtitle: {
+  QuizCompleteScreenCaption: {
     fontSize: 13,
     color: Colors.ivoryMuted,
     textAlign: 'center',
     marginBottom: 24,
   },
-  QuizCompleteScreenStatsRow: {
+  QuizCompleteScreenStatsLine: {
     flexDirection: 'row',
     gap: 10,
     marginBottom: 24,
   },
 
-  StatCardContainer: {
+  StatCardShell: {
     flex: 1,
     backgroundColor: Colors.surface,
     borderRadius: 16,
@@ -156,18 +159,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  StatCardLabel: {
+  StatCardCaption: {
     fontSize: 10,
     color: Colors.textFaint,
     marginBottom: 10,
   },
 
-  StatCardValue: {
+  StatCardFigure: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 19,
   },
 
-  QuizCompleteScreenPrimaryBtn: {
+  QuizCompleteScreenPrimaryAction: {
     height: 43,
     borderRadius: 14,
     alignItems: 'center',
@@ -175,12 +178,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  QuizCompleteScreenPrimaryBtnText: {
+  QuizCompleteScreenPrimaryActionLabel: {
     fontSize: 14,
     fontWeight: '700',
     color: Colors.buttonText,
   },
-  QuizCompleteScreenSecondaryBtn: {
+  QuizCompleteScreenSecondaryAction: {
     height: 41.5,
     borderRadius: 14,
     borderWidth: 1,
@@ -189,7 +192,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  QuizCompleteScreenSecondaryBtnText: {
+  QuizCompleteScreenSecondaryActionLabel: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.goldLight,

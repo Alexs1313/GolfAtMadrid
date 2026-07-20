@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { FadeInItem } from '../../components/FadeInItem';
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { useRequestsState } from '../../navigation/RequestsContext';
+
 import { Colors } from '../../theme/colors';
 
 import type { ServiceCategory } from '../../types';
@@ -33,7 +34,7 @@ export function MyParkingScreen({
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.MyParkingScreenScroll}
+      contentContainerStyle={styles.MyParkingScreenScrollWrap}
     >
       <ScreenHeader
         title="Services"
@@ -42,17 +43,17 @@ export function MyParkingScreen({
         onPressBell={onPressBell}
       />
 
-      <View style={styles.MyParkingScreenBody}>
+      <View style={styles.MyParkingScreenContent}>
         <ServiceCategoryTabs category={category} onSelect={onSelectCategory} />
         <ParkingSubTabs
           parkingSegment={parkingSegment}
           onSelect={onSelectParkingSegment}
         />
 
-        <Text style={styles.MyParkingScreenLabel}>Current & Upcoming</Text>
+        <Text style={styles.MyParkingScreenCaption}>Current & Upcoming</Text>
 
         {parkingReservations.length === 0 ? (
-          <Text style={styles.MyParkingScreenEmptyText}>
+          <Text style={styles.MyParkingScreenBlankMessage}>
             No parking reservations yet. Confirm a space on the Parking Map to
             see it here.
           </Text>
@@ -61,18 +62,18 @@ export function MyParkingScreen({
             <FadeInItem
               key={reservation.id}
               index={i}
-              style={styles.MyParkingScreenRow}
+              style={styles.MyParkingScreenLine}
             >
               <View>
-                <Text style={styles.MyParkingScreenTitle}>
+                <Text style={styles.MyParkingScreenHeading}>
                   Space {reservation.spaceId} · {reservation.zone}
                 </Text>
-                <Text style={styles.MyParkingScreenSubtitle}>
+                <Text style={styles.MyParkingScreenSubhead}>
                   {reservation.dateLabel} · {reservation.timeLabel}
                 </Text>
               </View>
-              <View style={styles.MyParkingScreenBadge}>
-                <Text style={styles.MyParkingScreenBadgeText}>
+              <View style={styles.MyParkingScreenChip}>
+                <Text style={styles.MyParkingScreenChipLabel}>
                   {reservation.status}
                 </Text>
               </View>
@@ -85,27 +86,28 @@ export function MyParkingScreen({
 }
 
 const styles = StyleSheet.create({
-  MyParkingScreenScroll: {
+  MyParkingScreenScrollWrap: {
     paddingBottom: 24,
   },
-  MyParkingScreenBody: {
+
+  MyParkingScreenContent: {
     paddingHorizontal: 16,
     paddingTop: 12,
   },
-  MyParkingScreenLabel: {
+  MyParkingScreenCaption: {
     fontSize: 12,
     color: Colors.textFaint,
     marginBottom: 10,
   },
 
-  MyParkingScreenEmptyText: {
+  MyParkingScreenBlankMessage: {
     fontSize: 12.5,
     color: Colors.textFainter,
     textAlign: 'center',
     paddingVertical: 40,
   },
 
-  MyParkingScreenRow: {
+  MyParkingScreenLine: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -115,24 +117,24 @@ const styles = StyleSheet.create({
     padding: 14,
     marginBottom: 10,
   },
-  MyParkingScreenTitle: {
+  MyParkingScreenHeading: {
     fontSize: 13.5,
     fontWeight: '600',
     color: Colors.ivory,
     marginBottom: 4,
   },
-  MyParkingScreenSubtitle: {
+  MyParkingScreenSubhead: {
     fontSize: 11.5,
     color: Colors.textFaint,
   },
-  MyParkingScreenBadge: {
+  MyParkingScreenChip: {
     backgroundColor: '#2c3a4a',
     borderRadius: 20,
     paddingHorizontal: 9,
     paddingVertical: 3,
   },
 
-  MyParkingScreenBadgeText: {
+  MyParkingScreenChipLabel: {
     fontSize: 9.5,
     fontWeight: '700',
     color: Colors.goldLight,

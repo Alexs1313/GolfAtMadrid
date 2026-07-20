@@ -10,14 +10,18 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 
 import { FadeInItem } from '../../components/FadeInItem';
+
 import { ScreenHeader } from '../../components/ScreenHeader';
 import { AppIcon } from '../../components/icons/AppIcon';
+
 import { Fonts } from '../../constants/theme';
 import { EVENTS } from '../../data/events';
+
 import { useAppNavigation } from '../../navigation/NavigationContext';
 import { useRequestsState } from '../../navigation/RequestsContext';
 import { Colors } from '../../theme/colors';
 import type { EventItem } from '../../types';
+
 import { getEventDayLabel } from '../../utils/date';
 
 export function EventsScreen() {
@@ -45,12 +49,12 @@ export function EventsScreen() {
   const selectedDayLabel = getEventDayLabel(selectedDay);
 
   const discoverEvent = () => {
-    const random = EVENTS[Math.floor(Math.random() * EVENTS.length)];
-    openEventDetail(random);
+    const pickedEvent = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+    openEventDetail(pickedEvent);
   };
 
   return (
-    <View style={styles.EventsScreenContainer}>
+    <View style={styles.EventsScreenWrapper}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <ScreenHeader
           title="Events"
@@ -62,7 +66,7 @@ export function EventsScreen() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.EventsScreenDaysRow}
+          contentContainerStyle={styles.EventsScreenDaysLine}
         >
           {days.map(day => {
             const isActive = day === selectedDay;
@@ -73,29 +77,29 @@ export function EventsScreen() {
                 {isActive ? (
                   <LinearGradient
                     colors={[Colors.goldLight, Colors.gold]}
-                    style={styles.EventsScreenDayChip}
+                    style={styles.EventsScreenDayTile}
                   >
-                    <Text style={styles.EventsScreenDayWeekdayActive}>
+                    <Text style={styles.EventsScreenDayNameActive}>
                       {weekday}
                     </Text>
-                    <Text style={styles.EventsScreenDayNumberActive}>
+                    <Text style={styles.EventsScreenDayFigureActive}>
                       {number}
                     </Text>
                     <View
                       style={[
-                        styles.EventsScreenDayDotActive,
-                        !hasEvents && styles.EventsScreenDayDotHidden,
+                        styles.EventsScreenDayMarkerActive,
+                        !hasEvents && styles.EventsScreenDayMarkerHidden,
                       ]}
                     />
                   </LinearGradient>
                 ) : (
-                  <View style={styles.EventsScreenDayChipInactive}>
-                    <Text style={styles.EventsScreenDayWeekday}>{weekday}</Text>
-                    <Text style={styles.EventsScreenDayNumber}>{number}</Text>
+                  <View style={styles.EventsScreenDayTileInactive}>
+                    <Text style={styles.EventsScreenDayName}>{weekday}</Text>
+                    <Text style={styles.EventsScreenDayFigure}>{number}</Text>
                     <View
                       style={[
-                        styles.EventsScreenDayDot,
-                        !hasEvents && styles.EventsScreenDayDotHidden,
+                        styles.EventsScreenDayMarker,
+                        !hasEvents && styles.EventsScreenDayMarkerHidden,
                       ]}
                     />
                   </View>
@@ -105,17 +109,17 @@ export function EventsScreen() {
           })}
         </ScrollView>
 
-        <Text style={styles.EventsScreenSectionLabel}>
+        <Text style={styles.EventsScreenSectionCaption}>
           {selectedDayLabel} — {eventsForDay.length}{' '}
           {eventsForDay.length === 1 ? 'event' : 'events'}
         </Text>
 
         {eventsForDay.length === 0 ? (
-          <View style={styles.EventsScreenEmpty}>
-            <Text style={styles.EventsScreenEmptyTitle}>
+          <View style={styles.EventsScreenBlank}>
+            <Text style={styles.EventsScreenBlankHeading}>
               No events this day
             </Text>
-            <Text style={styles.EventsScreenEmptySubtitle}>
+            <Text style={styles.EventsScreenBlankSubhead}>
               Check another date or let us surprise you below.
             </Text>
           </View>
@@ -135,17 +139,17 @@ export function EventsScreen() {
         )}
 
         <TouchableOpacity
-          style={styles.EventsScreenDiscoverCard}
+          style={styles.EventsScreenDiscoverTile}
           onPress={discoverEvent}
         >
-          <View style={styles.EventsScreenDiscoverIcon}>
+          <View style={styles.EventsScreenDiscoverGlyph}>
             <AppIcon name="sparkle" size={18} />
           </View>
-          <View style={styles.EventsScreenDiscoverText}>
-            <Text style={styles.EventsScreenDiscoverTitle}>
+          <View style={styles.EventsScreenDiscoverCopy}>
+            <Text style={styles.EventsScreenDiscoverHeading}>
               Discover an Event
             </Text>
-            <Text style={styles.EventsScreenDiscoverSubtitle}>
+            <Text style={styles.EventsScreenDiscoverSubhead}>
               Let us surprise you with something on today's calendar
             </Text>
           </View>
@@ -165,47 +169,47 @@ function EventCard({
   onSendRequest: () => void;
 }) {
   return (
-    <View style={styles.EventCardContainer}>
-      <View style={styles.EventCardImageWrap}>
+    <View style={styles.EventCardWrapper}>
+      <View style={styles.EventCardImageFrame}>
         <Image
           source={event.image}
-          style={styles.EventCardImage}
+          style={styles.EventCardPhoto}
           resizeMode="cover"
         />
-        <View style={styles.EventCardCategoryBadge}>
-          <Text style={styles.EventCardCategoryText}>{event.category}</Text>
+        <View style={styles.EventCardCategoryChip}>
+          <Text style={styles.EventCardCategoryLabel}>{event.category}</Text>
         </View>
       </View>
 
-      <View style={styles.EventCardBody}>
-        <Text style={styles.EventCardTitle}>{event.title}</Text>
-        <Text style={styles.EventCardMeta}>
+      <View style={styles.EventCardContent}>
+        <Text style={styles.EventCardHeading}>{event.title}</Text>
+        <Text style={styles.EventCardDetails}>
           {getEventDayLabel(event.daysFromToday)} · {event.timeLabel} ·{' '}
           {event.location}
         </Text>
-        <Text style={styles.EventCardDescription}>
-          {event.shortDescription}
-        </Text>
-        <Text style={styles.EventCardPlaces}>{event.placesLabel}</Text>
+        <Text style={styles.EventCardSummary}>{event.shortDescription}</Text>
+        <Text style={styles.EventCardAvailability}>{event.placesLabel}</Text>
 
-        <View style={styles.EventCardActions}>
+        <View style={styles.EventCardControls}>
           <TouchableOpacity
-            style={styles.EventCardDetailsBtn}
+            style={styles.EventCardDetailsAction}
             onPress={onViewDetails}
           >
-            <Text style={styles.EventCardDetailsBtnText}>View Details</Text>
+            <Text style={styles.EventCardDetailsActionLabel}>View Details</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.EventCardRequestBtnWrapper}
+            style={styles.EventCardRequestActionShell}
             onPress={onSendRequest}
           >
             <LinearGradient
               colors={[Colors.goldLight, Colors.gold]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={styles.EventCardRequestBtn}
+              style={styles.EventCardRequestAction}
             >
-              <Text style={styles.EventCardRequestBtnText}>Send Request</Text>
+              <Text style={styles.EventCardRequestActionLabel}>
+                Send Request
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -215,16 +219,18 @@ function EventCard({
 }
 
 const styles = StyleSheet.create({
-  EventsScreenContainer: {
+  EventsScreenWrapper: {
     flex: 1,
     backgroundColor: Colors.background,
   },
-  EventsScreenDaysRow: {
+
+  EventsScreenDaysLine: {
     paddingHorizontal: 16,
     paddingTop: 16,
     gap: 8,
   },
-  EventsScreenDayChip: {
+
+  EventsScreenDayTile: {
     width: 46,
     height: 65.5,
     borderRadius: 14,
@@ -232,7 +238,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
   },
-  EventsScreenDayChipInactive: {
+  EventsScreenDayTileInactive: {
     width: 46,
     height: 65.5,
     borderRadius: 14,
@@ -243,67 +249,75 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
   },
-  EventsScreenDayWeekday: {
+
+  EventsScreenDayName: {
     fontSize: 10,
     fontWeight: '600',
     color: Colors.ivory,
     letterSpacing: 0.5,
   },
-  EventsScreenDayNumber: {
+  EventsScreenDayFigure: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 19,
     color: Colors.ivory,
   },
-  EventsScreenDayWeekdayActive: {
+
+  EventsScreenDayNameActive: {
     fontSize: 10,
     fontWeight: '600',
     color: Colors.buttonText,
     letterSpacing: 0.5,
   },
-  EventsScreenDayNumberActive: {
+  EventsScreenDayFigureActive: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 19,
     color: Colors.buttonText,
   },
-  EventsScreenDayDot: {
+
+  EventsScreenDayMarker: {
     width: 4,
     height: 4,
     borderRadius: 2,
     backgroundColor: Colors.goldLight,
   },
-  EventsScreenDayDotActive: {
+
+  EventsScreenDayMarkerActive: {
     width: 4,
     height: 4,
     borderRadius: 2,
     backgroundColor: Colors.buttonText,
   },
-  EventsScreenDayDotHidden: {
+  EventsScreenDayMarkerHidden: {
     opacity: 0,
   },
-  EventsScreenSectionLabel: {
+
+  EventsScreenSectionCaption: {
     fontSize: 12,
     color: Colors.textFaint,
     paddingHorizontal: 18,
     marginTop: 16,
     marginBottom: 8,
   },
-  EventsScreenEmpty: {
+  EventsScreenBlank: {
     alignItems: 'center',
     paddingVertical: 40,
     paddingHorizontal: 32,
   },
-  EventsScreenEmptyTitle: {
+
+  EventsScreenBlankHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 17,
     color: Colors.ivory,
     marginBottom: 8,
   },
-  EventsScreenEmptySubtitle: {
+
+  EventsScreenBlankSubhead: {
     fontSize: 13,
     color: Colors.ivoryMuted,
     textAlign: 'center',
   },
-  EventsScreenDiscoverCard: {
+
+  EventsScreenDiscoverTile: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#1b1f27',
@@ -316,7 +330,7 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 14,
   },
-  EventsScreenDiscoverIcon: {
+  EventsScreenDiscoverGlyph: {
     width: 38,
     height: 38,
     borderRadius: 19,
@@ -324,20 +338,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  EventsScreenDiscoverText: {
+
+  EventsScreenDiscoverCopy: {
     flex: 1,
   },
-  EventsScreenDiscoverTitle: {
+  EventsScreenDiscoverHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 14.5,
     color: Colors.ivory,
     marginBottom: 4,
   },
-  EventsScreenDiscoverSubtitle: {
+  EventsScreenDiscoverSubhead: {
     fontSize: 11.5,
     color: Colors.textFainter,
   },
-  EventCardContainer: {
+
+  EventCardWrapper: {
     marginHorizontal: 16,
     marginBottom: 16,
     borderRadius: 22,
@@ -346,14 +362,16 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: Colors.surface,
   },
-  EventCardImageWrap: {
+
+  EventCardImageFrame: {
     height: 120,
   },
-  EventCardImage: {
+  EventCardPhoto: {
     width: '100%',
     height: '100%',
   },
-  EventCardCategoryBadge: {
+
+  EventCardCategoryChip: {
     position: 'absolute',
     left: 12,
     top: 10,
@@ -364,41 +382,44 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
   },
-  EventCardCategoryText: {
+  EventCardCategoryLabel: {
     fontSize: 10.5,
     fontWeight: '600',
     color: Colors.goldLight,
   },
-  EventCardBody: {
+
+  EventCardContent: {
     padding: 16,
   },
-  EventCardTitle: {
+  EventCardHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 17,
     color: Colors.ivory,
     marginBottom: 8,
   },
-  EventCardMeta: {
+
+  EventCardDetails: {
     fontSize: 12.5,
     color: Colors.textFainter,
     marginBottom: 10,
   },
-  EventCardDescription: {
+  EventCardSummary: {
     fontSize: 13,
     lineHeight: 19.5,
     color: Colors.ivoryMuted,
     marginBottom: 10,
   },
-  EventCardPlaces: {
+  EventCardAvailability: {
     fontSize: 12,
     color: Colors.goldLight,
     marginBottom: 14,
   },
-  EventCardActions: {
+  EventCardControls: {
     flexDirection: 'row',
     gap: 10,
   },
-  EventCardDetailsBtn: {
+
+  EventCardDetailsAction: {
     flex: 1,
     height: 39.5,
     borderRadius: 14,
@@ -407,21 +428,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  EventCardDetailsBtnText: {
+
+  EventCardDetailsActionLabel: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.goldLight,
   },
-  EventCardRequestBtnWrapper: {
+  EventCardRequestActionShell: {
     flex: 1,
   },
-  EventCardRequestBtn: {
+  EventCardRequestAction: {
     height: 39.5,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  EventCardRequestBtnText: {
+
+  EventCardRequestActionLabel: {
     fontSize: 13,
     fontWeight: '700',
     color: Colors.buttonText,

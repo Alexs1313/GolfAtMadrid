@@ -1,10 +1,22 @@
-import React, {createContext, useCallback, useContext, useEffect, useMemo, useState} from 'react';
-import {BackHandler} from 'react-native';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { BackHandler } from 'react-native';
 
-import {QUIZ_QUESTIONS} from '../data/quiz';
-import {usePersistedState} from '../hooks/usePersistedState';
-import type {DictionaryCategory, QuizDifficulty, QuizQuestion} from '../types';
-import {useAppNavigation} from './NavigationContext';
+import { QUIZ_QUESTIONS } from '../data/quiz';
+
+import { usePersistedState } from '../hooks/usePersistedState';
+import type {
+  DictionaryCategory,
+  QuizDifficulty,
+  QuizQuestion,
+} from '../types';
+import { useAppNavigation } from './NavigationContext';
 
 type LearnSegment = 'dictionary' | 'saved';
 
@@ -81,21 +93,26 @@ type LearnContextValue = {
 
 const LearnContext = createContext<LearnContextValue | null>(null);
 
-export function LearnProvider({children}: {children: React.ReactNode}) {
-  const {selectTab} = useAppNavigation();
+export function LearnProvider({ children }: { children: React.ReactNode }) {
+  const { selectTab } = useAppNavigation();
   const [segment, setSegment] = useState<LearnSegment>('dictionary');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<'All' | DictionaryCategory>('All');
+  const [selectedCategory, setSelectedCategory] = useState<
+    'All' | DictionaryCategory
+  >('All');
   const [savedTermIdsArray, setSavedTermIdsArray] = usePersistedState<string[]>(
     'learn.savedTermIds',
     [],
   );
-  const savedTermIds = useMemo(() => new Set(savedTermIdsArray), [savedTermIdsArray]);
-  const [quizDifficulty, setQuizDifficulty] = useState<QuizDifficulty>('Medium');
-  const [bestScores, setBestScores] = usePersistedState<Record<QuizDifficulty, number | null>>(
-    'learn.bestScores',
-    {Easy: null, Medium: null, Hard: null},
+  const savedTermIds = useMemo(
+    () => new Set(savedTermIdsArray),
+    [savedTermIdsArray],
   );
+  const [quizDifficulty, setQuizDifficulty] =
+    useState<QuizDifficulty>('Medium');
+  const [bestScores, setBestScores] = usePersistedState<
+    Record<QuizDifficulty, number | null>
+  >('learn.bestScores', { Easy: null, Medium: null, Hard: null });
   const [activeQuiz, setActiveQuiz] = useState<ActiveQuiz | null>(null);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
 
@@ -123,7 +140,8 @@ export function LearnProvider({children}: {children: React.ReactNode}) {
 
   const finishQuiz = useCallback((quiz: ActiveQuiz) => {
     const correct = quiz.answers.reduce<number>(
-      (sum, answer, i) => sum + (answer === quiz.questions[i].correctIndex ? 1 : 0),
+      (sum, answer, i) =>
+        sum + (answer === quiz.questions[i].correctIndex ? 1 : 0),
       0,
     );
     const total = quiz.questions.length;
@@ -143,7 +161,7 @@ export function LearnProvider({children}: {children: React.ReactNode}) {
         bestScore,
         isNewBest,
       });
-      return isNewBest ? {...prev, [quiz.difficulty]: correct} : prev;
+      return isNewBest ? { ...prev, [quiz.difficulty]: correct } : prev;
     });
     setActiveQuiz(null);
   }, []);
@@ -155,7 +173,7 @@ export function LearnProvider({children}: {children: React.ReactNode}) {
       }
       const answers = [...prev.answers];
       answers[prev.currentIndex] = optionIndex;
-      return {...prev, answers};
+      return { ...prev, answers };
     });
   }, []);
 
@@ -169,16 +187,16 @@ export function LearnProvider({children}: {children: React.ReactNode}) {
         finishQuiz(prev);
         return prev;
       }
-      return {...prev, currentIndex: nextIndex};
+      return { ...prev, currentIndex: nextIndex };
     });
   }, [finishQuiz]);
 
   const pauseQuiz = useCallback(() => {
-    setActiveQuiz(prev => (prev ? {...prev, isPaused: true} : prev));
+    setActiveQuiz(prev => (prev ? { ...prev, isPaused: true } : prev));
   }, []);
 
   const resumeQuiz = useCallback(() => {
-    setActiveQuiz(prev => (prev ? {...prev, isPaused: false} : prev));
+    setActiveQuiz(prev => (prev ? { ...prev, isPaused: false } : prev));
   }, []);
 
   const exitQuiz = useCallback(() => {
@@ -195,21 +213,24 @@ export function LearnProvider({children}: {children: React.ReactNode}) {
     if (!activeQuiz && !quizResult) {
       return;
     }
-    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (quizResult) {
-        closeQuizResult();
-        return true;
-      }
-      if (activeQuiz) {
-        if (activeQuiz.isPaused) {
-          exitQuiz();
-        } else {
-          pauseQuiz();
+    const subscription = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        if (quizResult) {
+          closeQuizResult();
+          return true;
         }
-        return true;
-      }
-      return false;
-    });
+        if (activeQuiz) {
+          if (activeQuiz.isPaused) {
+            exitQuiz();
+          } else {
+            pauseQuiz();
+          }
+          return true;
+        }
+        return false;
+      },
+    );
     return () => subscription.remove();
   }, [activeQuiz, quizResult, closeQuizResult, exitQuiz, pauseQuiz]);
 
@@ -258,7 +279,9 @@ export function LearnProvider({children}: {children: React.ReactNode}) {
     ],
   );
 
-  return <LearnContext.Provider value={value}>{children}</LearnContext.Provider>;
+  return (
+    <LearnContext.Provider value={value}>{children}</LearnContext.Provider>
+  );
 }
 
 export function useLearnState() {

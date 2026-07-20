@@ -1,13 +1,25 @@
-import React, {createContext, useCallback, useContext, useMemo, useState} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 
-import {HOLES} from '../data/holes';
-import {usePersistedState} from '../hooks/usePersistedState';
-import type {GameParticipant, HoleScore, RoundSummary, SavedGame} from '../types';
+import { HOLES } from '../data/holes';
+
+import { usePersistedState } from '../hooks/usePersistedState';
+import type {
+  GameParticipant,
+  HoleScore,
+  RoundSummary,
+  SavedGame,
+} from '../types';
 
 type ScoreSegment = 'current' | 'stats';
 
 function freshHoleScores(): HoleScore[] {
-  return HOLES.map(hole => ({strokes: hole.par, putts: 2}));
+  return HOLES.map(hole => ({ strokes: hole.par, putts: 2 }));
 }
 
 type ScoreContextValue = {
@@ -42,14 +54,17 @@ type ScoreContextValue = {
 
 const ScoreContext = createContext<ScoreContextValue | null>(null);
 
-export function ScoreProvider({children}: {children: React.ReactNode}) {
+export function ScoreProvider({ children }: { children: React.ReactNode }) {
   const [segment, setSegment] = useState<ScoreSegment>('current');
   const [holeIndex, setHoleIndex] = useState(0);
   const [holeScores, setHoleScores] = useState<HoleScore[]>(freshHoleScores);
   const [participants, setParticipants] = useState<GameParticipant[]>([]);
   const [startedAt] = useState(() => Date.now());
   const [roundComplete, setRoundComplete] = useState<RoundSummary | null>(null);
-  const [previousGames, setPreviousGames] = usePersistedState<SavedGame[]>('score.previousGames', []);
+  const [previousGames, setPreviousGames] = usePersistedState<SavedGame[]>(
+    'score.previousGames',
+    [],
+  );
   const [isPaused, setIsPaused] = useState(false);
 
   const updateCurrentHole = useCallback(
@@ -84,13 +99,15 @@ export function ScoreProvider({children}: {children: React.ReactNode}) {
     }
     setParticipants(prev => [
       ...prev,
-      {id: `${Date.now()}`, name: trimmed, scoreToPar: 0},
+      { id: `${Date.now()}`, name: trimmed, scoreToPar: 0 },
     ]);
   }, []);
 
   const adjustParticipant = useCallback((id: string, delta: number) => {
     setParticipants(prev =>
-      prev.map(p => (p.id === id ? {...p, scoreToPar: p.scoreToPar + delta} : p)),
+      prev.map(p =>
+        p.id === id ? { ...p, scoreToPar: p.scoreToPar + delta } : p,
+      ),
     );
   }, []);
 
@@ -141,7 +158,10 @@ export function ScoreProvider({children}: {children: React.ReactNode}) {
       }
     });
 
-    const durationMin = Math.max(1, Math.round((Date.now() - startedAt) / 60000));
+    const durationMin = Math.max(
+      1,
+      Math.round((Date.now() - startedAt) / 60000),
+    );
 
     setRoundComplete({
       finalStrokes,
@@ -149,7 +169,10 @@ export function ScoreProvider({children}: {children: React.ReactNode}) {
       totalPutts,
       bestHole,
       toughestHole,
-      fairwaysHitPct: fairwayEligible > 0 ? Math.round((fairwaysHit / fairwayEligible) * 100) : 0,
+      fairwaysHitPct:
+        fairwayEligible > 0
+          ? Math.round((fairwaysHit / fairwayEligible) * 100)
+          : 0,
       greensInRegPct: Math.round((greensInReg / HOLES.length) * 100),
       durationMin,
     });
@@ -164,7 +187,12 @@ export function ScoreProvider({children}: {children: React.ReactNode}) {
       day: 'numeric',
     });
     setPreviousGames(prev => [
-      {id: `${Date.now()}`, dateLabel, timestamp: Date.now(), summary: roundComplete},
+      {
+        id: `${Date.now()}`,
+        dateLabel,
+        timestamp: Date.now(),
+        summary: roundComplete,
+      },
       ...prev,
     ]);
   }, [roundComplete]);
@@ -237,7 +265,9 @@ export function ScoreProvider({children}: {children: React.ReactNode}) {
     ],
   );
 
-  return <ScoreContext.Provider value={value}>{children}</ScoreContext.Provider>;
+  return (
+    <ScoreContext.Provider value={value}>{children}</ScoreContext.Provider>
+  );
 }
 
 export function useScoreState() {

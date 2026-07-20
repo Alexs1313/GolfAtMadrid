@@ -33,43 +33,43 @@ export function GamePausedModal() {
   };
 
   return (
-    <View style={styles.GamePausedModalScrim}>
-      <View style={styles.GamePausedModalCard}>
-        <Text style={styles.GamePausedModalTitle}>Game Paused</Text>
-        <Text style={styles.GamePausedModalSubtitle}>
+    <View style={styles.GamePausedModalOverlay}>
+      <View style={styles.GamePausedModalPanel}>
+        <Text style={styles.GamePausedModalHeading}>Game Paused</Text>
+        <Text style={styles.GamePausedModalCaption}>
           Hole {hole.number} of {HOLES.length} · {totalStrokes} strokes so far
         </Text>
 
         <TouchableOpacity
-          style={styles.GamePausedModalPrimaryBtnWrap}
+          style={styles.GamePausedModalPrimaryActionWrap}
           onPress={resumeGame}
         >
           <LinearGradient
             colors={[Colors.goldLight, Colors.gold]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.GamePausedModalPrimaryBtn}
+            style={styles.GamePausedModalPrimaryAction}
           >
-            <Text style={styles.GamePausedModalPrimaryBtnText}>
+            <Text style={styles.GamePausedModalPrimaryActionLabel}>
               Resume Game
             </Text>
           </LinearGradient>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.GamePausedModalSecondaryBtn}
+          style={styles.GamePausedModalSecondaryAction}
           onPress={saveAndExit}
         >
-          <Text style={styles.GamePausedModalSecondaryBtnText}>
+          <Text style={styles.GamePausedModalSecondaryActionLabel}>
             Save and Exit
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.GamePausedModalDangerBtn}
+          style={styles.GamePausedModalDangerAction}
           onPress={endGame}
         >
-          <Text style={styles.GamePausedModalDangerBtnText}>End Game</Text>
+          <Text style={styles.GamePausedModalDangerActionLabel}>End Game</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -77,7 +77,7 @@ export function GamePausedModal() {
 }
 
 const styles = StyleSheet.create({
-  GamePausedModalScrim: {
+  GamePausedModalOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 
-  GamePausedModalCard: {
+  GamePausedModalPanel: {
     width: '100%',
     maxWidth: 300,
     backgroundColor: Colors.surface,
@@ -100,35 +100,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     alignItems: 'center',
   },
-  GamePausedModalTitle: {
+  GamePausedModalHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 19,
     color: Colors.ivory,
     marginBottom: 8,
   },
 
-  GamePausedModalSubtitle: {
+  GamePausedModalCaption: {
     fontSize: 12.5,
     color: Colors.textFainter,
     marginBottom: 22,
     textAlign: 'center',
   },
-  GamePausedModalPrimaryBtnWrap: {
+  GamePausedModalPrimaryActionWrap: {
     width: '100%',
     marginBottom: 12,
   },
-  GamePausedModalPrimaryBtn: {
+  GamePausedModalPrimaryAction: {
     height: 43,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  GamePausedModalPrimaryBtnText: {
+  GamePausedModalPrimaryActionLabel: {
     fontSize: 14,
     fontWeight: '700',
     color: Colors.buttonText,
   },
-  GamePausedModalSecondaryBtn: {
+  GamePausedModalSecondaryAction: {
     width: '100%',
     height: 41.5,
     borderRadius: 14,
@@ -138,13 +138,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 12,
   },
-  GamePausedModalSecondaryBtnText: {
+  GamePausedModalSecondaryActionLabel: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.goldLight,
   },
 
-  GamePausedModalDangerBtn: {
+  GamePausedModalDangerAction: {
     width: '100%',
     height: 41.5,
     borderRadius: 14,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  GamePausedModalDangerBtnText: {
+  GamePausedModalDangerActionLabel: {
     fontSize: 13,
     fontWeight: '600',
     color: '#e08876',

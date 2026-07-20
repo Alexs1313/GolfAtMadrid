@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
 import { Fonts } from '../constants/theme';
 import { Colors } from '../theme/colors';
 
@@ -14,20 +13,20 @@ interface Props {
 
 export function BackHeader({ title, onBack, eyebrow }: Props) {
   return (
-    <View style={styles.BackHeaderContainer}>
-      <TouchableOpacity style={styles.BackHeaderButton} onPress={onBack}>
+    <View style={styles.BackHeaderWrapper}>
+      <TouchableOpacity style={styles.BackHeaderControl} onPress={onBack}>
         <AppIcon name="chevronLeft" size={9} />
       </TouchableOpacity>
-      <View style={styles.BackHeaderTextWrap}>
-        {eyebrow && <Text style={styles.BackHeaderEyebrow}>{eyebrow}</Text>}
-        <Text style={styles.BackHeaderTitle}>{title}</Text>
+      <View style={styles.BackHeaderTextGroup}>
+        {eyebrow && <Text style={styles.BackHeaderKicker}>{eyebrow}</Text>}
+        <Text style={styles.BackHeaderHeading}>{title}</Text>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  BackHeaderContainer: {
+  BackHeaderWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
     gap: 14,
   },
 
-  BackHeaderButton: {
+  BackHeaderControl: {
     width: 36,
     height: 36,
     borderRadius: 18,
@@ -46,17 +45,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  BackHeaderTextWrap: {
+  BackHeaderTextGroup: {
     flex: 1,
   },
-  BackHeaderEyebrow: {
+
+  BackHeaderKicker: {
     fontSize: 10.5,
     color: Colors.goldLight,
     letterSpacing: 1.5,
     marginBottom: 4,
   },
 
-  BackHeaderTitle: {
+  BackHeaderHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 20,
     color: Colors.ivory,

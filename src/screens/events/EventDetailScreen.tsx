@@ -14,6 +14,7 @@ import { BackHeader } from '../../components/BackHeader';
 import { Fonts } from '../../constants/theme';
 
 import { useAppNavigation } from '../../navigation/NavigationContext';
+
 import { useRequestsState } from '../../navigation/RequestsContext';
 import { Colors } from '../../theme/colors';
 
@@ -30,79 +31,81 @@ export function EventDetailScreen() {
   const event = eventDetail;
 
   return (
-    <View style={styles.EventDetailScreenContainer}>
-      <BackHeader title="Event Details" onBack={closeEventDetail} />
-
+    <View style={styles.EventDetailScreenWrapper}>
       <ScrollView showsVerticalScrollIndicator={false}>
+        <BackHeader title="Event Details" onBack={closeEventDetail} />
+
         <Image
           source={event.image}
-          style={styles.EventDetailScreenImage}
+          style={styles.EventDetailScreenPhoto}
           resizeMode="cover"
         />
 
-        <View style={styles.EventDetailScreenBody}>
-          <View style={styles.EventDetailScreenCategoryBadge}>
-            <Text style={styles.EventDetailScreenCategoryText}>
+        <View style={styles.EventDetailScreenContent}>
+          <View style={styles.EventDetailScreenCategoryChip}>
+            <Text style={styles.EventDetailScreenCategoryLabel}>
               {event.category}
             </Text>
           </View>
 
-          <Text style={styles.EventDetailScreenTitle}>{event.title}</Text>
-          <Text style={styles.EventDetailScreenDescription}>
+          <Text style={styles.EventDetailScreenHeading}>{event.title}</Text>
+          <Text style={styles.EventDetailScreenSummary}>
             {event.fullDescription}
           </Text>
 
-          <View style={styles.EventDetailScreenInfoRow}>
-            <View style={styles.EventDetailScreenInfoCard}>
-              <Text style={styles.EventDetailScreenInfoLabel}>DATE & TIME</Text>
-              <Text style={styles.EventDetailScreenInfoValue}>
+          <View style={styles.EventDetailScreenInfoLine}>
+            <View style={styles.EventDetailScreenInfoTile}>
+              <Text style={styles.EventDetailScreenInfoCaption}>
+                DATE & TIME
+              </Text>
+              <Text style={styles.EventDetailScreenInfoFigure}>
                 {getEventDayLabel(event.daysFromToday)}
               </Text>
-              <Text style={styles.EventDetailScreenInfoValue}>
+              <Text style={styles.EventDetailScreenInfoFigure}>
                 {event.timeLabel}
               </Text>
             </View>
-            <View style={styles.EventDetailScreenInfoCard}>
-              <Text style={styles.EventDetailScreenInfoLabel}>LOCATION</Text>
-              <Text style={styles.EventDetailScreenInfoValue}>
+            <View style={styles.EventDetailScreenInfoTile}>
+              <Text style={styles.EventDetailScreenInfoCaption}>LOCATION</Text>
+              <Text style={styles.EventDetailScreenInfoFigure}>
                 {event.location}
               </Text>
             </View>
           </View>
 
-          <Text style={styles.EventDetailScreenSectionLabel}>Schedule</Text>
+          <Text style={styles.EventDetailScreenSectionCaption}>Schedule</Text>
           {event.schedule.map((item, i) => (
-            <View key={i} style={styles.EventDetailScreenScheduleRow}>
-              <Text style={styles.EventDetailScreenScheduleTime}>
+            <View key={i} style={styles.EventDetailScreenScheduleLine}>
+              <Text style={styles.EventDetailScreenScheduleSlot}>
                 {item.time}
               </Text>
-              <Text style={styles.EventDetailScreenScheduleLabel}>
+              <Text style={styles.EventDetailScreenScheduleCaption}>
                 {item.label}
               </Text>
             </View>
           ))}
 
-          <Text style={styles.EventDetailScreenSectionLabel}>
+          <Text style={styles.EventDetailScreenSectionCaption}>
             Included & Requirements
           </Text>
-          <View style={styles.EventDetailScreenTagsRow}>
+          <View style={styles.EventDetailScreenTagsLine}>
             {event.included.map(tag => (
-              <View key={tag} style={styles.EventDetailScreenTag}>
-                <Text style={styles.EventDetailScreenTagText}>{tag}</Text>
+              <View key={tag} style={styles.EventDetailScreenChip}>
+                <Text style={styles.EventDetailScreenChipLabel}>{tag}</Text>
               </View>
             ))}
           </View>
-          <Text style={styles.EventDetailScreenRequirementsNote}>
+          <Text style={styles.EventDetailScreenRequirementsNotice}>
             {event.requirementsNote}
           </Text>
 
-          <Text style={styles.EventDetailScreenPlaces}>
+          <Text style={styles.EventDetailScreenAvailability}>
             {event.placesLabel}
           </Text>
         </View>
       </ScrollView>
 
-      <View style={styles.EventDetailScreenFooter}>
+      <View style={styles.EventDetailScreenBottomBar}>
         <TouchableOpacity
           onPress={() => {
             submitRequest('Events', event.title);
@@ -113,9 +116,9 @@ export function EventDetailScreen() {
             colors={[Colors.goldLight, Colors.gold]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.EventDetailScreenCta}
+            style={styles.EventDetailScreenPrimaryAction}
           >
-            <Text style={styles.EventDetailScreenCtaText}>
+            <Text style={styles.EventDetailScreenPrimaryActionLabel}>
               Send Attendance Request
             </Text>
           </LinearGradient>
@@ -126,18 +129,18 @@ export function EventDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  EventDetailScreenContainer: {
+  EventDetailScreenWrapper: {
     flex: 1,
     backgroundColor: Colors.background,
   },
-  EventDetailScreenImage: {
+  EventDetailScreenPhoto: {
     width: '100%',
     height: 182,
   },
-  EventDetailScreenBody: {
+  EventDetailScreenContent: {
     padding: 18,
   },
-  EventDetailScreenCategoryBadge: {
+  EventDetailScreenCategoryChip: {
     alignSelf: 'flex-start',
     backgroundColor: Colors.goldSoftBg,
     borderWidth: 1,
@@ -147,78 +150,79 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     marginBottom: 12,
   },
-  EventDetailScreenCategoryText: {
+
+  EventDetailScreenCategoryLabel: {
     fontSize: 11,
     fontWeight: '600',
     color: Colors.goldLight,
   },
 
-  EventDetailScreenTitle: {
+  EventDetailScreenHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 23,
     color: Colors.ivory,
     marginBottom: 12,
   },
 
-  EventDetailScreenDescription: {
+  EventDetailScreenSummary: {
     fontSize: 13,
     lineHeight: 20.8,
     color: Colors.ivoryMuted,
     marginBottom: 20,
   },
 
-  EventDetailScreenInfoRow: {
+  EventDetailScreenInfoLine: {
     flexDirection: 'row',
     gap: 10,
     marginBottom: 24,
   },
-  EventDetailScreenInfoCard: {
+  EventDetailScreenInfoTile: {
     flex: 1,
     backgroundColor: Colors.surface,
     borderRadius: 14,
     padding: 12,
   },
-  EventDetailScreenInfoLabel: {
+  EventDetailScreenInfoCaption: {
     fontSize: 10,
     color: Colors.textFaint,
     marginBottom: 8,
   },
-  EventDetailScreenInfoValue: {
+  EventDetailScreenInfoFigure: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.ivory,
   },
-  EventDetailScreenSectionLabel: {
+  EventDetailScreenSectionCaption: {
     fontSize: 12,
     color: Colors.textFaint,
     marginBottom: 10,
   },
 
-  EventDetailScreenScheduleRow: {
+  EventDetailScreenScheduleLine: {
     flexDirection: 'row',
     marginBottom: 8,
   },
-  EventDetailScreenScheduleTime: {
+  EventDetailScreenScheduleSlot: {
     width: 74,
     fontSize: 12,
     fontWeight: '600',
     color: Colors.goldLight,
   },
 
-  EventDetailScreenScheduleLabel: {
+  EventDetailScreenScheduleCaption: {
     flex: 1,
     fontSize: 12.5,
     color: Colors.ivoryMuted,
   },
 
-  EventDetailScreenTagsRow: {
+  EventDetailScreenTagsLine: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
     marginBottom: 16,
     marginTop: 4,
   },
-  EventDetailScreenTag: {
+  EventDetailScreenChip: {
     backgroundColor: '#1b1f27',
     borderWidth: 1,
     borderColor: 'rgba(233,205,110,0.22)',
@@ -226,36 +230,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
-  EventDetailScreenTagText: {
+  EventDetailScreenChipLabel: {
     fontSize: 11.5,
     color: Colors.ivoryMuted,
   },
-  EventDetailScreenRequirementsNote: {
+  EventDetailScreenRequirementsNotice: {
     fontSize: 12.5,
     lineHeight: 18,
     color: Colors.textFainter,
     marginBottom: 20,
   },
-  EventDetailScreenPlaces: {
+  EventDetailScreenAvailability: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.goldLight,
     marginBottom: 24,
   },
-  EventDetailScreenFooter: {
+  EventDetailScreenBottomBar: {
     borderTopWidth: 1,
     borderTopColor: Colors.headerBorder,
     padding: 18,
   },
 
-  EventDetailScreenCta: {
+  EventDetailScreenPrimaryAction: {
     height: 47.5,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  EventDetailScreenCtaText: {
+  EventDetailScreenPrimaryActionLabel: {
     fontSize: 14.5,
     fontWeight: '700',
     color: Colors.buttonText,

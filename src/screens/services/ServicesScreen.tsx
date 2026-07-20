@@ -36,7 +36,7 @@ export function ServicesScreen() {
   const items = SERVICES.filter(service => service.category === category);
 
   return (
-    <View style={styles.ServicesScreenContainer}>
+    <View style={styles.ServicesScreenShell}>
       {category === 'parking' ? (
         parkingSegment === 'map' ? (
           <ParkingMapScreen
@@ -60,7 +60,7 @@ export function ServicesScreen() {
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.ServicesScreenList}
+          contentContainerStyle={styles.ServicesScreenFeed}
         >
           <ScreenHeader
             title="Services"
@@ -69,7 +69,7 @@ export function ServicesScreen() {
             onPressBell={openRequestCenter}
           />
 
-          <View style={styles.ServicesScreenListBody}>
+          <View style={styles.ServicesScreenFeedArea}>
             <ServiceCategoryTabs category={category} onSelect={setCategory} />
 
             {items.map((service, i) => (
@@ -98,36 +98,36 @@ function ServiceCard({
   onRequest: () => void;
 }) {
   return (
-    <View style={styles.ServiceCardContainer}>
-      <View style={styles.ServiceCardIconWrap}>
-        <Text style={styles.ServiceCardIcon}>{service.icon}</Text>
+    <View style={styles.ServiceCardShell}>
+      <View style={styles.ServiceCardIconHolder}>
+        <Text style={styles.ServiceCardGlyph}>{service.icon}</Text>
       </View>
 
-      <View style={styles.ServiceCardBody}>
-        <Text style={styles.ServiceCardTitle}>{service.title}</Text>
-        <Text style={styles.ServiceCardDescription}>{service.description}</Text>
-        <Text style={styles.ServiceCardAvailability}>
+      <View style={styles.ServiceCardContent}>
+        <Text style={styles.ServiceCardHeading}>{service.title}</Text>
+        <Text style={styles.ServiceCardSummary}>{service.description}</Text>
+        <Text style={styles.ServiceCardSchedule}>
           {service.availabilityLabel}
         </Text>
 
-        <View style={styles.ServiceCardActions}>
+        <View style={styles.ServiceCardControls}>
           <TouchableOpacity
-            style={styles.ServiceCardDetailsBtn}
+            style={styles.ServiceCardDetailsAction}
             onPress={onDetails}
           >
-            <Text style={styles.ServiceCardDetailsBtnText}>Details</Text>
+            <Text style={styles.ServiceCardDetailsActionLabel}>Details</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.ServiceCardRequestBtnWrapper}
+            style={styles.ServiceCardRequestActionWrapper}
             onPress={onRequest}
           >
             <LinearGradient
               colors={[Colors.goldLight, Colors.gold]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={styles.ServiceCardRequestBtn}
+              style={styles.ServiceCardRequestAction}
             >
-              <Text style={styles.ServiceCardRequestBtnText}>Request</Text>
+              <Text style={styles.ServiceCardRequestActionLabel}>Request</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -137,18 +137,18 @@ function ServiceCard({
 }
 
 const styles = StyleSheet.create({
-  ServicesScreenContainer: {
+  ServicesScreenShell: {
     flex: 1,
     backgroundColor: Colors.background,
   },
-  ServicesScreenList: {
+  ServicesScreenFeed: {
     paddingBottom: 24,
   },
-  ServicesScreenListBody: {
+  ServicesScreenFeedArea: {
     paddingHorizontal: 16,
     paddingTop: 16,
   },
-  ServiceCardContainer: {
+  ServiceCardShell: {
     flexDirection: 'row',
     backgroundColor: Colors.surface,
     borderWidth: 1,
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     padding: 14,
     marginBottom: 12,
   },
-  ServiceCardIconWrap: {
+  ServiceCardIconHolder: {
     width: 46,
     height: 46,
     borderRadius: 12,
@@ -168,35 +168,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  ServiceCardIcon: {
+  ServiceCardGlyph: {
     fontSize: 21,
   },
-  ServiceCardBody: {
+  ServiceCardContent: {
     flex: 1,
   },
-  ServiceCardTitle: {
+  ServiceCardHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 14.5,
     color: Colors.ivory,
     marginBottom: 4,
   },
-  ServiceCardDescription: {
+  ServiceCardSummary: {
     fontSize: 11.5,
     lineHeight: 16,
     color: Colors.textFainter,
     marginBottom: 8,
   },
-  ServiceCardAvailability: {
+  ServiceCardSchedule: {
     fontSize: 10.5,
     color: Colors.goldLight,
     marginBottom: 10,
   },
-  ServiceCardActions: {
+  ServiceCardControls: {
     flexDirection: 'row',
     gap: 8,
   },
 
-  ServiceCardDetailsBtn: {
+  ServiceCardDetailsAction: {
     flex: 1,
     height: 34.5,
     borderRadius: 10,
@@ -205,22 +205,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  ServiceCardDetailsBtnText: {
+  ServiceCardDetailsActionLabel: {
     fontSize: 12,
     fontWeight: '600',
     color: Colors.goldLight,
   },
-  ServiceCardRequestBtnWrapper: {
+  ServiceCardRequestActionWrapper: {
     flex: 1,
   },
-  ServiceCardRequestBtn: {
+  ServiceCardRequestAction: {
     height: 34.5,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  ServiceCardRequestBtnText: {
+  ServiceCardRequestActionLabel: {
     fontSize: 12,
     fontWeight: '700',
     color: Colors.buttonText,

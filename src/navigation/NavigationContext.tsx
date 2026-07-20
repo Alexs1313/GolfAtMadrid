@@ -1,14 +1,19 @@
-import React, {createContext, useCallback, useContext, useMemo, useState} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 
-import type {EventItem, HoleItem, ServiceItem} from '../types';
-import type {AppPhase, MainTab} from './types';
+import type { EventItem, HoleItem, ServiceItem } from '../types';
+import type { AppPhase, MainTab } from './types';
 
-type ActiveFlow = {category: 'service'; item: ServiceItem};
+type ActiveFlow = { category: 'service'; item: ServiceItem };
 
 type NavigationContextValue = {
   phase: AppPhase;
   finishLoader: () => void;
-  finishIntroVideo: () => void;
   finishOnboarding: () => void;
 
   activeTab: MainTab;
@@ -45,7 +50,11 @@ type NavigationContextValue = {
 
 const NavigationContext = createContext<NavigationContextValue | null>(null);
 
-export function NavigationProvider({children}: {children: React.ReactNode}) {
+export function NavigationProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [phase, setPhase] = useState<AppPhase>('Loader');
   const [activeTab, setActiveTab] = useState<MainTab>('Events');
   const [eventDetail, setEventDetail] = useState<EventItem | null>(null);
@@ -57,10 +66,6 @@ export function NavigationProvider({children}: {children: React.ReactNode}) {
   const [requestSentTitle, setRequestSentTitle] = useState<string | null>(null);
 
   const finishLoader = useCallback(() => {
-    setPhase('IntroVideo');
-  }, []);
-
-  const finishIntroVideo = useCallback(() => {
     setPhase('Onboarding');
   }, []);
 
@@ -116,7 +121,7 @@ export function NavigationProvider({children}: {children: React.ReactNode}) {
   }, []);
 
   const openServiceRequest = useCallback((item: ServiceItem) => {
-    setActiveFlow({category: 'service', item});
+    setActiveFlow({ category: 'service', item });
   }, []);
 
   const closeFlow = useCallback(() => {
@@ -135,7 +140,6 @@ export function NavigationProvider({children}: {children: React.ReactNode}) {
     () => ({
       phase,
       finishLoader,
-      finishIntroVideo,
       finishOnboarding,
       activeTab,
       selectTab,
@@ -164,7 +168,6 @@ export function NavigationProvider({children}: {children: React.ReactNode}) {
     [
       phase,
       finishLoader,
-      finishIntroVideo,
       finishOnboarding,
       activeTab,
       selectTab,

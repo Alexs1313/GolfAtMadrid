@@ -43,53 +43,53 @@ export function ServiceDetailScreen() {
   };
 
   return (
-    <Animated.View style={[styles.ServiceDetailScreenContainer, animatedStyle]}>
+    <Animated.View style={[styles.ServiceDetailScreenWrapper, animatedStyle]}>
       <BackHeader title={service.title} onBack={closeServiceDetail} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.ServiceDetailScreenBody}
+        contentContainerStyle={styles.ServiceDetailScreenContent}
       >
-        <Text style={styles.ServiceDetailScreenDescription}>
+        <Text style={styles.ServiceDetailScreenSummary}>
           {service.description}
         </Text>
 
-        <View style={styles.ServiceDetailScreenInfoRow}>
-          <View style={styles.ServiceDetailScreenInfoCard}>
-            <Text style={styles.ServiceDetailScreenInfoLabel}>
+        <View style={styles.ServiceDetailScreenInfoLine}>
+          <View style={styles.ServiceDetailScreenInfoTile}>
+            <Text style={styles.ServiceDetailScreenInfoCaption}>
               AVAILABILITY
             </Text>
-            <Text style={styles.ServiceDetailScreenInfoValue}>
+            <Text style={styles.ServiceDetailScreenInfoFigure}>
               {service.availabilityLabel}
             </Text>
           </View>
-          <View style={styles.ServiceDetailScreenInfoCard}>
-            <Text style={styles.ServiceDetailScreenInfoLabel}>
+          <View style={styles.ServiceDetailScreenInfoTile}>
+            <Text style={styles.ServiceDetailScreenInfoCaption}>
               RESPONSE TIME
             </Text>
-            <Text style={styles.ServiceDetailScreenInfoValue}>
+            <Text style={styles.ServiceDetailScreenInfoFigure}>
               {service.responseTime}
             </Text>
           </View>
         </View>
 
-        <Text style={styles.ServiceDetailScreenConditionsLabel}>
+        <Text style={styles.ServiceDetailScreenConditionsCaption}>
           Request Conditions
         </Text>
-        <Text style={styles.ServiceDetailScreenConditionsText}>
+        <Text style={styles.ServiceDetailScreenConditionsCopy}>
           {service.conditions}
         </Text>
       </ScrollView>
 
-      <View style={styles.ServiceDetailScreenFooter}>
+      <View style={styles.ServiceDetailScreenBottomBar}>
         <TouchableOpacity onPress={submit}>
           <LinearGradient
             colors={[Colors.goldLight, Colors.gold]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.ServiceDetailScreenCta}
+            style={styles.ServiceDetailScreenAction}
           >
-            <Text style={styles.ServiceDetailScreenCtaText}>
+            <Text style={styles.ServiceDetailScreenActionLabel}>
               Submit Request
             </Text>
           </LinearGradient>
@@ -100,7 +100,7 @@ export function ServiceDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  ServiceDetailScreenContainer: {
+  ServiceDetailScreenWrapper: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -109,65 +109,65 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
 
-  ServiceDetailScreenBody: {
+  ServiceDetailScreenContent: {
     paddingHorizontal: 18,
     paddingTop: 4,
     paddingBottom: 24,
   },
-  ServiceDetailScreenDescription: {
+  ServiceDetailScreenSummary: {
     fontSize: 13,
     lineHeight: 20.8,
     color: Colors.ivoryMuted,
     marginBottom: 20,
   },
 
-  ServiceDetailScreenInfoRow: {
+  ServiceDetailScreenInfoLine: {
     flexDirection: 'row',
     gap: 10,
     marginBottom: 20,
   },
-  ServiceDetailScreenInfoCard: {
+  ServiceDetailScreenInfoTile: {
     flex: 1,
     backgroundColor: Colors.surface,
     borderRadius: 14,
     padding: 12,
   },
-  ServiceDetailScreenInfoLabel: {
+  ServiceDetailScreenInfoCaption: {
     fontSize: 10,
     color: Colors.textFaint,
     marginBottom: 8,
   },
 
-  ServiceDetailScreenInfoValue: {
+  ServiceDetailScreenInfoFigure: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.ivory,
   },
-  ServiceDetailScreenConditionsLabel: {
+  ServiceDetailScreenConditionsCaption: {
     fontSize: 12,
     color: Colors.textFaint,
     marginBottom: 10,
   },
 
-  ServiceDetailScreenConditionsText: {
+  ServiceDetailScreenConditionsCopy: {
     fontSize: 12.5,
     lineHeight: 19.4,
     color: Colors.ivoryMuted,
   },
-  ServiceDetailScreenFooter: {
+  ServiceDetailScreenBottomBar: {
     borderTopWidth: 1,
     borderTopColor: Colors.headerBorder,
     padding: 18,
     marginBottom: 25,
   },
-  ServiceDetailScreenCta: {
+  ServiceDetailScreenAction: {
     height: 47.5,
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  ServiceDetailScreenCtaText: {
+  ServiceDetailScreenActionLabel: {
     fontSize: 14.5,
     fontWeight: '700',
     color: Colors.buttonText,

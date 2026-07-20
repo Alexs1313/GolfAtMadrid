@@ -329,7 +329,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fhskjdnfk.dsjfnaslsd;
+				PRODUCT_BUNDLE_IDENTIFIER = com.djdhakeo.eoujwndmdsd;
 				PRODUCT_NAME = GolfAtMadrid;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -361,7 +361,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.fhskjdnfk.dsjfnaslsd;
+				PRODUCT_BUNDLE_IDENTIFIER = com.djdhakeo.eoujwndmdsd;
 				PRODUCT_NAME = GolfAtMadrid;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

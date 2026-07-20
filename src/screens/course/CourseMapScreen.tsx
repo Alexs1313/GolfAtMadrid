@@ -67,10 +67,10 @@ export function CourseMapScreen() {
   ).length;
 
   return (
-    <View style={styles.CourseMapScreenContainer}>
+    <View style={styles.CourseMapScreenWrapper}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.CourseMapScreenScrollContent}
+        contentContainerStyle={styles.CourseMapScreenScrollArea}
       >
         <ScreenHeader
           title="Course Map"
@@ -78,10 +78,10 @@ export function CourseMapScreen() {
           notificationCount={activeRequestCount}
           onPressBell={openRequestCenter}
         />
-        <View style={styles.CourseMapScreenBody}>
-          <View style={styles.CourseMapScreenMapCard}>
+        <View style={styles.CourseMapScreenContent}>
+          <View style={styles.CourseMapScreenMapPanel}>
             <MapView
-              style={styles.CourseMapScreenMap}
+              style={styles.CourseMapScreenMapSurface}
               initialRegion={INITIAL_MAP_REGION}
             >
               <Marker
@@ -113,16 +113,16 @@ export function CourseMapScreen() {
             </MapView>
           </View>
 
-          <View style={styles.CourseMapScreenLegendRow}>
+          <View style={styles.CourseMapScreenLegendLine}>
             {LEGEND.map(item => (
-              <View key={item.label} style={styles.CourseMapScreenLegendItem}>
+              <View key={item.label} style={styles.CourseMapScreenLegendEntry}>
                 <View
                   style={[
-                    styles.CourseMapScreenLegendDot,
+                    styles.CourseMapScreenLegendSwatch,
                     { backgroundColor: item.color },
                   ]}
                 />
-                <Text style={styles.CourseMapScreenLegendLabel}>
+                <Text style={styles.CourseMapScreenLegendCaption}>
                   {item.label}
                 </Text>
               </View>
@@ -155,52 +155,55 @@ function HoleSheet({
   onViewDetails: () => void;
 }) {
   return (
-    <View style={styles.HoleSheetScrim}>
-      <View style={styles.HoleSheetCard}>
-        <View style={styles.HoleSheetTitleRow}>
-          <Text style={styles.HoleSheetTitle}>Hole {hole.number}</Text>
-          <Text style={styles.HoleSheetParYards}>
+    <View style={styles.HoleSheetOverlay}>
+      <View style={styles.HoleSheetPanel}>
+        <View style={styles.HoleSheetHeadingLine}>
+          <Text style={styles.HoleSheetHeading}>Hole {hole.number}</Text>
+          <Text style={styles.HoleSheetParDistance}>
             Par {hole.par} · {hole.yards} yds
           </Text>
         </View>
 
-        <View style={styles.HoleSheetStatsRow}>
-          <View style={styles.HoleSheetStatCard}>
-            <Text style={styles.HoleSheetStatLabel}>DIFFICULTY</Text>
-            <Text style={styles.HoleSheetStatValue}>{hole.difficulty}</Text>
+        <View style={styles.HoleSheetStatsLine}>
+          <View style={styles.HoleSheetStatTile}>
+            <Text style={styles.HoleSheetStatCaption}>DIFFICULTY</Text>
+            <Text style={styles.HoleSheetStatFigure}>{hole.difficulty}</Text>
           </View>
-          <View style={styles.HoleSheetStatCard}>
-            <Text style={styles.HoleSheetStatLabel}>TERRAIN</Text>
-            <Text style={styles.HoleSheetStatValue}>{hole.terrain}</Text>
+          <View style={styles.HoleSheetStatTile}>
+            <Text style={styles.HoleSheetStatCaption}>TERRAIN</Text>
+            <Text style={styles.HoleSheetStatFigure}>{hole.terrain}</Text>
           </View>
         </View>
 
-        <Text style={styles.HoleSheetDescription}>{hole.description}</Text>
+        <Text style={styles.HoleSheetSummary}>{hole.description}</Text>
 
-        <Text style={styles.HoleSheetLine}>
-          <Text style={styles.HoleSheetLineLabel}>Main obstacle: </Text>
-          <Text style={styles.HoleSheetLineValue}>{hole.mainObstacle}</Text>
+        <Text style={styles.HoleSheetEntry}>
+          <Text style={styles.HoleSheetEntryLabel}>Main obstacle: </Text>
+          <Text style={styles.HoleSheetEntryValue}>{hole.mainObstacle}</Text>
         </Text>
-        <Text style={styles.HoleSheetLine}>
-          <Text style={styles.HoleSheetLineLabel}>Recommended club: </Text>
-          <Text style={styles.HoleSheetLineValue}>{hole.recommendedClub}</Text>
+        <Text style={styles.HoleSheetEntry}>
+          <Text style={styles.HoleSheetEntryLabel}>Recommended club: </Text>
+          <Text style={styles.HoleSheetEntryValue}>{hole.recommendedClub}</Text>
         </Text>
 
-        <View style={styles.HoleSheetActions}>
-          <TouchableOpacity style={styles.HoleSheetCloseBtn} onPress={onClose}>
-            <Text style={styles.HoleSheetCloseBtnText}>Close</Text>
+        <View style={styles.HoleSheetActionGroup}>
+          <TouchableOpacity
+            style={styles.HoleSheetCloseAction}
+            onPress={onClose}
+          >
+            <Text style={styles.HoleSheetCloseActionLabel}>Close</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.HoleSheetDetailsBtnWrapper}
+            style={styles.HoleSheetDetailsActionWrap}
             onPress={onViewDetails}
           >
             <LinearGradient
               colors={[Colors.goldLight, Colors.gold]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={styles.HoleSheetDetailsBtn}
+              style={styles.HoleSheetDetailsAction}
             >
-              <Text style={styles.HoleSheetDetailsBtnText}>
+              <Text style={styles.HoleSheetDetailsActionLabel}>
                 View Hole Details
               </Text>
             </LinearGradient>
@@ -212,18 +215,18 @@ function HoleSheet({
 }
 
 const styles = StyleSheet.create({
-  CourseMapScreenContainer: {
+  CourseMapScreenWrapper: {
     flex: 1,
     backgroundColor: Colors.background,
   },
-  CourseMapScreenScrollContent: {
+  CourseMapScreenScrollArea: {
     paddingBottom: 24,
   },
-  CourseMapScreenBody: {
+  CourseMapScreenContent: {
     padding: 16,
   },
 
-  CourseMapScreenMapCard: {
+  CourseMapScreenMapPanel: {
     width: '100%',
     aspectRatio: 941 / 1550,
     borderRadius: 22,
@@ -231,33 +234,33 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.surfaceBorder,
   },
-  CourseMapScreenMap: {
+  CourseMapScreenMapSurface: {
     width: '100%',
     height: '100%',
   },
-  CourseMapScreenLegendRow: {
+  CourseMapScreenLegendLine: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 14,
     marginTop: 16,
     paddingHorizontal: 4,
   },
-  CourseMapScreenLegendItem: {
+  CourseMapScreenLegendEntry: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
   },
 
-  CourseMapScreenLegendDot: {
+  CourseMapScreenLegendSwatch: {
     width: 9,
     height: 9,
     borderRadius: 3,
   },
-  CourseMapScreenLegendLabel: {
+  CourseMapScreenLegendCaption: {
     fontSize: 10.5,
     color: Colors.textFainter,
   },
-  HoleSheetScrim: {
+  HoleSheetOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -266,7 +269,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
 
-  HoleSheetCard: {
+  HoleSheetPanel: {
     backgroundColor: Colors.headerBg,
     borderTopWidth: 1,
     borderTopColor: Colors.goldSoftBorder,
@@ -275,68 +278,68 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 32,
   },
-  HoleSheetTitleRow: {
+  HoleSheetHeadingLine: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'baseline',
     marginBottom: 16,
   },
 
-  HoleSheetTitle: {
+  HoleSheetHeading: {
     fontFamily: Fonts.headingSemiBold,
     fontSize: 20,
     color: Colors.ivory,
   },
-  HoleSheetParYards: {
+  HoleSheetParDistance: {
     fontSize: 12,
     fontWeight: '600',
     color: Colors.goldLight,
   },
-  HoleSheetStatsRow: {
+  HoleSheetStatsLine: {
     flexDirection: 'row',
     gap: 10,
     marginBottom: 16,
   },
-  HoleSheetStatCard: {
+  HoleSheetStatTile: {
     flex: 1,
     backgroundColor: '#1b1f27',
     borderRadius: 10,
     padding: 10,
   },
-  HoleSheetStatLabel: {
+  HoleSheetStatCaption: {
     fontSize: 10,
     color: Colors.textFaint,
     marginBottom: 6,
   },
 
-  HoleSheetStatValue: {
+  HoleSheetStatFigure: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.ivory,
   },
-  HoleSheetDescription: {
+  HoleSheetSummary: {
     fontSize: 13,
     lineHeight: 20.15,
     color: Colors.ivoryMuted,
     marginBottom: 12,
   },
-  HoleSheetLine: {
+  HoleSheetEntry: {
     fontSize: 12.5,
     marginBottom: 4,
   },
 
-  HoleSheetLineLabel: {
+  HoleSheetEntryLabel: {
     color: Colors.textFainter,
   },
-  HoleSheetLineValue: {
+  HoleSheetEntryValue: {
     color: Colors.ivory,
   },
-  HoleSheetActions: {
+  HoleSheetActionGroup: {
     flexDirection: 'row',
     gap: 9,
     marginTop: 20,
   },
-  HoleSheetCloseBtn: {
+  HoleSheetCloseAction: {
     flex: 1,
     height: 41.5,
     borderRadius: 14,
@@ -346,23 +349,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  HoleSheetCloseBtnText: {
+  HoleSheetCloseActionLabel: {
     fontSize: 13,
     fontWeight: '600',
     color: Colors.goldLight,
   },
-  HoleSheetDetailsBtnWrapper: {
+  HoleSheetDetailsActionWrap: {
     flex: 1,
   },
 
-  HoleSheetDetailsBtn: {
+  HoleSheetDetailsAction: {
     height: 43,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  HoleSheetDetailsBtnText: {
+  HoleSheetDetailsActionLabel: {
     fontSize: 14,
     fontWeight: '700',
     color: Colors.buttonText,

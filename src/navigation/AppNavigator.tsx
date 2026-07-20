@@ -1,6 +1,4 @@
-// Navigator
 import React from 'react';
-
 import { AppShell } from './AppShell';
 import { LearnProvider } from './LearnContext';
 

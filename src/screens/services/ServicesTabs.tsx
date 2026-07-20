@@ -19,26 +19,26 @@ export function ServiceCategoryTabs({
   onSelect: (category: ServiceCategory) => void;
 }) {
   return (
-    <View style={styles.ServiceCategoryTabsControl}>
+    <View style={styles.ServiceCategoryTabsGroup}>
       {CATEGORIES.map(cat => {
         const isActive = cat.key === category;
         return (
           <TouchableOpacity
             key={cat.key}
-            style={styles.ServiceCategoryTabsButton}
+            style={styles.ServiceCategoryTabsAction}
             onPress={() => onSelect(cat.key)}
           >
             {isActive ? (
               <LinearGradient
                 colors={[Colors.goldLight, Colors.gold]}
-                style={styles.ServiceCategoryTabsFill}
+                style={styles.ServiceCategoryTabsBackdrop}
               >
-                <Text style={styles.ServiceCategoryTabsTextActive}>
+                <Text style={styles.ServiceCategoryTabsLabelActive}>
                   {cat.label}
                 </Text>
               </LinearGradient>
             ) : (
-              <Text style={styles.ServiceCategoryTabsText}>{cat.label}</Text>
+              <Text style={styles.ServiceCategoryTabsLabel}>{cat.label}</Text>
             )}
           </TouchableOpacity>
         );
@@ -57,18 +57,18 @@ export function ParkingSubTabs({
   onSelect: (segment: ParkingSegment) => void;
 }) {
   return (
-    <View style={styles.ParkingSubTabsControl}>
+    <View style={styles.ParkingSubTabsGroup}>
       <TouchableOpacity
         style={[
-          styles.ParkingSubTabsButton,
-          parkingSegment === 'map' && styles.ParkingSubTabsButtonActive,
+          styles.ParkingSubTabsAction,
+          parkingSegment === 'map' && styles.ParkingSubTabsActionActive,
         ]}
         onPress={() => onSelect('map')}
       >
         <Text
           style={[
-            styles.ParkingSubTabsText,
-            parkingSegment === 'map' && styles.ParkingSubTabsTextActive,
+            styles.ParkingSubTabsLabel,
+            parkingSegment === 'map' && styles.ParkingSubTabsLabelActive,
           ]}
         >
           Parking Map
@@ -76,15 +76,15 @@ export function ParkingSubTabs({
       </TouchableOpacity>
       <TouchableOpacity
         style={[
-          styles.ParkingSubTabsButton,
-          parkingSegment === 'my' && styles.ParkingSubTabsButtonActive,
+          styles.ParkingSubTabsAction,
+          parkingSegment === 'my' && styles.ParkingSubTabsActionActive,
         ]}
         onPress={() => onSelect('my')}
       >
         <Text
           style={[
-            styles.ParkingSubTabsText,
-            parkingSegment === 'my' && styles.ParkingSubTabsTextActive,
+            styles.ParkingSubTabsLabel,
+            parkingSegment === 'my' && styles.ParkingSubTabsLabelActive,
           ]}
         >
           My Parking
@@ -95,7 +95,7 @@ export function ParkingSubTabs({
 }
 
 const styles = StyleSheet.create({
-  ServiceCategoryTabsControl: {
+  ServiceCategoryTabsGroup: {
     flexDirection: 'row',
     backgroundColor: Colors.surface,
     borderWidth: 1,
@@ -105,16 +105,16 @@ const styles = StyleSheet.create({
     gap: 4,
     marginBottom: 16,
   },
-  ServiceCategoryTabsButton: {
+  ServiceCategoryTabsAction: {
     flex: 1,
   },
-  ServiceCategoryTabsFill: {
+  ServiceCategoryTabsBackdrop: {
     height: 34.5,
     borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  ServiceCategoryTabsText: {
+  ServiceCategoryTabsLabel: {
     height: 34.5,
     fontSize: 12,
     fontWeight: '600',
@@ -122,35 +122,35 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 34.5,
   },
-  ServiceCategoryTabsTextActive: {
+  ServiceCategoryTabsLabelActive: {
     fontSize: 12,
     fontWeight: '600',
     color: Colors.buttonText,
   },
 
-  ParkingSubTabsControl: {
+  ParkingSubTabsGroup: {
     flexDirection: 'row',
     backgroundColor: '#1b1f27',
     borderRadius: 10,
     padding: 3,
     marginBottom: 16,
   },
-  ParkingSubTabsButton: {
+  ParkingSubTabsAction: {
     flex: 1,
     height: 30.5,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  ParkingSubTabsButtonActive: {
+  ParkingSubTabsActionActive: {
     backgroundColor: Colors.surface,
   },
-  ParkingSubTabsText: {
+  ParkingSubTabsLabel: {
     fontSize: 12,
     fontWeight: '600',
     color: Colors.textFaint,
   },
-  ParkingSubTabsTextActive: {
+  ParkingSubTabsLabelActive: {
     color: Colors.goldLight,
   },
 });

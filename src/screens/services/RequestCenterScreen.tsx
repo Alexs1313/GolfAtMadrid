@@ -57,83 +57,86 @@ export function RequestCenterScreen() {
   }
 
   return (
-    <Animated.View style={[styles.RequestCenterScreenContainer, animatedStyle]}>
-      <BackHeader title="Request Center" onBack={closeRequestCenter} />
-
-      <View style={styles.RequestCenterScreenTabRow}>
-        {TABS.map(t => {
-          const isActive = t.key === tab;
-          return (
-            <TouchableOpacity
-              key={t.key}
-              style={[
-                styles.RequestCenterScreenTabBtn,
-                isActive && styles.RequestCenterScreenTabBtnActive,
-              ]}
-              onPress={() => setTab(t.key)}
-            >
-              <Text
-                style={[
-                  styles.RequestCenterScreenTabText,
-                  isActive && styles.RequestCenterScreenTabTextActive,
-                ]}
-              >
-                {t.label}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-
+    <Animated.View style={[styles.RequestCenterScreenWrapper, animatedStyle]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.RequestCenterScreenList}
+        contentContainerStyle={styles.RequestCenterScreenFeed}
       >
-        {filtered.length === 0 ? (
-          <Text style={styles.RequestCenterScreenEmptyText}>
-            {EMPTY_MESSAGES[tab]}
-          </Text>
-        ) : (
-          filtered.map((request, i) => (
-            <FadeInItem
-              key={request.id}
-              index={i}
-              style={styles.RequestCenterScreenCard}
-            >
-              <View style={styles.RequestCenterScreenCardTop}>
-                <Text style={styles.RequestCenterScreenCardTitle}>
-                  {request.title}
-                </Text>
-                <View
+        <BackHeader title="Request Center" onBack={closeRequestCenter} />
+
+        <View style={styles.RequestCenterScreenTabGroup}>
+          {TABS.map(t => {
+            const isActive = t.key === tab;
+            return (
+              <TouchableOpacity
+                key={t.key}
+                style={[
+                  styles.RequestCenterScreenTabAction,
+                  isActive && styles.RequestCenterScreenTabActionActive,
+                ]}
+                onPress={() => setTab(t.key)}
+              >
+                <Text
                   style={[
-                    styles.RequestCenterScreenBadge,
-                    {
-                      backgroundColor:
-                        STATUS_BADGE_COLORS[request.statusLabel] ?? '#2c3140',
-                    },
+                    styles.RequestCenterScreenTabLabel,
+                    isActive && styles.RequestCenterScreenTabLabelActive,
                   ]}
                 >
-                  <Text style={styles.RequestCenterScreenBadgeText}>
-                    {request.statusLabel}
+                  {t.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+
+        <View style={styles.RequestCenterScreenFeedList}>
+          {filtered.length === 0 ? (
+            <Text style={styles.RequestCenterScreenBlankMessage}>
+              {EMPTY_MESSAGES[tab]}
+            </Text>
+          ) : (
+            filtered.map((request, i) => (
+              <FadeInItem
+                key={request.id}
+                index={i}
+                style={styles.RequestCenterScreenTile}
+              >
+                <View style={styles.RequestCenterScreenTileHead}>
+                  <Text style={styles.RequestCenterScreenTileHeading}>
+                    {request.title}
                   </Text>
+                  <View
+                    style={[
+                      styles.RequestCenterScreenChip,
+                      {
+                        backgroundColor:
+                          STATUS_BADGE_COLORS[request.statusLabel] ??
+                          '#2c3140',
+                      },
+                    ]}
+                  >
+                    <Text style={styles.RequestCenterScreenChipLabel}>
+                      {request.statusLabel}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-              <Text style={styles.RequestCenterScreenMeta}>
-                {request.category} · {request.refCode}
-              </Text>
-              <Text style={styles.RequestCenterScreenMeta}>
-                {request.submittedLabel}
-              </Text>
-            </FadeInItem>
-          ))
-        )}
+                <Text style={styles.RequestCenterScreenCaption}>
+                  {request.category} · {request.refCode}
+                </Text>
+                <Text style={styles.RequestCenterScreenCaption}>
+                  {request.submittedLabel}
+                </Text>
+              </FadeInItem>
+            ))
+          )}
+        </View>
       </ScrollView>
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-  RequestCenterScreenContainer: {
+  RequestCenterScreenWrapper: {
     position: 'absolute',
     top: 0,
     left: 0,
@@ -141,13 +144,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: Colors.background,
   },
-  RequestCenterScreenTabRow: {
+  RequestCenterScreenTabGroup: {
     flexDirection: 'row',
     paddingHorizontal: 16,
     paddingVertical: 14,
     gap: 7,
   },
-  RequestCenterScreenTabBtn: {
+  RequestCenterScreenTabAction: {
     flex: 1,
     height: 35,
     borderRadius: 10,
@@ -156,30 +159,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  RequestCenterScreenTabBtnActive: {
+  RequestCenterScreenTabActionActive: {
     backgroundColor: '#1b1f27',
     borderColor: Colors.goldSoftBorder,
   },
-  RequestCenterScreenTabText: {
+  RequestCenterScreenTabLabel: {
     fontSize: 12.5,
     fontWeight: '600',
     color: Colors.textFaint,
   },
-  RequestCenterScreenTabTextActive: {
+  RequestCenterScreenTabLabelActive: {
     color: Colors.goldLight,
   },
-  RequestCenterScreenList: {
-    paddingHorizontal: 16,
+  RequestCenterScreenFeed: {
     paddingBottom: 24,
   },
-  RequestCenterScreenEmptyText: {
+  RequestCenterScreenFeedList: {
+    paddingHorizontal: 16,
+  },
+  RequestCenterScreenBlankMessage: {
     fontSize: 12.5,
     color: Colors.textFainter,
     textAlign: 'center',
     paddingVertical: 40,
   },
 
-  RequestCenterScreenCard: {
+  RequestCenterScreenTile: {
     borderWidth: 1,
     borderColor: Colors.surfaceBorder,
     borderRadius: 19,
@@ -187,7 +192,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  RequestCenterScreenCardTop: {
+  RequestCenterScreenTileHead: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
@@ -195,24 +200,25 @@ const styles = StyleSheet.create({
     gap: 8,
   },
 
-  RequestCenterScreenCardTitle: {
+  RequestCenterScreenTileHeading: {
     flex: 1,
     fontSize: 14,
     fontWeight: '600',
     color: Colors.ivory,
   },
-  RequestCenterScreenBadge: {
+
+  RequestCenterScreenChip: {
     borderRadius: 20,
     paddingHorizontal: 9,
     paddingVertical: 3,
   },
-  RequestCenterScreenBadgeText: {
+  RequestCenterScreenChipLabel: {
     fontSize: 9.5,
     fontWeight: '700',
     color: Colors.goldLight,
     letterSpacing: 0.3,
   },
-  RequestCenterScreenMeta: {
+  RequestCenterScreenCaption: {
     fontSize: 11.5,
     color: Colors.textFaint,
     marginBottom: 6,

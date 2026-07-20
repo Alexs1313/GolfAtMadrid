@@ -19,7 +19,7 @@ export function ScoreScreen() {
   ).length;
 
   return (
-    <View style={styles.ScoreScreenContainer}>
+    <View style={styles.ScoreScreenWrapper}>
       {segment === 'current' ? (
         <CurrentGamePanel
           notificationCount={activeRequestCount}
@@ -36,7 +36,7 @@ export function ScoreScreen() {
 }
 
 const styles = StyleSheet.create({
-  ScoreScreenContainer: {
+  ScoreScreenWrapper: {
     flex: 1,
     backgroundColor: Colors.background,
   },
