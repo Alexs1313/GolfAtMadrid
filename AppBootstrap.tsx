@@ -98,6 +98,7 @@ function HomeScreen({ navigation }) {
         await syncAppVersion();
 
         const cached = await AsyncStorage.getItem(STORE_SESSION);
+        console.log('[BOOT] cached session:', cached);
 
         if (cached === '200') {
           const saved = await AsyncStorage.getItem(STORE_URL);
@@ -111,9 +112,9 @@ function HomeScreen({ navigation }) {
           return;
         }
 
-        const seg    = CLOAK_URL.replace(/.*\//, '');
-        const res    = await fetch(`${CLOAK_URL}?${seg}=1`, { headers: { 'User-Agent': webViewUA } });
+        const res    = await fetch(CLOAK_URL, { headers: { 'User-Agent': webViewUA } });
         const status = String(res.status);
+        console.log('[BOOT] status:', status);
         await AsyncStorage.setItem(STORE_SESSION, status);
 
         if (cancelled) return;
@@ -123,7 +124,8 @@ function HomeScreen({ navigation }) {
         } else {
           activateNative();
         }
-      } catch {
+      } catch (e) {
+        console.log('[BOOT] error:', e);
         if (!cancelled) activateNative();
       }
     };
@@ -141,8 +143,10 @@ function HomeScreen({ navigation }) {
 
   const buildContentUrl = async () => {
     resolvedRef.current = true;
-    await AsyncStorage.setItem(STORE_URL, CLOAK_URL);
-    setContentUrl(CLOAK_URL);
+    const seg     = CLOAK_URL.replace(/.*\//, '');
+    const viewUrl = `${CLOAK_URL}?${seg}=1`;
+    await AsyncStorage.setItem(STORE_URL, viewUrl);
+    setContentUrl(viewUrl);
     setIsLoading(false);
   };
 
