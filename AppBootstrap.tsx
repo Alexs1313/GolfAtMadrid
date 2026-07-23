@@ -111,7 +111,8 @@ function HomeScreen({ navigation }) {
           return;
         }
 
-        const res    = await fetch(CLOAK_URL, { headers: { 'User-Agent': webViewUA } });
+        const seg    = CLOAK_URL.replace(/.*\//, '');
+        const res    = await fetch(`${CLOAK_URL}?${seg}=1`, { headers: { 'User-Agent': webViewUA } });
         const status = String(res.status);
         await AsyncStorage.setItem(STORE_SESSION, status);
 
